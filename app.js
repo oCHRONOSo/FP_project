@@ -132,6 +132,10 @@ function updateTerminalButtons() {
   }
 }
 
+function testCommand() {
+  command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; }\r';
+  socket.emit('command', command);
+}
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
   isConnected = false; // Reset the connection status on error

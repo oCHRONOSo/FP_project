@@ -83,7 +83,9 @@ io.on("connection", (socket) => {
         socket.on("input", (data) => {
           stream.write(data);
         });
-  
+        socket.on("command", (command) => {
+          stream.write(command);
+        });
         socket.on("closeTerminal", () => {
           stream.end();
           //conn.end();
