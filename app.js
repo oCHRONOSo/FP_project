@@ -18,8 +18,9 @@ const initializeTerminal = () => {
     // Display output received from the server in the terminal
     term.write(data);
   });
-
+  socket.emit('start');
   isTerminalInitialized = true;
+  
 };
 
  // Call the function to initialize the terminal on page load
@@ -133,8 +134,7 @@ function updateTerminalButtons() {
 }
 
 function testCommand() {
-  command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; }\r';
-  socket.emit('command', command);
+  socket.emit('command');
 }
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);

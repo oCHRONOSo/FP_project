@@ -79,11 +79,17 @@ io.on("connection", (socket) => {
           stream.end();
           conn.end();
         }); */
-  
+        socket.on("start", () => {
+          stream.write("clear \r")
+        });
+
         socket.on("input", (data) => {
           stream.write(data);
         });
-        socket.on("command", (command) => {
+
+        socket.on("command", () => {
+          // command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; } && clear\r'; 
+          // command = "echo hola\r"
           stream.write(command);
         });
         socket.on("closeTerminal", () => {
@@ -130,23 +136,15 @@ io.on("connection", (socket) => {
       accept();
     });
 
-    conn.connect(sshConfig);
-
-    socket.on("disconnect", () => {
+    socket.on("disconnectSSH", () => {
       socket.emit("ssh.status", "Disconnected");
       console.log("SSH connection disconnected.");
       conn.end();
     });
-  });
+    conn.connect(sshConfig);
 
-  // Listen for disconnectSSH event from the client
-  socket.on("disconnectSSH", () => {
-    console.log("Client requested SSH disconnect.");
+    
 
-    // You can add additional cleanup logic here if needed
-
-    // Notify the client about the disconnect status
-    socket.emit("ssh.status", "Disconnected");
   });
 });
 
