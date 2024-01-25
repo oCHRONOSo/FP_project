@@ -4,6 +4,26 @@ let isTerminalOpen = false;
 let isTerminalInitialized = false;
 let term;
 
+// get the ssh key
+function handleFile() {
+  const fileInput = document.getElementById('fileInput');
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const sshKeyContent = e.target.result;
+
+      // Send the SSH key content to the server using WebSocket
+      socket.emit('sshkey',sshKeyContent);
+    };
+
+    reader.readAsText(file);
+  } else {
+    console.error('No file selected');
+  }
+}
 // Initialize terminal on page load
 const initializeTerminal = () => {
   term = new Terminal();
@@ -45,7 +65,7 @@ function connectSSH() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  socket.emit('startSSHConnection', { ip, username, password });
+  socket.emit('startSSHConnection', { ip, username, password});
 
   // Show connecting status
   showMessage("Connecting to SSH...");

@@ -22,13 +22,29 @@ io.on("connection", (socket) => {
   console.log(`User connected from IP: ${clientIpAddress}`);
 
   // Listen for SSH details from the client to start an SSH connection
-  socket.on("startSSHConnection", ({ ip, username, password }) => {
-    const sshConfig = {
-      host: ip,
-      port: 22,
-      username: username,
-      password: password,
-    };
+  socket.on("startSSHConnection", ({ ip, username, password}) => {
+    let sshConfig;
+    
+
+    if (typeof password === 'undefined' || password === null || password === '') {
+      socket.on('sshkey',(sshKeyContent) => {
+        sshConfig = {
+          host: ip,
+          port: 22,
+          username: username,
+          privatekey: sshKeyContent,
+        };
+      });
+    } else {
+      
+      sshConfig = {
+        host: ip,
+        port: 22,
+        username: username,
+        password: password,
+      };
+    }
+    
 
     const conn = new ssh2.Client();
 

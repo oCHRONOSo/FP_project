@@ -21,6 +21,11 @@
 
         <label for="password">Password:</label>
         <input type="password" id="password" placeholder="Enter Password" value="usuario" />
+        
+        <label for="myFile">SSH key</label>
+        <input type="file" id="sshkey" accept=".pub,.pem,.ppk"/>
+        <button onclick="handleFile()">Upload SSH Key</button>
+
         <button onclick="connectSSH()">Connect</button>
         <button onclick="disconnectSSH()">Disconnect</button>
 
