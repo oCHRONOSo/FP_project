@@ -6,7 +6,7 @@ let term;
 
 // get the ssh key
 function handleFile() {
-  const fileInput = document.getElementById('fileInput');
+  const fileInput = document.getElementById('sshkey');
 
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];

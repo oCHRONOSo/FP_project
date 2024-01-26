@@ -8,13 +8,12 @@
     <script src="node_modules/xterm/lib/xterm.js"></script>
     <title>SSH Connection</title>
     <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
-    <script defer src="app.js"></script>
 </head>
 
 <body>
     <div id="login-form">
         <label for="ip">IP Address:</label>
-        <input type="text" id="ip" placeholder="Enter IP Address" value="192.168.139.129" />
+        <input type="text" id="ip" placeholder="Enter IP Address" value="192.168.186.12" />
 
         <label for="username">Username:</label>
         <input type="text" id="username" placeholder="Enter Username" value="usuario" />
@@ -37,6 +36,8 @@
         <button onclick="closeTerminal()" id="close-terminal-btn" disabled>Close Terminal</button>
         <button onclick="testCommand()" id="command">command</button>
         <div id="message"></div>
+
+        <script defer src="app.js"></script>
     </div>
 </body>
 
