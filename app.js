@@ -85,6 +85,7 @@ function connectSSH() {
 }
 
 function disconnectSSH() {
+  closeTerminal();
   if (!isConnected) {
     showMessage("Not connected!");
     return;
@@ -92,6 +93,8 @@ function disconnectSSH() {
 
   socket.emit('disconnectSSH');
   showMessage("Disconnecting from SSH...");
+  isConnected = false;
+  
 }
 
 function openTerminal() {
@@ -160,6 +163,7 @@ function updateTerminalButtons() {
 function testCommand() {
   socket.emit('command');
 }
+
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
   isConnected = false; // Reset the connection status on error
