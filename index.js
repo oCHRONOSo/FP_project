@@ -22,19 +22,19 @@ io.on("connection", (socket) => {
   console.log(`User connected from IP: ${clientIpAddress}`);
 
   // Listen for SSH details from the client to start an SSH connection
-  socket.on("startSSHConnection", ({ ip, username, password}) => {
+  socket.on("startSSHConnection", ({ ip, username, password, sshKeyContent}) => {
     let sshConfig;
     
 
     if (typeof password === 'undefined' || password === null || password === '') {
-      socket.on('sshkey',(sshKeyContent) => {
+
         sshConfig = {
           host: ip,
           port: 22,
           username: username,
-          privatekey: sshKeyContent,
+          privateKey: sshKeyContent,
         };
-      });
+        
     } else {
       
       sshConfig = {
@@ -105,7 +105,7 @@ io.on("connection", (socket) => {
 
         socket.on("command", () => {
           // command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; } && clear\r'; 
-          // command = "echo hola\r"
+          command = "echo hola\r"
           stream.write(command);
         });
         socket.on("closeTerminal", () => {
