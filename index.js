@@ -1,4 +1,4 @@
-// Create an HTTP server using the 'http' module
+// Import the 'http' module to create an HTTP server
 const http = require("http").createServer();
 
 // Import necessary modules for SSH functionality
@@ -8,10 +8,11 @@ const pty = require("node-pty");
 const os = require("os");
 
 // Set up Socket.IO with CORS configuration
-const io = require("socket.io")(http, {
+let io = require("socket.io")(http, {
   cors: { origin: "*" },
 });
 
+// Determine the default shell based on the operating system
 const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
 
 // Handle incoming Socket.IO connections
@@ -20,11 +21,21 @@ io.on("connection", (socket) => {
   const clientIpAddress = socket.handshake.address;
   console.log(`User connected from IP: ${clientIpAddress}`);
 
+  let conns = new Map();
+  let sshStream;
+
   // Listen for SSH details from the client to start an SSH connection
   socket.on(
     "startSSHConnection",
-    ({ ip, username, password, sshKeyContent }) => {
+    ({ ip, username, password, sshKeyContent, passphrase }) => {
+      const existingConnection = conns.get(socket.id);
+      if (existingConnection) {
+        existingConnection.end();
+      };
+
       let sshConfig;
+
+      const conn = new ssh2.Client();
 
       if (
         typeof password === "undefined" ||
@@ -37,6 +48,10 @@ io.on("connection", (socket) => {
           username: username,
           privateKey: sshKeyContent,
         };
+
+        if (passphrase) {
+          sshConfig.passphrase = passphrase;
+        }
       } else {
         sshConfig = {
           host: ip,
@@ -46,26 +61,27 @@ io.on("connection", (socket) => {
         };
       }
 
-      const conn = new ssh2.Client();
-
       // Emit a status message when the server starts connecting
       socket.emit("ssh.status", "Connecting to SSH...");
 
       conn.on("error", (err) => {
-        console.error("SSH connection error:", err.message);
-        socket.emit(
-          "ssh.error",
-          "Error connecting via SSH. Check your credentials and try again."
-        );
+        if (err.message.includes("Encrypted private key detected")) {
+          // Emit an error indicating encrypted key without passphrase
+          socket.emit("ssh.error", "Encrypted private OpenSSH key detected, but no passphrase provided.");
+        } else {
+          // Other SSH connection errors
+          console.error("SSH connection error:", err.message);
+          socket.emit("ssh.error", "Error connecting via SSH. Check your credentials and try again.");
+        }
         socket.emit("ssh.status", "Error connecting via SSH.");
         conn.end();
       });
-      
+
       conn.on("ready", function () {
         socket.emit("ssh.success");
         socket.emit("ssh.status", "SSH connection successful!");
         console.log("SSH connection successful!");
-        
+
         conn.shell(function (err, stream) {
           if (err) {
             console.error("Error opening shell:", err.message);
@@ -74,6 +90,9 @@ io.on("connection", (socket) => {
             conn.end();
             return;
           }
+
+          conns.set(socket.id, conn);
+          sshStream = stream;
 
           var ptyProcess = pty.spawn(shell, [], {
             name: "xterm-color",
@@ -93,64 +112,58 @@ io.on("connection", (socket) => {
             // Handle the error or terminate the process
           });
 
-          stream.on("data", function (data) {
+          sshStream.on("data", function (data) {
             io.emit("output", data.toString());
           });
 
-          /* stream.on("close", function () {
-          stream.end();
-          conn.end();
-        }); */
           socket.on("start", () => {
-            stream.write("clear \r");
+            sshStream.write("clear \r");
           });
 
           socket.on("input", (data) => {
-            stream.write(data);
+            sshStream.write(data);
           });
 
           socket.on("command", () => {
             // command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; } && clear\r';
-            command = "scp ";
-            stream.write(command);
+            command = "echo hola";
+            sshStream.write(command);
           });
-          socket.on("closeTerminal", () => {
-            stream.end();
-            //conn.end();
-          });
+
         });
-        const localFilePath =
-          "hola.sh";
-        const remoteDestination = "/home/usuario/";
 
-        conn.sftp((sftpErr, sftp) => {
-          if (sftpErr) {
-            console.error("Error creating SFTP session:", sftpErr.message);
-            
-            return;
-          }
+        const localFilePath = "hola.sh";
+        const remoteDestination = `/home/${username}/`;
 
-          sftp.fastPut(
-            localFilePath,
-            remoteDestination + "script.sh",
-            {},
-            (transferErr) => {
-              if (transferErr) {
-                console.error(
-                  "Error during file transfer:",
-                  transferErr.message
-                );
-                
-                return;
-              }
+        socket.on("copy",() => {
 
-              console.log("File transfer complete!");
-              
+          conn.sftp((sftpErr, sftp) => {
+            if (sftpErr) {
+              console.error("Error creating SFTP session:", sftpErr.message);
+              return;
             }
-          );
+  
+            sftp.fastPut(
+              localFilePath,
+              remoteDestination + "script.sh",
+              {},
+              (transferErr) => {
+                if (transferErr) {
+                  console.error(
+                    "Error during file transfer:",
+                    transferErr.message
+                  );
+                  return;
+                }
+  
+                console.log("File transfer complete!");
+              }
+            );
+          });
         });
+        
       });
-      
+
       // Additional error handling for authentication failures
       conn.on("keyboard-interactive", () => {
         // Authentication failed
@@ -168,11 +181,6 @@ io.on("connection", (socket) => {
       // Emit a status message when the server is attempting to connect
       socket.emit("ssh.status", "Attempting to connect...");
       console.log("Attempting to connect...");
-
-      conn.on("banner", (banner) => {
-        // Log the SSH banner received from the server
-        console.log("SSH banner received:", banner.toString());
-      });
 
       conn.on(
         "keyboard-interactive",

@@ -1,11 +1,10 @@
-const socket = io("ws://localhost:8080");
+let socket = io("ws://localhost:8080");
 let isConnected = false;
 let isTerminalOpen = false;
 let isTerminalInitialized = false;
 let term;
 let sshKeyContent;
 
-// get the ssh key
 function handleFile() {
   const fileInput = document.getElementById('sshkey');
 
@@ -15,15 +14,13 @@ function handleFile() {
 
     reader.onload = function (e) {
       sshKeyContent = e.target.result;
-
-      // Send the SSH key content to the server using WebSocket
       
     };
-    console.log("sent");
+    showMessage("Uploading successful");
     reader.readAsText(file);
     
   } else {
-    console.error('No file selected');
+    showMessage('No file selected');
   }
 }
 // Initialize terminal on page load
@@ -48,12 +45,16 @@ const initializeTerminal = () => {
  // Call the function to initialize the terminal on page load
 
 function showMessage(text, duration = 2000) {
+
+  const messageContainer = document.getElementById('message_container');
   const messageElement = document.getElementById('message');
+  messageContainer.hidden = false;
   messageElement.innerHTML = text;
 
   // Pause for the specified duration and then clear the message
   setTimeout(() => {
     messageElement.innerHTML = '';
+    messageContainer.hidden = true;
   }, duration);
 }
 
@@ -66,9 +67,9 @@ function connectSSH() {
   const ip = document.getElementById('ip').value;
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-
+  const passphrase = document.getElementById('passphrase').value;
   //socket.emit('sshkey',sshKeyContent);
-  socket.emit('startSSHConnection', { ip, username, password,sshKeyContent});
+  socket.emit('startSSHConnection', { ip, username, password, sshKeyContent, passphrase});
   //console.log(sshKeyContent);
   
   // Show connecting status
@@ -128,8 +129,6 @@ function closeTerminal() {
     return;
   }
 
-  //socket.emit('closeTerminal');
-  // Logic to close the terminal (if needed)
   showMessage("Closing terminal...");
 
   const terminalContainer = document.getElementById('terminal-container');
@@ -163,7 +162,9 @@ function updateTerminalButtons() {
 function testCommand() {
   socket.emit('command');
 }
-
+function testCopy(){
+  socket.emit('copy');
+}
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
   isConnected = false; // Reset the connection status on error
@@ -173,7 +174,7 @@ socket.on("ssh.error", (errorMessage) => {
 });
 
 socket.on("disconnect", () => {
-  showMessage("Disconnected");
+  showMessage("Server Disconnected");
   isConnected = false; // Reset the connection status on disconnection
 
   // Reset terminal status and update buttons

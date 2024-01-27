@@ -5,40 +5,105 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
-    <script src="node_modules/xterm/lib/xterm.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+        .fixed-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 9999;
+        }
+    </style>
     <title>SSH Connection</title>
-    <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
 </head>
 
 <body>
-    <div id="login-form">
-        <label for="ip">IP Address:</label>
-        <input type="text" id="ip" placeholder="Enter IP Address" value="192.168.139.130" />
+    <form id="login-form" class="container bg-light m-5 p-3">
+        <h2 class="display-4 text-center mb-3"> SSH Connection</h2>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6 bg-secondary-subtle rounded">
+                <div class="row ">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" id="username" class="form-control" placeholder="Enter Username" value="usuario" />
+                        </div>
+                        
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="ip" class="form-label">IP Address:</label>
+                            <input type="text" id="ip" class="form-control" placeholder="Enter IP Address" value="192.168.186.12" />
+                        </div>
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" placeholder="Enter Username" value="usuario" />
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Enter Password" value="usuario" />
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter Password" value="usuario" />
+                    </div>
+                    <div class="mb-3">
+                        <button onclick="connectSSH()" class="btn btn-success">Connect</button>
+                        <button onclick="disconnectSSH()" class="btn btn-danger">
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="sshkey" class="form-label">SSH key:</label>
+                    <input type="file" id="sshkey" class="form-control" accept=".pub,.pem,.ppk" />
+                </div>
+                <div class="mb-3">
+                    <label for="passphrase" class="form-label">Key passphrase:</label>
+                    <input type="text" id="passphrase" class="form-control" placeholder="Enter passphrase" />
+                </div>
+                <div class="mb-3">
+                    <button onclick="handleFile()" class="btn btn-primary">
+                        Upload SSH Key
+                    </button>
+                </div>
+            </div>
+        </div>
         
-        <label for="myFile">SSH key</label>
-        <input type="file" id="sshkey" accept=".pub,.pem,.ppk"/>
-        <button onclick="handleFile()">Upload SSH Key</button>
+    
+        
+    
+        <div class="mb-3">
+            <button onclick="openTerminal()" id="open-terminal-btn" class="btn btn-info" disabled>
+                Open Terminal
+            </button>
+            <button onclick="closeTerminal()" id="close-terminal-btn" class="btn btn-secondary" disabled>
+                Close Terminal
+            </button>
+            <button onclick="testCommand()" id="command" class="btn btn-warning">
+                Command
+            </button>
+            <button onclick="testCopy()" id="copy" class="btn btn-warning">
+                Copy
+            </button>
+        </div>
+    </form>
+    
+    
+    <!-- New terminal container -->
+    <div id="terminal-container" hidden></div>
 
-        <button onclick="connectSSH()">Connect</button>
-        <button onclick="disconnectSSH()">Disconnect</button>
-
-        <!-- New terminal container -->
-        <div id="terminal-container" hidden></div>
-
-        <!-- New buttons to open and close terminal -->
-        <button onclick="openTerminal()" id="open-terminal-btn" disabled>Open Terminal</button>
-        <button onclick="closeTerminal()" id="close-terminal-btn" disabled>Close Terminal</button>
-        <button onclick="testCommand()" id="command">command</button>
-        <div id="message"></div>
-
-        <script defer src="app.js"></script>
+    <div class="container fixed-container col-6" id="message_container" hidden>
+        <div id="message" class="alert alert-primary"></div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="node_modules/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
+    <script defer src="app.js"></script>
 </body>
 
 </html>
