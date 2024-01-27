@@ -1,2 +1,1 @@
-passphrase bug (pass key that requires a passphrase verification)
 mutiple connextions issue (double terminal)

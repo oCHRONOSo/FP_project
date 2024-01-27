@@ -114,7 +114,6 @@ function openTerminal() {
   } else {
     showMessage("Terminal container or terminal element not found.");
   }
-  showMessage("Opening terminal...");
   
   // Set isTerminalOpen to true
   isTerminalOpen = true;
@@ -129,7 +128,6 @@ function closeTerminal() {
     return;
   }
 
-  showMessage("Closing terminal...");
 
   const terminalContainer = document.getElementById('terminal-container');
 

@@ -23,6 +23,7 @@ io.on("connection", (socket) => {
 
   let conns = new Map();
   let sshStream;
+  let sftp = false;
 
   // Listen for SSH details from the client to start an SSH connection
   socket.on(
@@ -78,6 +79,7 @@ io.on("connection", (socket) => {
       });
 
       conn.on("ready", function () {
+        sftp = true;
         socket.emit("ssh.success");
         socket.emit("ssh.status", "SSH connection successful!");
         console.log("SSH connection successful!");
@@ -133,33 +135,37 @@ io.on("connection", (socket) => {
         });
 
         const localFilePath = "hola.sh";
-        const remoteDestination = `/home/${username}/`;
+        const remoteDestination = "./";
 
         socket.on("copy",() => {
-
-          conn.sftp((sftpErr, sftp) => {
-            if (sftpErr) {
-              console.error("Error creating SFTP session:", sftpErr.message);
-              return;
-            }
-  
-            sftp.fastPut(
-              localFilePath,
-              remoteDestination + "script.sh",
-              {},
-              (transferErr) => {
-                if (transferErr) {
-                  console.error(
-                    "Error during file transfer:",
-                    transferErr.message
-                  );
+            if (sftp) {
+              conn.sftp((sftpErr, sftp) => {
+                if (sftpErr) {
+                  console.error("Error creating SFTP session:", sftpErr.message);
                   return;
                 }
-  
-                console.log("File transfer complete!");
-              }
-            );
-          });
+      
+                sftp.fastPut(
+                  localFilePath,
+                  remoteDestination + "script.sh",
+                  {},
+                  (transferErr) => {
+                    if (transferErr) {
+                      console.error(
+                        "Error during file transfer:",
+                        transferErr.message
+                      );
+                      return;
+                    }
+      
+                    console.log("File transfer complete!");
+                  }
+                );
+              });
+            }
+            
+          
+          
         });
         
       });
@@ -207,11 +213,20 @@ io.on("connection", (socket) => {
       });
 
       socket.on("disconnectSSH", () => {
+        sftp = false;
         socket.emit("ssh.status", "Disconnected");
         console.log("SSH connection disconnected.");
         conn.end();
       });
-      conn.connect(sshConfig);
+      try {
+        conn.connect(sshConfig);
+      } catch (error) {
+        if (error.message.includes("Cannot parse privateKey")) {
+          socket.emit("ssh.status", "Check your passphrase")
+        }
+ 
+      }
+      
     }
   );
 });
