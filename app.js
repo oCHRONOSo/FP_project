@@ -23,9 +23,13 @@ function handleFile() {
     showMessage('No file selected');
   }
 }
-// Initialize terminal on page load
+
 const initializeTerminal = () => {
-  term = new Terminal();
+
+// Initialize terminal on page load
+  term = new Terminal({
+    cursorBlink: true,
+  });
   term.open(document.getElementById('terminal-container'));
 
   term.onData((data) => {

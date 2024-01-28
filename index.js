@@ -21,18 +21,12 @@ io.on("connection", (socket) => {
   const clientIpAddress = socket.handshake.address;
   console.log(`User connected from IP: ${clientIpAddress}`);
 
-  let conns = new Map();
-  let sshStream;
   let sftp = false;
 
   // Listen for SSH details from the client to start an SSH connection
   socket.on(
     "startSSHConnection",
     ({ ip, username, password, sshKeyContent, passphrase }) => {
-      const existingConnection = conns.get(socket.id);
-      if (existingConnection) {
-        existingConnection.end();
-      };
 
       let sshConfig;
 
@@ -93,8 +87,6 @@ io.on("connection", (socket) => {
             return;
           }
 
-          conns.set(socket.id, conn);
-          sshStream = stream;
 
           var ptyProcess = pty.spawn(shell, [], {
             name: "xterm-color",
@@ -114,22 +106,22 @@ io.on("connection", (socket) => {
             // Handle the error or terminate the process
           });
 
-          sshStream.on("data", function (data) {
+          stream.on("data", function (data) {
             io.emit("output", data.toString());
           });
 
           socket.on("start", () => {
-            sshStream.write("clear \r");
+            stream.write("clear \r");
           });
 
           socket.on("input", (data) => {
-            sshStream.write(data);
+            stream.write(data);
           });
 
           socket.on("command", () => {
             // command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; } && clear\r';
             command = "echo hola";
-            sshStream.write(command);
+            stream.write(command);
           });
 
         });
@@ -213,10 +205,10 @@ io.on("connection", (socket) => {
       });
 
       socket.on("disconnectSSH", () => {
+        conn.end();
         sftp = false;
         socket.emit("ssh.status", "Disconnected");
         console.log("SSH connection disconnected.");
-        conn.end();
       });
       try {
         conn.connect(sshConfig);
