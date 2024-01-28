@@ -186,3 +186,11 @@ socket.on("disconnect", () => {
   isTerminalOpen = false;
   updateTerminalButtons();
 });
+document.getElementById('flexSwitchCheckDefault').addEventListener('click',()=>{
+  if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+      document.documentElement.setAttribute('data-bs-theme','light')
+  }
+  else {
+      document.documentElement.setAttribute('data-bs-theme','dark')
+  }
+});
