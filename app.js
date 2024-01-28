@@ -86,6 +86,10 @@ function connectSSH() {
 
     // Update isConnected flag based on the status
     isConnected = status === "SSH connection successful!";
+    if (!isTerminalInitialized) {
+      initializeTerminal(); // Initialize the terminal if not already initialized
+    }
+    openTerminal();
     updateTerminalButtons();
   });
 }
@@ -109,10 +113,6 @@ function openTerminal() {
     return;
   }
 
-  // Logic to open the terminal (if needed)
-  if (!isTerminalInitialized) {
-    initializeTerminal(); // Initialize the terminal if not already initialized
-  }
   const terminalContainer = document.getElementById('terminal-container');
   if (terminalContainer) {
     terminalContainer.hidden = false ; // Clear the terminal content
@@ -165,8 +165,8 @@ function updateTerminalButtons() {
 function testCommand() {
   socket.emit('command');
 }
-function testCopy(){
-  input_name = "tools.sh";
+function testCopy(button){
+  const input_name = button;
   socket.emit("path",input_name);
   socket.emit('copy');
 }
