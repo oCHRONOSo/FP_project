@@ -43,37 +43,39 @@
                         <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
                         <div class="row g-3 mb-3">
                             <div class="col-md-6 bg-secondary-subtle rounded">
-                                <div class="row g-2">
-                                    <div class="col-6 mb-3">
+                                <div class="row ">
+                                    <div class="col-6">
+                                        <div class="mb-3">
                                             <label for="username" class="form-label">Username:</label>
                                             <input type="text" id="username" class="form-control"
                                                 placeholder="Enter Username" value="usuario" />
+                                        </div>
+
                                     </div>
-                                    <div class="col-6 mb-3">
+                                    <div class="col-6">
+                                        <div class="mb-3">
                                             <label for="ip" class="form-label">IP Address:</label>
                                             <input type="text" id="ip" class="form-control"
                                                 placeholder="Enter IP Address" value="192.168.186.12" />
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="row g-2">
-                                    <div class="col-9 mb-3">
+                                <div>
+                                    <div class="mb-3">
                                         <label for="password" class="form-label">Password:</label>
                                         <input type="password" id="password" class="form-control"
                                             placeholder="Enter Password" value="usuario" />
                                     </div>
-                                    <div class="col-3 mb-3">
-                                        <label for="port" class="form-label">Port:</label>
-                                        <input type="text" id="port" class="form-control"
-                                            placeholder="Port" value="22" />
+                                    <div class="mb-3">
+                                        <button type="button" onclick="connectSSH()"
+                                            class="btn btn-success">Connect</button>
+                                        <button type="button" onclick="disconnectSSH()" class="btn btn-danger">
+                                            Disconnect
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <button type="button" onclick="connectSSH()"
-                                        class="btn btn-success">Connect</button>
-                                    <button type="button" onclick="disconnectSSH()" class="btn btn-danger">
-                                        Disconnect
-                                    </button>
-                                </div>
+
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">

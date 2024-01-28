@@ -4,7 +4,6 @@ const http = require("http").createServer();
 // Import necessary modules for SSH functionality
 const ssh2 = require("ssh2");
 const fs = require("fs");
-const path = require('path');
 const pty = require("node-pty");
 const os = require("os");
 
@@ -27,7 +26,7 @@ io.on("connection", (socket) => {
   // Listen for SSH details from the client to start an SSH connection
   socket.on(
     "startSSHConnection",
-    ({ ip, username, password, port, sshKeyContent, passphrase }) => {
+    ({ ip, username, password, sshKeyContent, passphrase }) => {
 
       let sshConfig;
 
@@ -40,7 +39,7 @@ io.on("connection", (socket) => {
       ) {
         sshConfig = {
           host: ip,
-          port: port,
+          port: 22,
           username: username,
           privateKey: sshKeyContent,
         };
@@ -51,7 +50,7 @@ io.on("connection", (socket) => {
       } else {
         sshConfig = {
           host: ip,
-          port: port,
+          port: 22,
           username: username,
           password: password,
         };
@@ -80,12 +79,10 @@ io.on("connection", (socket) => {
         console.log("SSH connection successful!");
 
         conn.shell(function (err, stream) {
-
           if (err) {
             console.error("Error opening shell:", err.message);
             socket.emit("ssh.error", "Error opening shell. Please try again.");
             console.log("Error while opening SHELL");
-            sftp = false;
             conn.end();
             return;
           }
@@ -127,22 +124,19 @@ io.on("connection", (socket) => {
             stream.write(command);
           });
 
+        });
 
-          if (sftp) {
-            conn.sftp((sftpErr, sftp) => {
-              if (sftpErr) {
-                console.error("Error creating SFTP session:", sftpErr.message);
-                return;
-              }
-              let script_path;
-              socket.on('path',(input_name)=>{
-                script_path = findScriptPath("scripts/",input_name);
-              });
+        const localFilePath = "hola.sh";
+        const remoteDestination = "./";
 
-              socket.on("copy", () => {
-                const localFilePath = script_path;
-                const remoteDestination = "./";
-
+        socket.on("copy",() => {
+            if (sftp) {
+              conn.sftp((sftpErr, sftp) => {
+                if (sftpErr) {
+                  console.error("Error creating SFTP session:", sftpErr.message);
+                  return;
+                }
+      
                 sftp.fastPut(
                   localFilePath,
                   remoteDestination + "script.sh",
@@ -155,25 +149,17 @@ io.on("connection", (socket) => {
                       );
                       return;
                     }
-
+      
                     console.log("File transfer complete!");
                   }
                 );
-
-                stream.write(`chmod a+x script.sh && sleep 0.5 && (echo ${password} | sudo -S ./script.sh) && rm script.sh
-                \r`);
-
               });
-
-
-
-            });
-          }
-
+            }
+            
+          
+          
         });
-
-
-
+        
       });
 
       // Additional error handling for authentication failures
@@ -230,9 +216,9 @@ io.on("connection", (socket) => {
         if (error.message.includes("Cannot parse privateKey")) {
           socket.emit("ssh.status", "Check your passphrase")
         }
-
+ 
       }
-
+      
     }
   );
 });
@@ -241,39 +227,3 @@ io.on("connection", (socket) => {
 http.listen(8080, () =>
   console.log("Server listening on http://localhost:8080")
 );
-
-function findScriptPath(folderPath, scriptName) {
-  // Check if folderPath exists
-  if (!fs.existsSync(folderPath)) {
-
-      console.log('Folder does not exist');
-      return;
-  }
-
-  // Read all files and directories in the folder
-  const files = fs.readdirSync(folderPath);
-
-  // Loop through each file/directory
-  for (const file of files) {
-      const filePath = path.join(folderPath, file);
-
-      // Check if it's a directory
-      if (fs.statSync(filePath).isDirectory()) {
-          // Recursively search in subdirectories
-          const subFolderPath = path.join(folderPath, file);
-          const foundPath = findScriptPath(subFolderPath, scriptName);
-          if (foundPath) {
-              return foundPath;
-          }
-      } else {
-          // Check if it's the script file
-          if (file === scriptName && file.endsWith('.sh')) {
-              console.log(filePath);
-              return filePath;
-          }
-      }
-  }
-
-  // Script not found
-  return null;
-}

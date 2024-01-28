@@ -72,9 +72,8 @@ function connectSSH() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const passphrase = document.getElementById('passphrase').value;
-  const port = document.getElementById('port').value;
   //socket.emit('sshkey',sshKeyContent);
-  socket.emit('startSSHConnection', { ip, username, password, port, sshKeyContent, passphrase});
+  socket.emit('startSSHConnection', { ip, username, password, sshKeyContent, passphrase});
   //console.log(sshKeyContent);
   
   // Show connecting status
@@ -166,8 +165,6 @@ function testCommand() {
   socket.emit('command');
 }
 function testCopy(){
-  input_name = "tools.sh";
-  socket.emit("path",input_name);
   socket.emit('copy');
 }
 socket.on("ssh.error", (errorMessage) => {

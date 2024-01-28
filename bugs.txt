@@ -1,1 +1,2 @@
-mutiple connextions issue (double terminal)
+mutiple connextions issue (broadcast output)
+sftp (copy file corrupt server while changing to root and execute copy)
