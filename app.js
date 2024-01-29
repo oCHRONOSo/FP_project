@@ -29,6 +29,7 @@ const initializeTerminal = () => {
 // Initialize terminal on page load
   term = new Terminal({
     cursorBlink: true,
+    convertEol: true,
   });
   term.open(document.getElementById('terminal-container'));
 
