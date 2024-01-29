@@ -79,7 +79,7 @@
                                     <div class="col-6 mb-3">
                                         <label for="ip" class="form-label">IP Address:</label>
                                         <input type="text" id="ip" class="form-control" placeholder="Enter IP Address"
-                                            value="192.168.186.12" />
+                                            value="192.168.139.130" />
                                     </div>
                                 </div>
                                 <div class="row g-2">
@@ -166,6 +166,28 @@
                     <div class="mb-3">
                         <button type="button" onclick="testCopy('tools.sh')" id="tools" class="btn btn-warning">
                             Install tools
+                        </button>
+                        <button type="button" onclick="testCopy('install_apache.sh')" id="tools" class="btn btn-warning">
+                            Install Apache
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion" id="accordion3">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseConfigure" aria-expanded="false" aria-controls="collapseConfigure">
+                    4- Configure Packages &nbsp <i class="bi bi-gear-fill"></i>
+                </button>
+            </h2>
+            <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
+                <div class="accordion-body">
+                    <div class="mb-3">
+                        <button type="button" onclick="testCopy('configure_apache.sh')" id="tools" class="btn btn-warning">
+                            Configure apache2 
                         </button>
                     </div>
                 </div>

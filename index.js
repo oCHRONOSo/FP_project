@@ -123,7 +123,7 @@ io.on("connection", (socket) => {
 
           socket.on("command", () => {
             // command = '[ "$EUID" -ne 0 ] && echo "Please run this command as root" || { echo \'#!/bin/bash\' > empty_script.sh && chmod +x empty_script.sh; } && clear\r';
-            command = "echo hola";
+            command = "apt install sudo";
             stream.write(command);
           });
 
