@@ -8,6 +8,8 @@ const path = require('path');
 const pty = require("node-pty");
 const os = require("os");
 
+let conn;
+
 // Set up Socket.IO with CORS configuration
 let io = require("socket.io")(http, {
   cors: { origin: "*" },
@@ -28,10 +30,10 @@ io.on("connection", (socket) => {
   socket.on(
     "startSSHConnection",
     ({ ip, username, password, port, sshKeyContent, passphrase }) => {
-
+      let conn;
       let sshConfig;
 
-      const conn = new ssh2.Client();
+      conn = new ssh2.Client();
 
       if (
         typeof password === "undefined" ||
@@ -172,7 +174,7 @@ io.on("connection", (socket) => {
 
         });
 
-
+        
 
       });
 
@@ -219,11 +221,13 @@ io.on("connection", (socket) => {
       });
 
       socket.on("disconnectSSH", () => {
-        conn.end();
-        sftp = false;
-        socket.emit("ssh.status", "Disconnected");
-        console.log("SSH connection disconnected.");
+          conn.end();
+          sftp = false;
+          socket.emit("ssh.status", "Disconnected");
+          console.log("SSH connection disconnected.");
+          //conn = null;
       });
+
       try {
         conn.connect(sshConfig);
       } catch (error) {

@@ -47,7 +47,6 @@ const initializeTerminal = () => {
   
 };
 
- // Call the function to initialize the terminal on page load
 
 function showMessage(text, duration = 2000) {
 
@@ -90,13 +89,11 @@ function connectSSH() {
     if (!isTerminalInitialized) {
       initializeTerminal(); // Initialize the terminal if not already initialized
     }
-    openTerminal();
     updateTerminalButtons();
   });
 }
 
 function disconnectSSH() {
-  closeTerminal();
   if (!isConnected) {
     showMessage("Not connected!");
     return;
@@ -105,12 +102,17 @@ function disconnectSSH() {
   socket.emit('disconnectSSH');
   showMessage("Disconnecting from SSH...");
   isConnected = false;
+  isTerminalInitialized = false;
   
 }
 
 function openTerminal() {
-  if (!isConnected || isTerminalOpen) {
-    showMessage("Cannot open terminal. Ensure SSH connection is established and terminal is not already open.");
+  if (!isConnected) {
+    showMessage("Cannot open terminal. Ensure SSH connection is established.");
+    return;
+  }
+  if (isTerminalOpen) {
+    showMessage("Terminal is already open.");
     return;
   }
 
@@ -129,8 +131,12 @@ function openTerminal() {
 }
 
 function closeTerminal() {
-  if (!isConnected || !isTerminalOpen) {
-    showMessage("Cannot close terminal. Ensure SSH connection is established and terminal is open.");
+  if (!isConnected ) {
+    showMessage("Cannot close terminal. Ensure SSH connection is established.");
+    return;
+  }
+  if (!isTerminalOpen) {
+    showMessage("Terminal is already closed");
     return;
   }
 
@@ -174,7 +180,6 @@ function testCopy(button){
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
   isConnected = false; // Reset the connection status on error
-
   // Disable terminal control buttons
   updateTerminalButtons();
 });
@@ -182,7 +187,6 @@ socket.on("ssh.error", (errorMessage) => {
 socket.on("disconnect", () => {
   showMessage("Server Disconnected");
   isConnected = false; // Reset the connection status on disconnection
-
   // Reset terminal status and update buttons
   isTerminalOpen = false;
   updateTerminalButtons();
