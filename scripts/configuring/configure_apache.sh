@@ -26,7 +26,7 @@ sudo openssl req -new -x509 -days 365 -nodes \
 # Enable SSL module
 sudo a2enmod ssl
 
-# Create virtual host configuration file with sudo and echo
+# Create virtual host configuration file
 sudo echo "<VirtualHost *:80>
     ServerAdmin webmaster@$domain
     ServerName $domain
@@ -57,7 +57,7 @@ sudo a2dissite 000-default.conf
 sudo chmod -R 755 $directory
 sudo chown -R $apache_user:$apache_user $directory
 
-# Create index.html file without tee
+# Create index.html 
 sudo echo "<html>
     <head>
         <title>Welcome to $domain!</title>
@@ -65,7 +65,7 @@ sudo echo "<html>
     <body>
         <h1>Success! The $domain server block is working!</h1>
     </body>
-</html>" > /var/www/$domain/index.html
+</html>" > $directory/index.html
 
 # Reload Apache to apply changes
 sudo systemctl restart apache2
