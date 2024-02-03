@@ -1,4 +1,5 @@
-domain="example.com"
+domain="$1"
+
 directory="/var/www/$domain"
 cert_dir="/etc/nginx/ssl/certs"
 key_dir="/etc/nginx/ssl/private"
@@ -44,14 +45,23 @@ sudo echo "server {
 
 }" > /etc/nginx/sites-available/$domain 
 
+sudo echo "server {
+    listen 80;
+    listen [::]:80;
+    server_name $domain;
+
+    return 301 https://\$server_name\$request_uri;
+}" > /etc/nginx/sites-available/${domain}_http_redirect
+
 sudo ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/$domain 
+sudo ln -s "/etc/nginx/sites-available/${domain}_http_redirect" "/etc/nginx/sites-enabled/${domain}_http_redirect"
 
 sudo echo "<html>
     <head>
-        <title>Welcome to $domain!</title>
+        <title>Welcome to $domain! </title>
     </head>
     <body>
-        <h1>Success! The $domain server block is working!</h1>
+        <h1>Success! The $domain server block is working! (Nginx)</h1>
     </body>
 </html>" > $directory/index.html
 

@@ -174,8 +174,11 @@ function testCommand() {
 }
 function testCopy(button){
   const input_name = button;
+  const domain = document.getElementById("domain").value
+
   socket.emit("path",input_name);
   socket.emit('copy');
+  socket.emit('configue_webserver',domain);
 }
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);

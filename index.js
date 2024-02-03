@@ -138,34 +138,51 @@ io.on("connection", (socket) => {
               }
               let script_path;
               socket.on('path',(input_name)=>{
-                script_path = findScriptPath("scripts/",input_name);
+                try {
+                  script_path = findScriptPath("scripts/",input_name);
+                }
+                 catch (error) {
+                    socket.emit("ssh.status", "error: script not found");
+                 }
+                
               });
-
-              socket.on("copy", () => {
-                const localFilePath = script_path;
-                const remoteDestination = "./";
-
-                sftp.fastPut(
-                  localFilePath,
-                  remoteDestination + "script.sh",
-                  {},
-                  (transferErr) => {
-                    if (transferErr) {
-                      console.error(
-                        "Error during file transfer:",
-                        transferErr.message
-                      );
-                      return;
-                    }
-
-                    console.log("File transfer complete!");
+  
+                socket.on("copy", () => {
+                  const localFilePath = script_path;
+                  const remoteDestination = "./";
+                  try {
+                    sftp.fastPut(
+                      localFilePath,
+                      remoteDestination + "script.sh",
+                      {},
+                      (transferErr) => {
+                        if (transferErr) {
+                          console.error(
+                            "Error during file transfer:",
+                            transferErr.message
+                          );
+                          return;
+                        }
+    
+                        console.log("File transfer complete!");
+                      }
+                    );
+                    socket.on("configue_webserver", (domain) => {
+                      stream.write(`chmod a+x script.sh && sleep 0.5 && (echo ${password} | sudo -S ./script.sh ${domain}) && rm script.sh
+                      \r`);
+                  });
+                    
+                  } catch (error) {
+                    socket.emit("ssh.status", "error: unable to copy the code");
                   }
-                );
 
-                stream.write(`chmod a+x script.sh && sleep 0.5 && (echo ${password} | sudo -S ./script.sh) && rm script.sh
-                \r`);
-
-              });
+                  
+  
+                });
+                
+              
+              
+              
 
 
 

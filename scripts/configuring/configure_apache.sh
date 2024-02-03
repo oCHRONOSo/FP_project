@@ -1,7 +1,8 @@
 
 
 # Define variables
-domain="example.com"
+domain="$1"
+
 directory="/var/www/$domain"
 cert_dir="/etc/apache2/ssl/certs"
 key_dir="/etc/apache2/ssl/private"
@@ -60,10 +61,10 @@ sudo chown -R $apache_user:$apache_user $directory
 # Create index.html 
 sudo echo "<html>
     <head>
-        <title>Welcome to $domain!</title>
+        <title>Welcome to $domain! </title>
     </head>
     <body>
-        <h1>Success! The $domain server block is working!</h1>
+        <h1>Success! The $domain server block is working! (Apache) </h1>
     </body>
 </html>" > $directory/index.html
 
