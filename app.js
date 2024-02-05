@@ -99,11 +99,10 @@ function disconnectSSH() {
     return;
   }
 
-  socket.emit('disconnectSSH');
   showMessage("Disconnecting from SSH...");
   isConnected = false;
   isTerminalInitialized = false;
-  
+  socket.emit('disconnectSSH');
 }
 
 function openTerminal() {
@@ -194,6 +193,7 @@ socket.on("disconnect", () => {
   isTerminalOpen = false;
   updateTerminalButtons();
 });
+
 document.getElementById('flexSwitchCheckDefault').addEventListener('click',()=>{
   if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
       document.documentElement.setAttribute('data-bs-theme','light')
