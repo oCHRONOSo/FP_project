@@ -1,201 +1,159 @@
-const http = require("http").createServer();
-const ssh2 = require("ssh2");
-const fs = require("fs");
-const path = require('path');
-const pty = require("node-pty");
-const os = require("os");
-const io = require("socket.io")(http, { cors: { origin: "*" } });
+// Establish WebSocket connection with the server
+const socket = io("ws://localhost:8080");
 
-const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
+// Initialize state variables
+let isConnected = false;
+let isTerminalOpen = false;
+let isTerminalInitialized = false;
+let term;
+let sshKeyContent;
 
-io.on("connection", (socket) => {
-  const clientIpAddress = socket.handshake.address;
-  console.log(`User connected from IP: ${clientIpAddress}`);
-  let sftp = false;
+// Function to handle file upload for SSH key
+function handleFile() {
+  const fileInput = document.getElementById('sshkey');
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      sshKeyContent = e.target.result;
+    };
+    showMessage("Uploading successful");
+    reader.readAsText(file);
+  } else {
+    showMessage('No file selected');
+  }
+}
 
-  socket.on("startSSHConnection", ({ ip, username, password, port, sshKeyContent, passphrase }) => {
-    let sshConfig;
-    let conn = new ssh2.Client();
-    let ptyProcess;
+// Initialize the terminal
+const initializeTerminal = () => {
+  if (!isTerminalInitialized) {
+    term = new Terminal({ cursorBlink: true, convertEol: true });
+    term.open(document.getElementById('terminal-container'));
+    term.onData((data) => socket.emit('input', data));
+    socket.on('output', (data) => term.write(data));
+    socket.emit('start');
+    isTerminalInitialized = true;
+  }
+};
 
-    if (!password) {
-      sshConfig = { host: ip, port, username, privateKey: sshKeyContent, passphrase };
-    } else {
-      sshConfig = { host: ip, port, username, password };
-    }
+// Display message in the UI
+function showMessage(text, duration = 2000) {
+  const messageContainer = document.getElementById('message_container');
+  const messageElement = document.getElementById('message');
+  messageContainer.hidden = false;
+  messageElement.innerHTML = text;
+  setTimeout(() => {
+    messageElement.innerHTML = '';
+    messageContainer.hidden = true;
+  }, duration);
+}
 
-    socket.emit("ssh.status", "Connecting to SSH...");
-    conn.on("error", (err) => {
-      const errorMessage = err.message.includes("Encrypted private key detected")
-        ? "Encrypted private OpenSSH key detected, but no passphrase provided."
-        : "Error connecting via SSH. Check your credentials and try again.";
-      console.error("SSH connection error:", err.message);
-      socket.emit("ssh.error", errorMessage);
-      socket.emit("ssh.status", "Error connecting via SSH.");
-      conn.end();
-    });
-
-    conn.on("ready", function () {
-      sftp = true;
-      socket.emit("ssh.success");
-      socket.emit("ssh.status", "SSH connection successful!");
-      console.log("SSH connection successful!");
-
-      conn.shell(function (err, stream) {
-        if (err) {
-          console.error("Error opening shell:", err.message);
-          socket.emit("ssh.error", "Error opening shell. Please try again.");
-          console.log("Error while opening SHELL");
-          sftp = false;
-          conn.end();
-          return;
-        }
-
-        ptyProcess = pty.spawn(shell, [], {
-          name: "xterm-color",
-          cols: 80,
-          rows: 30,
-          cwd: process.env.HOME,
-          env: process.env,
-        });
-
-        ptyProcess.on("error", function (err) {
-          console.error("Error spawning PTY process:", err.message);
-          socket.emit("ssh.error", "Error spawning PTY process. Please try again.");
-          console.log("Error PTY process");
-        });
-
-        stream.on("data", function (data) {
-          io.emit("output", data.toString());
-        });
-
-        socket.on("start", () => {
-          stream.write("clear \r");
-        });
-
-        socket.on("input", (data) => {
-          stream.write(data);
-        });
-
-        socket.on("command", () => {
-          const command = "apt install sudo";
-          stream.write(command);
-        });
-
-        if (sftp) {
-          conn.sftp((sftpErr, sftp) => {
-            if (sftpErr) {
-              console.error("Error creating SFTP session:", sftpErr.message);
-              return;
-            }
-            let script_path;
-            socket.on('path', (input_name) => {
-              try {
-                script_path = findScriptPath("scripts/", input_name);
-              } catch (error) {
-                socket.emit("ssh.status", "error: script not found");
-              }
-            });
-
-            socket.on("copy", () => {
-              const localFilePath = script_path;
-              const remoteDestination = "./";
-              try {
-                sftp.fastPut(
-                  localFilePath,
-                  remoteDestination + "script.sh",
-                  {},
-                  (transferErr) => {
-                    if (transferErr) {
-                      console.error("Error during file transfer:", transferErr.message);
-                      return;
-                    }
-                    console.log("File transfer complete!");
-                    sftp.end();
-                  }
-                );
-                socket.on("configue_webserver", (domain) => {
-                  stream.write(`chmod a+x script.sh && sleep 0.5 && (echo ${password} | sudo -S ./script.sh ${domain}) && rm script.sh\r`);
-                });
-              } catch (error) {
-                socket.emit("ssh.status", "error: unable to copy the code");
-              }
-            });
-          });
-        }
-      });
-    });
-
-    conn.on("keyboard-interactive", () => {
-      console.error("Authentication failed. Check your credentials and try again.");
-      socket.emit("ssh.error", "Authentication failed. Check your credentials and try again.");
-      socket.emit("ssh.status", "Authentication failed.");
-      conn.end();
-    });
-
-    socket.emit("ssh.status", "Attempting to connect...");
-    console.log("Attempting to connect...");
-
-    conn.on("keyboard-interactive", (name, instructions, lang, prompts, finish) => {
-      console.log("SSH keyboard-interactive authentication prompts:", prompts);
-      finish([password]);
-    });
-
-    conn.on("tcpip", (info, accept, reject) => {
-      console.log("TCP/IP forwarding requested:", info);
-      accept();
-    });
-
-    conn.on("request", (accept, reject, name, info) => {
-      console.log("SSH channel request:", name, info);
-      accept();
-    });
-
-    socket.on("disconnectSSH", () => {
-      if (conn) {
-        conn.end();
-        sftp = false;
-        socket.emit("ssh.status", "Disconnected");
-        console.log("SSH connection disconnected.");
-        conn = null;
-      }
-      if (ptyProcess) {
-        ptyProcess.kill();
-        ptyProcess = null;
-        console.log("PTY process terminated.");
-      }
-    });
-
-    try {
-      conn.connect(sshConfig);
-    } catch (error) {
-      if (error.message.includes("Cannot parse privateKey")) {
-        socket.emit("ssh.status", "Check your passphrase");
-      }
-    }
-  });
-});
-
-http.listen(8080, () => console.log("Server listening on http://localhost:8080"));
-
-function findScriptPath(folderPath, scriptName) {
-  if (!fs.existsSync(folderPath)) {
-    console.log('Folder does not exist');
+// Connect to SSH server
+function connectSSH() {
+  if (isConnected) {
+    showMessage("Already connected!");
     return;
   }
-  const files = fs.readdirSync(folderPath);
-  for (const file of files) {
-    const filePath = path.join(folderPath, file);
-    if (fs.statSync(filePath).isDirectory()) {
-      const subFolderPath = path.join(folderPath, file);
-      const foundPath = findScriptPath(subFolderPath, scriptName);
-      if (foundPath) return foundPath;
-    } else {
-      if (file === scriptName && file.endsWith('.sh')) {
-        console.log(filePath);
-        return filePath;
-      }
-    }
-  }
-  return null;
+  const { value: ip } = document.getElementById('ip');
+  const { value: username } = document.getElementById('username');
+  const { value: password } = document.getElementById('password');
+  const { value: passphrase } = document.getElementById('passphrase');
+  const { value: port } = document.getElementById('port');
+  socket.emit('startSSHConnection', { ip, username, password, port, sshKeyContent, passphrase });
+  showMessage("Connecting to SSH...");
+  socket.on("ssh.status", (status) => {
+    showMessage(status);
+    isConnected = status === "SSH connection successful!";
+    if (!isTerminalInitialized) initializeTerminal();
+    updateTerminalButtons();
+  });
+  openTerminal();
 }
+
+// Disconnect from SSH server
+function disconnectSSH() {
+  if (!isConnected) {
+    showMessage("Not connected!");
+    return;
+  }
+  term.dispose();
+  term = null;
+  document.getElementById('terminal-container').innerHTML = null;
+  isTerminalInitialized = false;
+  showMessage("Disconnecting from SSH...");
+  isConnected = false;
+  socket.emit('disconnectSSH');
+  closeTerminal();
+}
+
+// Open the terminal
+function openTerminal() {
+  if (!isConnected) {
+    showMessage("Cannot open terminal. Ensure SSH connection is established.");
+    return;
+  }
+  if (isTerminalOpen) {
+    showMessage("Terminal is already open.");
+    return;
+  }
+  document.getElementById('terminal-container').hidden = false;
+  isTerminalOpen = true;
+  updateTerminalButtons();
+}
+
+// Close the terminal
+function closeTerminal() {
+  if (!isConnected) {
+    showMessage("Cannot close terminal. Ensure SSH connection is established.");
+    return;
+  }
+  if (!isTerminalOpen) {
+    showMessage("Terminal is already closed");
+    return;
+  }
+  document.getElementById('terminal-container').hidden = true;
+  isTerminalOpen = false;
+  updateTerminalButtons();
+}
+
+// Update state of terminal buttons
+function updateTerminalButtons() {
+  const openTerminalBtn = document.getElementById('open-terminal-btn');
+  const closeTerminalBtn = document.getElementById('close-terminal-btn');
+  openTerminalBtn.disabled = isConnected && isTerminalOpen;
+  closeTerminalBtn.disabled = !isConnected || !isTerminalOpen;
+}
+
+// Send test command to the server
+function testCommand() {
+  socket.emit('command');
+}
+
+// Copy script to the server and configure web server
+function testCopy(button) {
+  const input_name = button;
+  const domain = document.getElementById("domain").value;
+  socket.emit("path", input_name);
+  socket.emit('copy');
+  socket.emit('configue_webserver', domain);
+}
+
+// Handle SSH error messages
+socket.on("ssh.error", (errorMessage) => {
+  showMessage(`Error: ${errorMessage}`);
+  isConnected = false;
+  updateTerminalButtons();
+});
+
+// Handle server disconnection
+socket.on("disconnect", () => {
+  showMessage("Server Disconnected");
+  isConnected = false;
+  isTerminalOpen = false;
+  updateTerminalButtons();
+});
+
+// Toggle between dark and light themes
+document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
+  document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
+});

@@ -1,10 +1,14 @@
+// Establish WebSocket connection with the server
 const socket = io("ws://localhost:8080");
+
+// Initialize state variables
 let isConnected = false;
 let isTerminalOpen = false;
 let isTerminalInitialized = false;
 let term;
 let sshKeyContent;
 
+// Function to handle file upload for SSH key
 function handleFile() {
   const fileInput = document.getElementById('sshkey');
   if (fileInput.files.length > 0) {
@@ -20,6 +24,7 @@ function handleFile() {
   }
 }
 
+// Initialize the terminal
 const initializeTerminal = () => {
   if (!isTerminalInitialized) {
     term = new Terminal({ cursorBlink: true, convertEol: true });
@@ -31,6 +36,7 @@ const initializeTerminal = () => {
   }
 };
 
+// Display message in the UI
 function showMessage(text, duration = 2000) {
   const messageContainer = document.getElementById('message_container');
   const messageElement = document.getElementById('message');
@@ -42,6 +48,7 @@ function showMessage(text, duration = 2000) {
   }, duration);
 }
 
+// Connect to SSH server
 function connectSSH() {
   if (isConnected) {
     showMessage("Already connected!");
@@ -63,6 +70,7 @@ function connectSSH() {
   openTerminal();
 }
 
+// Disconnect from SSH server
 function disconnectSSH() {
   if (!isConnected) {
     showMessage("Not connected!");
@@ -78,6 +86,7 @@ function disconnectSSH() {
   closeTerminal();
 }
 
+// Open the terminal
 function openTerminal() {
   if (!isConnected) {
     showMessage("Cannot open terminal. Ensure SSH connection is established.");
@@ -92,6 +101,7 @@ function openTerminal() {
   updateTerminalButtons();
 }
 
+// Close the terminal
 function closeTerminal() {
   if (!isConnected) {
     showMessage("Cannot close terminal. Ensure SSH connection is established.");
@@ -106,6 +116,7 @@ function closeTerminal() {
   updateTerminalButtons();
 }
 
+// Update state of terminal buttons
 function updateTerminalButtons() {
   const openTerminalBtn = document.getElementById('open-terminal-btn');
   const closeTerminalBtn = document.getElementById('close-terminal-btn');
@@ -113,10 +124,12 @@ function updateTerminalButtons() {
   closeTerminalBtn.disabled = !isConnected || !isTerminalOpen;
 }
 
+// Send test command to the server
 function testCommand() {
   socket.emit('command');
 }
 
+// Copy script to the server and configure web server
 function testCopy(button) {
   const input_name = button;
   const domain = document.getElementById("domain").value;
@@ -125,12 +138,14 @@ function testCopy(button) {
   socket.emit('configue_webserver', domain);
 }
 
+// Handle SSH error messages
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
   isConnected = false;
   updateTerminalButtons();
 });
 
+// Handle server disconnection
 socket.on("disconnect", () => {
   showMessage("Server Disconnected");
   isConnected = false;
@@ -138,6 +153,8 @@ socket.on("disconnect", () => {
   updateTerminalButtons();
 });
 
+// Toggle between dark and light themes
 document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
 });
+
