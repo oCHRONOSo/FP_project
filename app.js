@@ -1,4 +1,4 @@
-let socket = io("ws://localhost:8080");
+const socket = io("ws://localhost:8080");
 let isConnected = false;
 let isTerminalOpen = false;
 let isTerminalInitialized = false;
@@ -7,55 +7,35 @@ let sshKeyContent;
 
 function handleFile() {
   const fileInput = document.getElementById('sshkey');
-
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
     const reader = new FileReader();
-
-    reader.onload = function (e) {
+    reader.onload = (e) => {
       sshKeyContent = e.target.result;
-      
     };
     showMessage("Uploading successful");
     reader.readAsText(file);
-    
   } else {
     showMessage('No file selected');
   }
 }
 
 const initializeTerminal = () => {
-
-// Initialize terminal on page load
-  term = new Terminal({
-    cursorBlink: true,
-    convertEol: true,
-  });
-  term.open(document.getElementById('terminal-container'));
-
-  term.onData((data) => {
-    // Send user input from the terminal to the server
-    socket.emit('input', data);
-  });
-
-  socket.on('output', (data) => {
-    // Display output received from the server in the terminal
-    term.write(data);
-  });
-  socket.emit('start');
-  isTerminalInitialized = true;
-  
+  if (!isTerminalInitialized) {
+    term = new Terminal({ cursorBlink: true, convertEol: true });
+    term.open(document.getElementById('terminal-container'));
+    term.onData((data) => socket.emit('input', data));
+    socket.on('output', (data) => term.write(data));
+    socket.emit('start');
+    isTerminalInitialized = true;
+  }
 };
 
-
 function showMessage(text, duration = 2000) {
-
   const messageContainer = document.getElementById('message_container');
   const messageElement = document.getElementById('message');
   messageContainer.hidden = false;
   messageElement.innerHTML = text;
-
-  // Pause for the specified duration and then clear the message
   setTimeout(() => {
     messageElement.innerHTML = '';
     messageContainer.hidden = true;
@@ -67,30 +47,20 @@ function connectSSH() {
     showMessage("Already connected!");
     return;
   }
-
-  const ip = document.getElementById('ip').value;
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  const passphrase = document.getElementById('passphrase').value;
-  const port = document.getElementById('port').value;
-  //socket.emit('sshkey',sshKeyContent);
-  socket.emit('startSSHConnection', { ip, username, password, port, sshKeyContent, passphrase});
-  //console.log(sshKeyContent);
-  
-  // Show connecting status
+  const { value: ip } = document.getElementById('ip');
+  const { value: username } = document.getElementById('username');
+  const { value: password } = document.getElementById('password');
+  const { value: passphrase } = document.getElementById('passphrase');
+  const { value: port } = document.getElementById('port');
+  socket.emit('startSSHConnection', { ip, username, password, port, sshKeyContent, passphrase });
   showMessage("Connecting to SSH...");
-
-  // Handle the connection status messages from the server
   socket.on("ssh.status", (status) => {
     showMessage(status);
-
-    // Update isConnected flag based on the status
     isConnected = status === "SSH connection successful!";
-    if (!isTerminalInitialized) {
-      initializeTerminal(); // Initialize the terminal if not already initialized
-    }
+    if (!isTerminalInitialized) initializeTerminal();
     updateTerminalButtons();
   });
+  openTerminal();
 }
 
 function disconnectSSH() {
@@ -98,11 +68,14 @@ function disconnectSSH() {
     showMessage("Not connected!");
     return;
   }
-
+  term.dispose();
+  term = null;
+  document.getElementById('terminal-container').innerHTML = null;
+  isTerminalInitialized = false;
   showMessage("Disconnecting from SSH...");
   isConnected = false;
-  isTerminalInitialized = false;
   socket.emit('disconnectSSH');
+  closeTerminal();
 }
 
 function openTerminal() {
@@ -114,23 +87,13 @@ function openTerminal() {
     showMessage("Terminal is already open.");
     return;
   }
-
-  const terminalContainer = document.getElementById('terminal-container');
-  if (terminalContainer) {
-    terminalContainer.hidden = false ; // Clear the terminal content
-  } else {
-    showMessage("Terminal container or terminal element not found.");
-  }
-  
-  // Set isTerminalOpen to true
+  document.getElementById('terminal-container').hidden = false;
   isTerminalOpen = true;
-
-  // Disable "Open Terminal" button and enable "Close Terminal" button
   updateTerminalButtons();
 }
 
 function closeTerminal() {
-  if (!isConnected ) {
+  if (!isConnected) {
     showMessage("Cannot close terminal. Ensure SSH connection is established.");
     return;
   }
@@ -138,67 +101,43 @@ function closeTerminal() {
     showMessage("Terminal is already closed");
     return;
   }
-
-
-  const terminalContainer = document.getElementById('terminal-container');
-
-  if (terminalContainer) {
-    terminalContainer.hidden = true ; // Clear the terminal content
-  } else {
-    showMessage("Terminal container or terminal element not found.");
-  }
-
-  // Set isTerminalOpen to false
+  document.getElementById('terminal-container').hidden = true;
   isTerminalOpen = false;
-
-  // Enable "Open Terminal" button and disable "Close Terminal" button
   updateTerminalButtons();
 }
 
 function updateTerminalButtons() {
   const openTerminalBtn = document.getElementById('open-terminal-btn');
   const closeTerminalBtn = document.getElementById('close-terminal-btn');
-
-  if (isConnected && isTerminalOpen) {
-    openTerminalBtn.disabled = true;
-    closeTerminalBtn.disabled = false;
-  } else {
-    openTerminalBtn.disabled = false;
-    closeTerminalBtn.disabled = true;
-  }
+  openTerminalBtn.disabled = isConnected && isTerminalOpen;
+  closeTerminalBtn.disabled = !isConnected || !isTerminalOpen;
 }
 
 function testCommand() {
   socket.emit('command');
 }
-function testCopy(button){
-  const input_name = button;
-  const domain = document.getElementById("domain").value
 
-  socket.emit("path",input_name);
+function testCopy(button) {
+  const input_name = button;
+  const domain = document.getElementById("domain").value;
+  socket.emit("path", input_name);
   socket.emit('copy');
-  socket.emit('configue_webserver',domain);
+  socket.emit('configue_webserver', domain);
 }
+
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
-  isConnected = false; // Reset the connection status on error
-  // Disable terminal control buttons
+  isConnected = false;
   updateTerminalButtons();
 });
 
 socket.on("disconnect", () => {
   showMessage("Server Disconnected");
-  isConnected = false; // Reset the connection status on disconnection
-  // Reset terminal status and update buttons
+  isConnected = false;
   isTerminalOpen = false;
   updateTerminalButtons();
 });
 
-document.getElementById('flexSwitchCheckDefault').addEventListener('click',()=>{
-  if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
-      document.documentElement.setAttribute('data-bs-theme','light')
-  }
-  else {
-      document.documentElement.setAttribute('data-bs-theme','dark')
-  }
+document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
+  document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
 });
