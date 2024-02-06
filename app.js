@@ -136,6 +136,8 @@ function testCopy(button) {
   socket.emit("path", input_name);
   socket.emit('copy');
   socket.emit('configue_webserver', domain);
+  
+
 }
 
 // Handle SSH error messages

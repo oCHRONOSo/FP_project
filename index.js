@@ -1,3 +1,4 @@
+// Import necessary modules
 const http = require("http").createServer();
 const ssh2 = require("ssh2");
 const fs = require("fs");
@@ -6,25 +7,30 @@ const pty = require("node-pty");
 const os = require("os");
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 
+// Determine the shell based on the operating system
 const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
 
+// Handle socket connections
 io.on("connection", (socket) => {
+  // Log the IP address of the connecting user
   const clientIpAddress = socket.handshake.address;
   console.log(`User connected from IP: ${clientIpAddress}`);
-  let sftp = false;
+  let sftpconn = false;
 
+  // Listen for requests to start an SSH connection
   socket.on("startSSHConnection", ({ ip, username, password, port, sshKeyContent, passphrase }) => {
     let sshConfig;
     let conn = new ssh2.Client();
     let ptyProcess;
 
+    // Set up SSH configuration based on provided credentials
     if (!password) {
       sshConfig = { host: ip, port, username, privateKey: sshKeyContent, passphrase };
     } else {
       sshConfig = { host: ip, port, username, password };
     }
 
-    socket.emit("ssh.status", "Connecting to SSH...");
+    // Handle SSH connection errors
     conn.on("error", (err) => {
       const errorMessage = err.message.includes("Encrypted private key detected")
         ? "Encrypted private OpenSSH key detected, but no passphrase provided."
@@ -35,12 +41,14 @@ io.on("connection", (socket) => {
       conn.end();
     });
 
+    // Upon successful SSH connection
     conn.on("ready", function () {
-      sftp = true;
+      sftpconn = true;
       socket.emit("ssh.success");
       socket.emit("ssh.status", "SSH connection successful!");
       console.log("SSH connection successful!");
 
+      // Open a shell within the SSH connection
       conn.shell(function (err, stream) {
         if (err) {
           console.error("Error opening shell:", err.message);
@@ -51,6 +59,7 @@ io.on("connection", (socket) => {
           return;
         }
 
+        // Spawn a pseudo-terminal process
         ptyProcess = pty.spawn(shell, [], {
           name: "xterm-color",
           cols: 80,
@@ -59,16 +68,19 @@ io.on("connection", (socket) => {
           env: process.env,
         });
 
+        // Handle errors in the PTY process
         ptyProcess.on("error", function (err) {
           console.error("Error spawning PTY process:", err.message);
           socket.emit("ssh.error", "Error spawning PTY process. Please try again.");
           console.log("Error PTY process");
         });
 
+        // Relay data received from the SSH connection to the client
         stream.on("data", function (data) {
           io.emit("output", data.toString());
         });
 
+        // Listen for client commands
         socket.on("start", () => {
           stream.write("clear \r");
         });
@@ -77,18 +89,21 @@ io.on("connection", (socket) => {
           stream.write(data);
         });
 
+        // Execute a predefined command on the server
         socket.on("command", () => {
           const command = "apt install sudo";
           stream.write(command);
         });
 
-        if (sftp) {
+        // If SFTP is enabled, handle file transfer operations
+        if (sftpconn) {
           conn.sftp((sftpErr, sftp) => {
             if (sftpErr) {
               console.error("Error creating SFTP session:", sftpErr.message);
               return;
             }
             let script_path;
+            // Listen for requests to find a script file
             socket.on('path', (input_name) => {
               try {
                 script_path = findScriptPath("scripts/", input_name);
@@ -97,10 +112,17 @@ io.on("connection", (socket) => {
               }
             });
 
+            let domain_sh;
+            socket.on('configue_webserver', (domain)=>{
+              domain_sh = domain
+              console.log(domain);
+            }); 
+
             socket.on("copy", () => {
               const localFilePath = script_path;
               const remoteDestination = "./";
               try {
+                
                 sftp.fastPut(
                   localFilePath,
                   remoteDestination + "script.sh",
@@ -111,21 +133,23 @@ io.on("connection", (socket) => {
                       return;
                     }
                     console.log("File transfer complete!");
-                    sftp.end();
+                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh}) && rm script.sh \n`);       
                   }
                 );
-                socket.on("configue_webserver", (domain) => {
-                  stream.write(`chmod a+x script.sh && sleep 0.5 && (echo ${password} | sudo -S ./script.sh ${domain}) && rm script.sh\r`);
-                });
+  
               } catch (error) {
                 socket.emit("ssh.status", "error: unable to copy the code");
               }
             });
+
+            
           });
+          
         }
       });
     });
 
+    // Handle keyboard-interactive authentication failure
     conn.on("keyboard-interactive", () => {
       console.error("Authentication failed. Check your credentials and try again.");
       socket.emit("ssh.error", "Authentication failed. Check your credentials and try again.");
@@ -133,24 +157,29 @@ io.on("connection", (socket) => {
       conn.end();
     });
 
+    // Attempt to establish an SSH connection
     socket.emit("ssh.status", "Attempting to connect...");
     console.log("Attempting to connect...");
 
+    // Respond to keyboard-interactive authentication prompts
     conn.on("keyboard-interactive", (name, instructions, lang, prompts, finish) => {
       console.log("SSH keyboard-interactive authentication prompts:", prompts);
       finish([password]);
     });
 
+    // Allow TCP/IP forwarding
     conn.on("tcpip", (info, accept, reject) => {
       console.log("TCP/IP forwarding requested:", info);
       accept();
     });
 
+    // Accept SSH channel requests
     conn.on("request", (accept, reject, name, info) => {
       console.log("SSH channel request:", name, info);
       accept();
     });
 
+    // Handle disconnection from the SSH server
     socket.on("disconnectSSH", () => {
       if (conn) {
         conn.end();
@@ -163,9 +192,12 @@ io.on("connection", (socket) => {
         ptyProcess.kill();
         ptyProcess = null;
         console.log("PTY process terminated.");
+        
       }
+      sftpconn = false;
     });
 
+    // Attempt to establish the SSH connection
     try {
       conn.connect(sshConfig);
     } catch (error) {
@@ -176,8 +208,10 @@ io.on("connection", (socket) => {
   });
 });
 
+// Start the HTTP server
 http.listen(8080, () => console.log("Server listening on http://localhost:8080"));
 
+// Function to recursively find a script file within a directory
 function findScriptPath(folderPath, scriptName) {
   if (!fs.existsSync(folderPath)) {
     console.log('Folder does not exist');
@@ -191,7 +225,7 @@ function findScriptPath(folderPath, scriptName) {
       const foundPath = findScriptPath(subFolderPath, scriptName);
       if (foundPath) return foundPath;
     } else {
-      if (file === scriptName && file.endsWith('.sh')) {
+      if (file === scriptName /* && file.endsWith('.sh') */ ) {
         console.log(filePath);
         return filePath;
       }

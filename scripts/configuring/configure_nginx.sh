@@ -5,14 +5,14 @@ cert_dir="/etc/nginx/ssl/certs"
 key_dir="/etc/nginx/ssl/private"
 nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}' | sort | uniq)
 
-sudo apt update 
-sudo apt install -y nginx php-fpm mariadb-server php-mysql
+ apt update 
+ apt install -y nginx php-fpm mariadb-server php-mysql
 
-sudo mkdir -p $directory
-sudo mkdir -p $cert_dir
-sudo mkdir -p $key_dir
+ mkdir -p $directory
+ mkdir -p $cert_dir
+ mkdir -p $key_dir
 
-sudo openssl req -new -x509 -days 365 -nodes \
+ openssl req -new -x509 -days 365 -nodes \
     -out $cert_dir/nginx.crt \
     -keyout $key_dir/nginx.key \
     -subj "/CN=$domain"
@@ -20,7 +20,7 @@ sudo openssl req -new -x509 -days 365 -nodes \
 
 
 
-sudo echo "server {
+ echo "server {
         #listen 80;
         #listen [::]:80;
         listen 443 ssl http2;
@@ -45,7 +45,7 @@ sudo echo "server {
 
 }" > /etc/nginx/sites-available/$domain 
 
-sudo echo "server {
+ echo "server {
     listen 80;
     listen [::]:80;
     server_name $domain;
@@ -53,10 +53,10 @@ sudo echo "server {
     return 301 https://\$server_name\$request_uri;
 }" > /etc/nginx/sites-available/${domain}_http_redirect
 
-sudo ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/$domain 
-sudo ln -s "/etc/nginx/sites-available/${domain}_http_redirect" "/etc/nginx/sites-enabled/${domain}_http_redirect"
+ ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/$domain 
+ ln -s "/etc/nginx/sites-available/${domain}_http_redirect" "/etc/nginx/sites-enabled/${domain}_http_redirect"
 
-sudo echo "<html>
+ echo "<html>
     <head>
         <title>Welcome to $domain! </title>
     </head>
@@ -65,9 +65,9 @@ sudo echo "<html>
     </body>
 </html>" > $directory/index.html
 
-sudo chmod -R 755 $directory
-sudo chown -R $nginx_user:$nginx_user $directory
+ chmod -R 755 $directory
+ chown -R $nginx_user:$nginx_user $directory
 
-sudo systemctl restart nginx
+ systemctl restart nginx
 
 echo "Configuration for $domain completed successfully."

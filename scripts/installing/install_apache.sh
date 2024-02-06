@@ -1,10 +1,10 @@
-
+#!/bin/bash
 
 # Update package index
-sudo apt update
+ apt update
 
 # Install Apache
-sudo apt install apache2 -y
+ apt install apache2 -y
 
 # Check if Apache is running
 if systemctl is-active --quiet apache2; then
