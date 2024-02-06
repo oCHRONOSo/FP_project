@@ -1,2 +1,5 @@
 mutiple connextions issue (broadcast output)
 sftp (copy file corrupt server while changing to root and execute copy)
+close / open terminal not working when connecting / disconnecting
+
+double text on the terminal after connect / disconnect / connect
