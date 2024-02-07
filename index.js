@@ -113,9 +113,12 @@ io.on("connection", (socket) => {
             });
 
             let domain_sh;
-            socket.on('configue_webserver', (domain)=>{
+            let folderName_sh;
+            socket.on('configue_webserver', ({domain, folderName})=>{
               domain_sh = domain
+              folderName_sh = folderName
               console.log(domain);
+              console.log(folderName);
             }); 
 
             socket.on("copy", () => {
@@ -133,7 +136,7 @@ io.on("connection", (socket) => {
                       return;
                     }
                     console.log("File transfer complete!");
-                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh}) && rm script.sh \n`);       
+                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ) && rm script.sh \n`);       
                   }
                 );
   

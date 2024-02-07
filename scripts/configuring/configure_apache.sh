@@ -2,8 +2,9 @@
 
 # Define variables
 domain="$1"
+foldername="$2"
 
-directory="/var/www/$domain"
+directory="/var/www/$foldername"
 cert_dir="/etc/apache2/ssl/certs"
 key_dir="/etc/apache2/ssl/private"
 apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1}' | sort | uniq)
@@ -20,8 +21,8 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
 
 # Generate SSL certificate and key
  openssl req -new -x509 -days 365 -nodes \
-    -out $cert_dir/apache.crt \
-    -keyout $key_dir/apache.key \
+    -out $cert_dir/apache_${foldername}.crt \
+    -keyout $key_dir/apache_${foldername}.key \
     -subj "/CN=$domain"
 
 # Enable SSL module
@@ -44,12 +45,12 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
     ErrorLog \${APACHE_LOG_DIR}/$domain-error.log
     CustomLog \${APACHE_LOG_DIR}/$domain-access.log combined
     SSLEngine on
-    SSLCertificateFile $cert_dir/apache.crt
-    SSLCertificateKeyFile $key_dir/apache.key
-</VirtualHost>" > /etc/apache2/sites-available/$domain.conf
+    SSLCertificateFile $cert_dir/apache_${foldername}.crt
+    SSLCertificateKeyFile $key_dir/apache_${foldername}.key
+</VirtualHost>" > /etc/apache2/sites-available/$foldername.conf
 
 # Enable the new site configuration
- a2ensite $domain.conf
+ a2ensite $foldername.conf
 
 # Disable the default site configuration
  a2dissite 000-default.conf

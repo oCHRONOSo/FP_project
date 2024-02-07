@@ -1,6 +1,9 @@
-domain="$1"
+#!/bin/bash
 
-directory="/var/www/$domain"
+domain="$1"
+foldername="$2"
+
+directory="/var/www/$foldername"
 cert_dir="/etc/nginx/ssl/certs"
 key_dir="/etc/nginx/ssl/private"
 nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}' | sort | uniq)
@@ -13,8 +16,8 @@ nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}'
  mkdir -p $key_dir
 
  openssl req -new -x509 -days 365 -nodes \
-    -out $cert_dir/nginx.crt \
-    -keyout $key_dir/nginx.key \
+    -out $cert_dir/nginx_${foldername}.crt \
+    -keyout $key_dir/nginx_${foldername}.key \
     -subj "/CN=$domain"
 
 
@@ -26,8 +29,8 @@ nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}'
         listen 443 ssl http2;
         listen [::]:443 ssl http2;
 
-        ssl_certificate $cert_dir/nginx.crt;
-        ssl_certificate_key $key_dir/nginx.key;
+        ssl_certificate $cert_dir/nginx_${foldername}.crt;
+        ssl_certificate_key $key_dir/nginx_${foldername}.key;
 
         root $directory;
 
@@ -43,7 +46,7 @@ nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}'
                 fastcgi_pass unix:/run/php/php-fpm.sock;
         }
 
-}" > /etc/nginx/sites-available/$domain 
+}" > /etc/nginx/sites-available/$foldername 
 
  echo "server {
     listen 80;
@@ -51,10 +54,10 @@ nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}'
     server_name $domain;
 
     return 301 https://\$server_name\$request_uri;
-}" > /etc/nginx/sites-available/${domain}_http_redirect
+}" > /etc/nginx/sites-available/${foldername}_http_redirect
 
- ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/$domain 
- ln -s "/etc/nginx/sites-available/${domain}_http_redirect" "/etc/nginx/sites-enabled/${domain}_http_redirect"
+ ln -s /etc/nginx/sites-available/$foldername /etc/nginx/sites-enabled/$foldername 
+ ln -s "/etc/nginx/sites-available/${foldername}_http_redirect" "/etc/nginx/sites-enabled/${foldername}_http_redirect"
 
  echo "<html>
     <head>

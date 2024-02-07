@@ -24,7 +24,7 @@ function handleFile() {
   }
 }
 
-// Initialize the terminal
+// Initialize the terminal 
 const initializeTerminal = () => {
   if (!isTerminalInitialized) {
     term = new Terminal({ cursorBlink: true, convertEol: true });
@@ -133,9 +133,10 @@ function testCommand() {
 function testCopy(button) {
   const input_name = button;
   const domain = document.getElementById("domain").value;
+  const folderName = document.getElementById("folder_name").value;
   socket.emit("path", input_name);
   socket.emit('copy');
-  socket.emit('configue_webserver', domain);
+  socket.emit('configue_webserver', {domain, folderName});
 }
 
 // Handle SSH error messages
