@@ -7,6 +7,8 @@ let isTerminalOpen = false;
 let isTerminalInitialized = false;
 let term;
 let sshKeyContent;
+let newLength = 200;
+let maxChar = 200
 
 // Function to handle file upload for SSH key
 function handleFile() {
@@ -27,8 +29,35 @@ function handleFile() {
 // Initialize the terminal 
 const initializeTerminal = () => {
   if (!isTerminalInitialized) {
-    term = new Terminal({ cursorBlink: true, convertEol: true });
+
+
+    term = new Terminal({ cursorBlink: true, convertEol: true, theme: {
+      background: '#0b0d0e',
+      foreground: '#f8f8f2',
+      cursor: '#f8f8f2',
+      cursorAccent: '#f8f8f2',
+      selection: '#44475a',
+      black: '#282a36',
+      red: '#ff5555',
+      green: '#50fa7b',
+      yellow: '#f1fa8c',
+      blue: '#bd93f9',
+      magenta: '#ff79c6',
+      cyan: '#8be9fd',
+      white: '#f8f8f2',
+      brightBlack: '#6272a4',
+      brightRed: '#ff6e6e',
+      brightGreen: '#69ff94',
+      brightYellow: '#ffffa5',
+      brightBlue: '#d6acff',
+      brightMagenta: '#ff92df',
+      brightCyan: '#a4ffff',
+      brightWhite: '#ffffff'
+    }});
     term.open(document.getElementById('terminal-container'));
+    
+
+
     term.onData((data) => socket.emit('input', data));
     socket.on('output', (data) => term.write(data));
     socket.emit('start');
@@ -158,4 +187,6 @@ socket.on("disconnect", () => {
 document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
 });
+
+
 
