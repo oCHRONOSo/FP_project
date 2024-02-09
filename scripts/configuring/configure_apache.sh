@@ -53,7 +53,7 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
  a2ensite $foldername.conf
 
 # Disable the default site configuration
- a2dissite 000-default.conf
+# a2dissite 000-default.conf
 
 # Set permissions
  chmod -R 755 $directory

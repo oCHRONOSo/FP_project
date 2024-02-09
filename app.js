@@ -9,7 +9,7 @@ let term;
 let sshKeyContent;
 let newLength = 200;
 let maxChar = 200
-
+let fitAddon;
 // Function to handle file upload for SSH key
 function handleFile() {
   const fileInput = document.getElementById('sshkey');
@@ -54,9 +54,23 @@ const initializeTerminal = () => {
       brightCyan: '#a4ffff',
       brightWhite: '#ffffff'
     }});
-    term.open(document.getElementById('terminal-container'));
-    
 
+    term.loadAddon(new WebLinksAddon.WebLinksAddon());
+    fitAddon = new FitAddon.FitAddon();
+    term.loadAddon(fitAddon);
+    searchAddon = new SearchAddon.SearchAddon();
+    term.loadAddon(searchAddon);
+
+    term.open(document.getElementById('terminal-container'));
+    fitAddon.fit();
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      fitAddon.fit();
+      //window.resizeTo(term.rows, term.cols);
+
+      //console.log("Size changed",term.rows, term.cols);
+    });
+    resizeObserver.observe(document.getElementById('terminal-container'));
 
     term.onData((data) => socket.emit('input', data));
     socket.on('output', (data) => term.write(data));
@@ -188,5 +202,39 @@ document.getElementById('flexSwitchCheckDefault').addEventListener('click', () =
   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
 });
 
+makeTermFullScreen = function(){
+  const element = document.getElementById('terminal-container');
+  ;
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+  } else if (element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
+exitFS = function() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+  fitAddon();
+}
+
+ toggleFullScreen = function() {
+  if (!document.fullscreenElement) {
+    makeTermFullScreen();
+  } else if (document.exitFullscreen) {
+    exitFS();
+  }
+}
 
 

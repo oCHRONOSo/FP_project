@@ -10,15 +10,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" /> -->
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap-icons/font/bootstrap-icons.min.css" />
-    
+
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <script src="node_modules/xterm/lib/xterm.js"></script>
     <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="node_modules/xterm-addon-search/lib/xterm-addon-search.js"></script>
+    <script src="node_modules/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
     <!-- <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script> -->
 
     <script src="./node_modules/socket.io/client-dist/socket.io.min.js"></script>
     <script defer src="app.js"></script>
-<!--     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script> -->
     <style>
@@ -27,6 +30,7 @@
             bottom: 10px;
             right: 10px;
             z-index: 9999;
+
         }
     </style>
 
@@ -34,29 +38,31 @@
 </head>
 
 <body class="bg-body">
-    
+
 
     <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary shadow">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse position-relative" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-              <a class="nav-link" href="#collapseSSH">SSH</a>
-              <a class="nav-link" href="#collapseTerminal">Terminal </a>
-              <a class="nav-link" href="#collapseInstall" >Install</a>
-              <span class="align-self-center position-absolute end-0 me-3">
-                <div class="form-switch form-check">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked>
-                <label class="form-check-label" for="flexSwitchCheckDefault">Dark mode</label>
-                </span>
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse position-relative" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="#collapseSSH">SSH</a>
+                    <a class="nav-link" href="#collapseTerminal">Terminal </a>
+                    <a class="nav-link" href="#collapseInstall">Install</a>
+                    <span class="align-self-center position-absolute end-0 me-3">
+                        <div class="form-switch form-check">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                                checked>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Dark mode</label>
+                    </span>
+                </div>
+
             </div>
-              
-            </div>
-          </div>
+        </div>
         </div>
     </nav>
 
@@ -71,8 +77,8 @@
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
                 <div class="accordion-body">
                     <form id="login-form" class="container p-3">
-                        
-                        <div class="row shadow-sm rounded-4 p-3 border border-secondary" >
+
+                        <div class="row shadow-sm rounded-4 p-3 border border-secondary">
                             <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
                             <div class="col-md-6 bg-body-tertiary p-4 rounded-4 border border-secondary-subtle">
                                 <div class="row g-2">
@@ -153,13 +159,31 @@
                             Hello
                         </button>
                     </div>
-                    <div>
-                        <div id="terminal-container" style="width: 740px" hidden></div>
+                        <div class="mb-3 shadow" style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div> <!-- style="max-width: 1080px; max-height:460px" -->
+                    
+                        <div class="col-6 mb-3">
+                        <label for="searchTxt" class="form-label">search text:</label>
+                        <input id="searchTxt" type="text" placeholder="Find" class="form-control col-md-3">
                     </div>
                     
+                    <div class="mb-3">
+                        <label class="form-check-label"> <input type="checkbox" class="form-check-input"
+                                id="matchCaseChb"> &nbsp Match Case</label>
+                    </div>
+                    <button type="button" class="btn btn-secondary"
+                        onclick="searchAddon.findNext(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('searchTxt').checked })">Find
+                        Next</button>
+                    <button type="button" class="btn btn-secondary"
+                        onclick="searchAddon.findPrevious(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('searchTxt').checked })">Find
+                        Previous</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleFullScreen();">Toggle
+                        Fullscreen</button>
                 </div>
             </div>
+
         </div>
+    </div>
+    </div>
     </div>
     <div class="accordion" id="accordion2">
         <div class="accordion-item">
@@ -175,7 +199,8 @@
                         <button type="button" onclick="testCopy('tools.sh')" id="tools" class="btn btn-warning">
                             Install tools
                         </button>
-                        <button type="button" onclick="testCopy('install_apache.sh')" id="tools" class="btn btn-warning">
+                        <button type="button" onclick="testCopy('install_apache.sh')" id="tools"
+                            class="btn btn-warning">
                             Install Apache
                         </button>
                     </div>
@@ -194,29 +219,31 @@
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
                 <div class="accordion-body">
                     <div class="mb-3">
-                        <button type="button" onclick="testCopy('configure_apache.sh')" id="tools" class="btn btn-warning">
-                            Configure apache2 
+                        <button type="button" onclick="testCopy('configure_apache.sh')" id="tools"
+                            class="btn btn-warning">
+                            Configure apache2
                         </button>
-                        
-                        <button type="button" onclick="testCopy('configure_nginx.sh')" id="tools" class="btn btn-warning">
-                            Configure nginx 
+
+                        <button type="button" onclick="testCopy('configure_nginx.sh')" id="tools"
+                            class="btn btn-warning">
+                            Configure nginx
                         </button>
                     </div>
                     <div class="col-6 mb-3">
                         <label for="domain" class="form-label">Domain:</label>
-                        <input type="text" id="domain" class="form-control"
-                            placeholder="Enter your domain" value="example.com" />
+                        <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
+                            value="example.com" />
                     </div>
                     <div class="col-6 mb-3">
                         <label for="domain" class="form-label">Folder name:</label>
-                        <input type="text" id="folder_name" class="form-control"
-                            placeholder="Enter your domain" value="example" />
+                        <input type="text" id="folder_name" class="form-control" placeholder="Enter your domain"
+                            value="example" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
 
 
 
