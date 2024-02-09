@@ -12,8 +12,8 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
 
 # Install apache
  apt update
- apt install apache2
-
+ apt install -y apache2 mariadb-server
+ apt install -y php php-common php-gd php-xmlrpc php-curl php-intl php-imagick php-mysql php-zip php-xml php-mbstring php-bcmath libapache2-mod-php
 # Create directories
  mkdir -p $directory
  mkdir -p $cert_dir
@@ -28,26 +28,43 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
 # Enable SSL module
  a2enmod ssl
 
-# Create virtual host configuration file
+# Create virtual host configuration file 
  echo "<VirtualHost *:80>
-    ServerAdmin webmaster@$domain
-    ServerName $domain
-    DocumentRoot $directory
-    ErrorLog \${APACHE_LOG_DIR}/$domain-error.log
-    CustomLog \${APACHE_LOG_DIR}/$domain-access.log combined
-    Redirect permanent / https://$domain/
-</VirtualHost>
 
-<VirtualHost *:443>
     ServerAdmin webmaster@$domain
     ServerName $domain
     DocumentRoot $directory
     ErrorLog \${APACHE_LOG_DIR}/$domain-error.log
     CustomLog \${APACHE_LOG_DIR}/$domain-access.log combined
-    SSLEngine on
-    SSLCertificateFile $cert_dir/apache_${foldername}.crt
-    SSLCertificateKeyFile $key_dir/apache_${foldername}.key
+    <Directory $directory>
+            AllowOverride All
+    </Directory>
 </VirtualHost>" > /etc/apache2/sites-available/$foldername.conf
+
+
+# Create virtual host configuration file (secure)
+#  echo "<VirtualHost *:80>
+#     ServerAdmin webmaster@$domain
+#     ServerName $domain
+#     DocumentRoot $directory
+#     ErrorLog \${APACHE_LOG_DIR}/$domain-error.log
+#     CustomLog \${APACHE_LOG_DIR}/$domain-access.log combined
+#     Redirect permanent / https://$domain/
+# </VirtualHost>
+
+# <VirtualHost *:443>
+#     ServerAdmin webmaster@$domain
+#     ServerName $domain
+#     DocumentRoot $directory
+#     ErrorLog \${APACHE_LOG_DIR}/$domain-error.log
+#     CustomLog \${APACHE_LOG_DIR}/$domain-access.log combined
+#     SSLEngine on
+#     SSLCertificateFile $cert_dir/apache_${foldername}.crt
+#     SSLCertificateKeyFile $key_dir/apache_${foldername}.key
+    # <Directory $directory>
+    #         AllowOverride All
+    # </Directory>
+# </VirtualHost>" > /etc/apache2/sites-available/$foldername.conf
 
 # Enable the new site configuration
  a2ensite $foldername.conf
