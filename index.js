@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
           cols: 80,
           rows: 30,
           cwd: process.env.HOME,
-          env: process.env,
+          env: process.env
         });
 
         // Handle errors in the PTY process

@@ -73,6 +73,7 @@ const initializeTerminal = () => {
     resizeObserver.observe(document.getElementById('terminal-container'));
 
     term.onData((data) => socket.emit('input', data));
+
     socket.on('output', (data) => term.write(data));
     socket.emit('start');
     isTerminalInitialized = true;
