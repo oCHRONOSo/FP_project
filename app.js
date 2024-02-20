@@ -67,7 +67,9 @@ const initializeTerminal = () => {
     const resizeObserver = new ResizeObserver((entries) => {
       fitAddon.fit();
       //window.resizeTo(term.rows, term.cols);
-
+      newrow = term.rows;
+      newcol = term.cols;
+      socket.emit('resize',{newrow,newcol})
       //console.log("Size changed",term.rows, term.cols);
     });
     resizeObserver.observe(document.getElementById('terminal-container'));

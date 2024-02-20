@@ -7,8 +7,7 @@ const pty = require("node-pty");
 const os = require("os");
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 
-// Determine the shell based on the operating system
-const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
+
 
 // Handle socket connections
 io.on("connection", (socket) => {
@@ -47,9 +46,17 @@ io.on("connection", (socket) => {
       socket.emit("ssh.success");
       socket.emit("ssh.status", "SSH connection successful!");
       console.log("SSH connection successful!");
-
       // Open a shell within the SSH connection
-      conn.shell(function (err, stream) {
+      conn.shell({ pty: true }, function (err, shellStream) {
+        // Determine the shell based on the operating system
+        const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
+        //console.log(shell);
+        stream = shellStream;
+        
+        socket.on('resize',({newrow,newcol})=>{
+          stream.setWindow(newrow,newcol);
+        });
+
         if (err) {
           console.error("Error opening shell:", err.message);
           socket.emit("ssh.error", "Error opening shell. Please try again.");
@@ -59,7 +66,7 @@ io.on("connection", (socket) => {
           return;
         }
 
-        // Spawn a pseudo-terminal process
+/*         // Spawn a pseudo-terminal process
         ptyProcess = pty.spawn(shell, [], {
           name: "xterm-color",
           cols: 80,
@@ -73,7 +80,7 @@ io.on("connection", (socket) => {
           console.error("Error spawning PTY process:", err.message);
           socket.emit("ssh.error", "Error spawning PTY process. Please try again.");
           console.log("Error PTY process");
-        });
+        }); */
 
         // Relay data received from the SSH connection to the client
         stream.on("data", function (data) {
@@ -114,18 +121,18 @@ io.on("connection", (socket) => {
 
             let domain_sh;
             let folderName_sh;
-            socket.on('configue_webserver', ({domain, folderName})=>{
+            socket.on('configue_webserver', ({ domain, folderName }) => {
               domain_sh = domain
               folderName_sh = folderName
               console.log(domain);
               console.log(folderName);
-            }); 
+            });
 
             socket.on("copy", () => {
               const localFilePath = script_path;
               const remoteDestination = "./";
               try {
-                
+
                 sftp.fastPut(
                   localFilePath,
                   remoteDestination + "script.sh",
@@ -136,20 +143,23 @@ io.on("connection", (socket) => {
                       return;
                     }
                     console.log("File transfer complete!");
-                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ) && rm script.sh \n`);       
+                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ) && rm script.sh \n`);
                   }
                 );
-  
+
               } catch (error) {
                 socket.emit("ssh.status", "error: unable to copy the code");
               }
             });
 
-            
+
           });
-          
+
         }
+
       });
+
+
     });
 
     // Handle keyboard-interactive authentication failure
@@ -195,7 +205,7 @@ io.on("connection", (socket) => {
         ptyProcess.kill();
         ptyProcess = null;
         console.log("PTY process terminated.");
-        
+
       }
       sftpconn = false;
     });
@@ -228,7 +238,7 @@ function findScriptPath(folderPath, scriptName) {
       const foundPath = findScriptPath(subFolderPath, scriptName);
       if (foundPath) return foundPath;
     } else {
-      if (file === scriptName /* && file.endsWith('.sh') */ ) {
+      if (file === scriptName /* && file.endsWith('.sh') */) {
         console.log(filePath);
         return filePath;
       }
