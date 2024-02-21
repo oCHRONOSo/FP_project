@@ -122,7 +122,6 @@ function disconnectSSH() {
     showMessage("Not connected!");
     return;
   }
-  term.dispose();
   term = null;
   document.getElementById('terminal-container').innerHTML = null;
   isTerminalInitialized = false;
@@ -200,6 +199,7 @@ socket.on("disconnect", () => {
   updateTerminalButtons();
 });
 
+
 // Toggle between dark and light themes
 document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
@@ -239,5 +239,4 @@ exitFS = function() {
     exitFS();
   }
 }
-
 

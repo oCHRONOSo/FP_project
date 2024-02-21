@@ -19,8 +19,8 @@ io.on("connection", (socket) => {
   // Listen for requests to start an SSH connection
   socket.on("startSSHConnection", ({ ip, username, password, port, sshKeyContent, passphrase }) => {
     let sshConfig;
-    let conn = new ssh2.Client();
-    let ptyProcess;
+    const conn = new ssh2.Client();
+    //let ptyProcess;
 
     // Set up SSH configuration based on provided credentials
     if (!password) {
@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
           return;
         }
 
-/*         // Spawn a pseudo-terminal process
+        /*         // Spawn a pseudo-terminal process
         ptyProcess = pty.spawn(shell, [], {
           name: "xterm-color",
           cols: 80,
@@ -199,13 +199,7 @@ io.on("connection", (socket) => {
         sftp = false;
         socket.emit("ssh.status", "Disconnected");
         console.log("SSH connection disconnected.");
-        conn = null;
-      }
-      if (ptyProcess) {
-        ptyProcess.kill();
-        ptyProcess = null;
-        console.log("PTY process terminated.");
-
+        //conn = null;
       }
       sftpconn = false;
     });

@@ -4,5 +4,5 @@ close / open terminal not working when connecting / disconnecting
 
 double text on the terminal after connect / disconnect / connect
 
-when reaching the end of the line in the terminal it doesn't skip a line (only while typing) (https://github.com/xtermjs/xterm.js/discussions/4436)
+- when reaching the end of the line in the terminal it doesn't skip a line (only while typing) (https://github.com/xtermjs/xterm.js/discussions/4436)
 
