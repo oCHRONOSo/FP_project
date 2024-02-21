@@ -9,9 +9,9 @@ cert_dir="/etc/nginx/ssl/certs"
 key_dir="/etc/nginx/ssl/private"
 nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}' | sort | uniq)
 
- apt update 
- apt install -y nginx php-fpm mariadb-server
- apt install -y php php-gd php-xmlrpc php-common php-curl php-intl php-imagick php-mysql php-zip php-xml php-mbstring php-bcmath
+#  apt update 
+#  apt install -y nginx php-fpm mariadb-server
+#  apt install -y php php-gd php-xmlrpc php-common php-curl php-intl php-imagick php-mysql php-zip php-xml php-mbstring php-bcmath
 
  mkdir -p $directory
  mkdir -p $cert_dir

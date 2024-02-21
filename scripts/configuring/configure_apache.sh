@@ -12,9 +12,9 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
 
 
 # Install apache
- apt update
- apt install -y apache2 mariadb-server
- apt install -y php php-common php-gd php-xmlrpc php-curl php-intl php-imagick php-mysql php-zip php-xml php-mbstring php-bcmath libapache2-mod-php
+#  apt update
+#  apt install -y apache2 mariadb-server
+#  apt install -y php php-common php-gd php-xmlrpc php-curl php-intl php-imagick php-mysql php-zip php-xml php-mbstring php-bcmath libapache2-mod-php
 # Create directories
  mkdir -p $directory
  mkdir -p $cert_dir

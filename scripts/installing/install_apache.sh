@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# Update package index
  apt update
-
-# Install Apache
- apt install apache2 -y
+ apt install -y apache2 mariadb-server
+ apt install -y php php-common php-gd php-xmlrpc php-curl php-intl php-imagick php-mysql php-zip php-xml php-mbstring php-bcmath libapache2-mod-php
 
 # Check if Apache is running
 if systemctl is-active --quiet apache2; then

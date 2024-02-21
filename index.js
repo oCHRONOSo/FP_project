@@ -3,7 +3,7 @@ const http = require("http").createServer();
 const ssh2 = require("ssh2");
 const fs = require("fs");
 const path = require('path');
-const pty = require("node-pty");
+// const pty = require("node-pty");
 const os = require("os");
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 

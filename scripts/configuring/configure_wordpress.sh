@@ -18,9 +18,9 @@ rm -r "$directory/wordpress"
 
 # Create database and user in MariaDB
 mariadb <<MYSQL_SCRIPT
-CREATE DATABASE IF NOT EXISTS wordpress;
+CREATE DATABASE IF NOT EXISTS wordpress_$foldername;
 CREATE USER IF NOT EXISTS 'wpuser'@'localhost' IDENTIFIED BY 'patata1234';
-GRANT ALL ON wordpress.* TO 'wpuser'@'localhost';
+GRANT ALL ON wordpress_$foldername.* TO 'wpuser'@'localhost';
 FLUSH PRIVILEGES;
 MYSQL_SCRIPT
 
