@@ -6,3 +6,5 @@ added folder name in webserver config
 added search / fit addon for the terminal, full screen terminal is available now
 
 fixed overlapping lines in terminal by matching the size of the pty (ssh2 shell) and xtermjs
+
+added checkbox for https and wordpress installation

@@ -121,11 +121,14 @@ io.on("connection", (socket) => {
 
             let domain_sh;
             let folderName_sh;
-            socket.on('configue_webserver', ({ domain, folderName }) => {
+            let isSecure_sh;
+            socket.on('configue_webserver', ({ domain, folderName, isSecure }) => {
               domain_sh = domain
               folderName_sh = folderName
+              isSecure_sh = isSecure.toString();
               console.log(domain);
               console.log(folderName);
+              console.log(isSecure_sh);
             });
 
             socket.on("copy", () => {
@@ -143,7 +146,7 @@ io.on("connection", (socket) => {
                       return;
                     }
                     console.log("File transfer complete!");
-                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ) && rm script.sh \n`);
+                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} ) && rm script.sh \n`);
                   }
                 );
 

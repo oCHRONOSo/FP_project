@@ -1,12 +1,28 @@
+domain="$1"
+foldername="$2"
+secure="$3"
+
+directory="/var/www/$foldername"
+# Install MariaDB server
 apt install -y mariadb-server
 
-# create user / database
+# Remove contents of the directory
+rm -rf "$directory"/*
 
-mariadb
+# Download WordPress
+wget -O "$directory/latest.zip" https://wordpress.org/latest.zip --wait=5
 
-CREATE DATABASE wordpress;
-USE wordpress;
-GRANT ALL ON wordpress.* TO 'wpuser'@'localhost' IDENTIFIED BY 'patata1234';
+unzip $directory/latest.zip -d $directory/
+cp -r "$directory/wordpress"/* "$directory/"
+rm -r "$directory/wordpress"
+
+# Create database and user in MariaDB
+mariadb <<MYSQL_SCRIPT
+CREATE DATABASE IF NOT EXISTS wordpress;
+CREATE USER IF NOT EXISTS 'wpuser'@'localhost' IDENTIFIED BY 'patata1234';
+GRANT ALL ON wordpress.* TO 'wpuser'@'localhost';
 FLUSH PRIVILEGES;
-quit
-chown -R www-data:www-data /var/www/wordpress
+MYSQL_SCRIPT
+
+# Change ownership of directory to www-data
+chown -R www-data:www-data "$directory"

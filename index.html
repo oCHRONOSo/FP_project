@@ -51,8 +51,8 @@
                 <div class="navbar-nav">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                     <a class="nav-link" href="#collapseSSH">SSH</a>
-                    <a class="nav-link" href="#collapseTerminal">Terminal </a>
-                    <a class="nav-link" href="#collapseInstall">Install</a>
+                    <a class="nav-link" href="#accordion1">Terminal </a>
+                    <a class="nav-link" href="#accordion3">Configure</a>
                     <span class="align-self-center position-absolute end-0 me-3">
                         <div class="form-switch form-check">
                             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
@@ -161,7 +161,7 @@
                     </div>
                         <div class="mb-3 shadow" style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div> <!-- style="max-width: 1080px; max-height:460px" -->
                     
-                        <div class="col-6 mb-3">
+                        <div class="col-3 mb-3">
                         <label for="searchTxt" class="form-label">search text:</label>
                         <input id="searchTxt" type="text" placeholder="Find" class="form-control col-md-3">
                     </div>
@@ -171,10 +171,10 @@
                                 id="matchCaseChb"> &nbsp Match Case</label>
                     </div>
                     <button type="button" class="btn btn-secondary"
-                        onclick="searchAddon.findNext(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('searchTxt').checked })">Find
+                        onclick="searchAddon.findNext(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">Find
                         Next</button>
                     <button type="button" class="btn btn-secondary"
-                        onclick="searchAddon.findPrevious(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('searchTxt').checked })">Find
+                        onclick="searchAddon.findPrevious(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">Find
                         Previous</button>
                     <button type="button" class="btn btn-secondary" onclick="toggleFullScreen();">Toggle
                         Fullscreen</button>   
@@ -228,16 +228,25 @@
                             class="btn btn-warning">
                             Configure nginx
                         </button>
+
+                        <button type="button" onclick="testCopy('configure_wordpress.sh')" id="tools"
+                            class="btn btn-warning">
+                            Configure Wordpress
+                        </button>
                     </div>
-                    <div class="col-6 mb-3">
+                    <div class="col-4 mb-3">
                         <label for="domain" class="form-label">Domain:</label>
                         <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
                             value="example.com" />
                     </div>
-                    <div class="col-6 mb-3">
+                    <div class="col-3 mb-3">
                         <label for="domain" class="form-label">Folder name:</label>
                         <input type="text" id="folder_name" class="form-control" placeholder="Enter your domain"
                             value="example" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-check-label"> <input type="checkbox" class="form-check-input"
+                                id="matchCaseSec"> &nbsp Secure</label>
                     </div>
                 </div>
             </div>

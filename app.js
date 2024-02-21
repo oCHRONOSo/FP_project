@@ -179,9 +179,10 @@ function testCopy(button) {
   const input_name = button;
   const domain = document.getElementById("domain").value;
   const folderName = document.getElementById("folder_name").value;
+  const isSecure = document.getElementById("matchCaseSec").checked;
   socket.emit("path", input_name);
   socket.emit('copy');
-  socket.emit('configue_webserver', {domain, folderName});
+  socket.emit('configue_webserver', {domain, folderName, isSecure});
 }
 
 // Handle SSH error messages
@@ -204,6 +205,8 @@ socket.on("disconnect", () => {
 document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
 });
+
+
 
 makeTermFullScreen = function(){
   const element = document.getElementById('terminal-container');
