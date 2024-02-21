@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat with AI</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1>Chat with AI</h1>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+      function sendMessage() {
+        var message = document.getElementById("message").value;
+        document.getElementById("chat").innerHTML +=
+          "<p>You: " + message + "</p>";
+        document.getElementById("message").value = "";
+
+        $.ajax({
+          url: "http://localhost:5000/api/chat",
+          type: "GET",
+          data: { message: message }, // Add message as a query parameter
+          contentType: "application/json",
+          success: function (response) {
+            var completion = response.completion;
+            var aiResponse = completion[completion.length - 1].content;
+            document.getElementById("chat").innerHTML +=
+              "<p>AI: " + aiResponse + "</p>";
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
