@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+<body>
+    <textarea id="userInput" rows="4" cols="50"></textarea>
+    <button onclick="getChatbotResponse()">Send</button>
+    <div id="chatbotResponse"></div>
+
+    <script>
+        async function getChatbotResponse() {
+            const userMessage = document.getElementById('userInput').value;
+            const userVector = encodeMessage(userMessage); // Implement this function
+            const prediction = await model.predict(tf.stack([tf.tensor1d(userVector)]));
+            const responseIndex = prediction.indexOf(Math.max(...prediction));
+            const emotions = ['Happy', 'Sad', 'Angry']; // Example emotions
+            const chatbotResponse = `Chatbot says: ${emotions[responseIndex]}`;
+            document.getElementById('chatbotResponse').innerText = chatbotResponse;
+        }
+    </script>
+</body>
+</html>
