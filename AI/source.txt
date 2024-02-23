@@ -1,2 +1,3 @@
 https://github.com/abetlen/llama-cpp-python
 https://python.langchain.com/docs/integrations/llms/llamacpp
+deepseek-coder-6.7b-instruct.Q4_K_M.gguf

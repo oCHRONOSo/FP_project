@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Answering App</title>
+</head>
+<body>
+    <h1>Question Answering App</h1>
+    <form action="/ask" method="post">
+        <label for="question">Enter your question:</label><br>
+        <input type="text" id="question" name="question"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="response"></div>
+    <script>
+        document.querySelector("form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch("/ask", {
+                method: "POST",
+                body: formData
+            });
+            const responseData = await response.text();
+            document.getElementById("response").innerText = responseData;
+        });
+    </script>
+</body>
+</html>
