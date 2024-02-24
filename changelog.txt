@@ -1,4 +1,5 @@
 fixed file format error while moving from windows to unix (CRLF --> LF)
+
 fixed mutiple copy execution ,separated domain from the socket.on('configue_webserver')
 
 added folder name in webserver config
@@ -7,4 +8,6 @@ added search / fit addon for the terminal, full screen terminal is available now
 
 fixed overlapping lines in terminal by matching the size of the pty (ssh2 shell) and xtermjs
 
-added checkbox for https and wordpress installation
+added checkbox for https , and wordpress installation
+
+added ai using ollama, deepseek-coder 6.7b  marked.js (markdown) 

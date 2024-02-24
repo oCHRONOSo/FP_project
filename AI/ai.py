@@ -17,7 +17,7 @@ prompt = PromptTemplate.from_template(template)
 callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 
 llm = LlamaCpp(
-    model_path="./deepseek-coder-6.7b-instruct.Q4_K_M.gguf",
+    model_path="./models/deepseek-coder-6.7b-instruct.Q4_K_M.gguf",
     temperature=0.75,
     max_tokens=400,
     top_p=1,
