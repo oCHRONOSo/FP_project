@@ -9,12 +9,12 @@ async function sendRequest() {
   };
 
   try {
-    const response = await fetch('http://localhost:11434/api/generate', {
-      method: 'POST',
-      headers: {
+    const response = await fetch('http://192.168.1.123:11434/api/generate', { 
+    method: 'POST',
+/*       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestData)
+      }, */
+    body: JSON.stringify(requestData)
     });
 
     streamReader = response.body.getReader();
@@ -26,7 +26,8 @@ async function sendRequest() {
 
 async function readStream() {
 const responseContainer = document.getElementById('response-container');
-responseContainer.innerHTML = '<h2>Response:</h2>';
+responseContainer.setAttribute("class","bg-body-tertiary p-4 rounded-4 border border-secondary-subtle");
+responseContainer.innerHTML = '<h3>Response:</h3>';
 const responseText = document.createElement('div');
 responseContainer.appendChild(responseText);
 

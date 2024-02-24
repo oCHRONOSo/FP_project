@@ -27,13 +27,14 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script> -->
     <style>
-        .fixed-container {
+        #message_container {
             position: fixed;
             bottom: 10px;
             right: 10px;
             z-index: 9999;
 
         }
+    /* #F0ECE5 #B6BBC4 #31304D #161A30  */
     </style>
 
     <title>SSH Connection</title>
@@ -79,7 +80,7 @@
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
                 <div class="accordion-body">
                     <form id="login-form" class="container p-3">
-                        <div class="row shadow-sm rounded-4 p-3 border border-secondary">
+                        <div class="row shadow rounded-4 p-3 border border-secondary">
                             <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
                             <div class="col-md-6 bg-body-tertiary p-4 rounded-4 border border-secondary-subtle">
                                 <div class="row g-2">
@@ -144,27 +145,28 @@
             </h2>
             <div id="collapseTerminal" class="accordion-collapse collapse" data-bs-parent="#accordion1">
                 <div class="accordion-body">
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-secondary"
-                                    disabled>
-                                    Open Terminal
-                                </button>
-                                <button type="button" onclick="closeTerminal()" id="close-terminal-btn"
-                                    class="btn btn-secondary" disabled>
-                                    Close Terminal
-                                </button>
-                                <button type="button" onclick="testCommand()" id="command" class="btn btn-warning">
-                                    Command
-                                </button>
-                                <button type="button" onclick="testCopy('hello.sh')" id="execute" class="btn btn-warning">
-                                    Hello
-                                </button>
-                            </div>
+                    <div class="mb-3">
+                        <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-secondary"
+                            disabled>
+                            Open Terminal
+                        </button>
+                        <button type="button" onclick="closeTerminal()" id="close-terminal-btn"
+                            class="btn btn-secondary" disabled>
+                            Close Terminal
+                        </button>
+<!--                         <button type="button" onclick="testCommand()" id="command" class="btn btn-warning">
+                            Command
+                        </button>
+                        <button type="button" onclick="testCopy('hello.sh')" id="execute" class="btn btn-warning">
+                            Hello
+                        </button> -->
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-lg-7 mb-3">
+                            
                                 <div class="mb-3 shadow" style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div> <!-- style="max-width: 1080px; max-height:460px" -->
                             
-                                <div class="col-3 mb-3">
+                            <div class="col-3 mb-3">
                                 <label for="searchTxt" class="form-label">search text:</label>
                                 <input id="searchTxt" type="text" placeholder="Find" class="form-control col-md-3">
                             </div>
@@ -182,13 +184,17 @@
                             <button type="button" class="btn btn-secondary" onclick="toggleFullScreen();">Toggle
                                 Fullscreen</button>  
                         </div>
-                        <div class="col-6 mb-3">
-                            <div class="mb-3">
-                                <label for="prompt" class="form-label">Enter your prompt:</label><br>
-                                <input class="form-control" type="text" id="prompt" rows="4" cols="50" value="explain me FTP"/>
+                        <div class="col-lg-5 mb-3">
+                            <div class="shadow rounded-4 p-3 border border-secondary">
+                                <h2 class="h2 text-center">AI assistant</h2>
+                                <div class="mb-3">
+                                    <label for="prompt" class="form-label">Enter your prompt:</label><br>
+                                    <input class="form-control" type="text" id="prompt" rows="4" cols="50" value="explain me FTP"/>
+                                </div>
+                                <button type="button" onclick="sendRequest()" class="btn btn-warning mb-3" >Send Request</button>
+                                <div id="response-container"></div>
                             </div>
-                              <button type="button" onclick="sendRequest()" class="btn btn-secondary " >Send Request</button>
-                              <div id="response-container"></div>
+                            
                         </div>
                     </div>
                      
@@ -276,7 +282,7 @@
 
 
 
-    <div class="container fixed-container col-4" id="message_container" hidden>
+    <div class="container fixed-container col-lg-4 col-md-6" id="message_container" hidden>
         <div id="message" class="alert alert-primary"></div>
     </div>
 
