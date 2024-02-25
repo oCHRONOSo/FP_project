@@ -1,0 +1,126 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+
+
+$col1:#EEEEEE;
+$col2:#00ADB5;
+$col3:#393E46;
+$col4:#222831;
+
+// dark green
+/* $col1:#DCD7C9;
+$col2:#A27B5C;
+$col3:#3F4E4F;
+$col4:#2C3639;; */
+
+$colight1:#112D4E ;
+$colight2:#3F72AF;
+$colight3:#DBE2EF;
+$colight4:#F9F7F7;
+
+/* $colight1:#113946 ;
+$colight2:#BCA37F;
+$colight3:#EAD7BB;
+$colight4:#FFF2D8; */
+
+$primary: #F0ECE5;
+$secondary: #B6BBC4;
+
+
+
+  
+  
+/*   .dark {
+  
+  
+      $body-color: #eeeeee;
+      $body-bg: $col4;
+      
+      
+      --#{$variable-prefix}body-color: #{$body-color};
+      --#{$variable-prefix}body-bg: #{$body-bg};
+        
+  }
+  .bg-body-tertiary {
+    --bs-bg-opacity: 1;
+    background-color: rgba(#{to-rgb($col3)}, var(--bs-bg-opacity)) !important;
+} */
+
+[data-bs-theme=dark] {
+
+    $theme-colors: (
+        "primary":    $col1,
+        "secondary":  $col2,
+        "success":    $success,
+        "info":       $info,
+        "warning":    $warning,
+        "danger":     $danger,
+        "light":      $light,
+        "dark":       $dark
+      );
+      
+      @each $color, $value in $theme-colors {
+          .btn-#{$color} {
+            @include button-variant($value, $value);
+          }
+        }
+        
+        @each $color, $value in $theme-colors {
+          .btn-outline-#{$color} {
+            @include button-outline-variant($value);
+          }
+        }
+
+    .form-check-input:checked {
+            background-color: #{$col4};
+            border-color: #{$col4};
+        }
+    .accordion-button:not(.collapsed) {
+            color: #{$col1};
+            background-color:#{$col2} ;
+        }
+    color-scheme: dark;
+    --bs-body-bg: #{$col4};
+    --bs-body-bg-rgb: #{to-rgb($col4)};
+    --bs-secondary-bg: #{$col3};
+    --bs-secondary-bg-rgb: #{to-rgb($col3)};
+    --bs-tertiary-bg: #{$col2};
+    --bs-tertiary-bg-rgb: #{to-rgb($col2)};
+}
+
+[data-bs-theme=light] {
+    $theme-colors: (
+        "primary":    $colight1,
+        "secondary":  $colight2,
+        "success":    $success,
+        "info":       $info,
+        "warning":    $warning,
+        "danger":     $danger,
+        "light":      $light,
+        "dark":       $dark
+      );
+      
+      @each $color, $value in $theme-colors {
+          .btn-#{$color} {
+            @include button-variant($value, $value);
+          }
+        }
+        
+        @each $color, $value in $theme-colors {
+          .btn-outline-#{$color} {
+            @include button-outline-variant($value);
+          }
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: #{$colight4};
+            background-color:#{$colight2} ;
+        }
+        
+    --bs-body-bg: #{$colight4};
+    --bs-body-bg-rgb: #{to-rgb($colight4)};
+    --bs-secondary-bg: #{$colight3};
+    --bs-secondary-bg-rgb: #{to-rgb($colight3)};
+    --bs-tertiary-bg: #{$colight2};
+    --bs-tertiary-bg-rgb: #{to-rgb($colight2)};
+}

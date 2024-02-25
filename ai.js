@@ -26,10 +26,11 @@ async function sendRequest() {
 
 async function readStream() {
 const responseContainer = document.getElementById('response-container');
-responseContainer.setAttribute("class","bg-body-tertiary p-4 rounded-4 border border-secondary-subtle");
+responseContainer.setAttribute("class","bg-body-secondary p-4 rounded-4 border border-secondary-subtle");
 responseContainer.innerHTML = '<h3>Response:</h3>';
 const responseText = document.createElement('div');
 responseContainer.appendChild(responseText);
+
 
 
 let accumulatedResponse = '';

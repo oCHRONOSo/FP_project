@@ -141,8 +141,13 @@ function openTerminal() {
     showMessage("Terminal is already open.");
     return;
   }
-  document.getElementById('terminal-container').hidden = false;
+  var element = document.getElementById('terminal-container');
+  element.hidden = false;
   isTerminalOpen = true;
+
+  var wrapper = document.getElementById('wrapper');
+  wrapper.hidden = false;
+ 
   updateTerminalButtons();
 }
 
@@ -157,6 +162,8 @@ function closeTerminal() {
     return;
   }
   document.getElementById('terminal-container').hidden = true;
+  var wrapper = document.getElementById('wrapper');
+  wrapper.hidden = true;
   isTerminalOpen = false;
   updateTerminalButtons();
 }
