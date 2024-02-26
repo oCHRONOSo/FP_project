@@ -12,4 +12,6 @@ added checkbox for https , and wordpress installation
 
 added ai using ollama, deepseek-coder 6.7b  marked.js (markdown) usage:( OLLAMA_HOST=0.0.0.0 OLLAMA_ORIGINS=http://192.168.1.123:*  ollama serve) ,for port setting (OLLAMA_PORT=)
 
-added custom style
+added custom style usage:( sass --watch custom.scss:custom.css)
+
+added recent connections using mysql

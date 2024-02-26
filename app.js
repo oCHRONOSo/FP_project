@@ -208,6 +208,57 @@ socket.on("disconnect", () => {
 });
 
 
+socket.on('recentConnections', (results) => {
+  console.log('Recent connections:', results);
+  
+  // Get a reference to the table body element
+  const tableBody = document.getElementById('connectionsTableBody');
+
+  // Clear existing rows from the table body
+  tableBody.innerHTML = '';
+
+  // Loop through the connections array and create table rows
+  results.forEach(connection => {
+    const row = document.createElement('tr');
+
+    // Create table cells for each connection property
+    const ipCell = document.createElement('td');
+    ipCell.textContent = connection.ip;
+    row.appendChild(ipCell);
+
+    const portCell = document.createElement('td');
+    portCell.textContent = connection.port;
+    row.appendChild(portCell);
+
+    const usernameCell = document.createElement('td');
+    usernameCell.textContent = connection.username;
+    row.appendChild(usernameCell);
+
+/*     const passwordCell = document.createElement('td');
+    passwordCell.textContent = connection.password;
+    row.appendChild(passwordCell); */
+
+    // Create a button cell with a button for each row
+    const actionsCell = document.createElement('td');
+    const button = document.createElement('button');
+    button.textContent = 'Action';
+    button.setAttribute("class","btn btn-secondary")
+    button.addEventListener('click', () => {
+      // Define the action to be performed when the button is clicked
+
+      document.getElementById("ip").value = connection.ip;
+      document.getElementById("port").value = connection.port;
+      document.getElementById("username").value = connection.username;
+      document.getElementById("password").value = connection.password;
+    });
+    actionsCell.appendChild(button);
+    row.appendChild(actionsCell);
+
+    // Append the row to the table body
+    tableBody.appendChild(row);
+  });
+});
+
 // Toggle between dark and light themes
 document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');

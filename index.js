@@ -6,11 +6,45 @@ const path = require('path');
 // const pty = require("node-pty");
 const os = require("os");
 const io = require("socket.io")(http, { cors: { origin: "*" } });
-
-
+const mysql = require('mysql');
 
 // Handle socket connections
 io.on("connection", (socket) => {
+
+  // Initialize MySQL connection
+  const dbConnection = mysql.createConnection({
+    host: 'localhost',
+    user: 'usuario',
+    password: 'usuario',
+    database: 'db_conn'
+  });
+
+  dbConnection.connect((err) => {
+    if (err) {
+      console.error('Error connecting to MySQL:', err);
+      return;
+    }
+    console.log('Connected to MySQL database');
+  });
+
+  const query = `
+  SELECT ip, port, username, password
+  FROM connections
+  ORDER BY last_connection DESC
+  LIMIT 10
+  `;
+
+  dbConnection.query(query, (err, results) => {
+    if (err) {
+      console.log('Error fetching recent connections from MySQL:', err);
+      return;
+    }
+    
+    // Emit the recent connections to the client
+    socket.emit('recentConnections', results);
+    console.log("DB results sent");
+  });
+
   // Log the IP address of the connecting user
   const clientIpAddress = socket.handshake.address;
   console.log(`User connected from IP: ${clientIpAddress}`);
@@ -43,9 +77,36 @@ io.on("connection", (socket) => {
     // Upon successful SSH connection
     conn.on("ready", function () {
       sftpconn = true;
+
+      //Database data insert
+      const insertQuery = `
+      INSERT INTO connections (ip, port, username, password, last_connection)
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE 
+      ip = VALUES(ip),
+      port = VALUES(port),
+      username = VALUES(username),
+      password = VALUES(password),
+      last_connection = CURRENT_TIMESTAMP
+      ;
+      `;
+
+      const values = [ip, port, username, password];
+    
+      dbConnection.query(insertQuery, values, (err, result) => {
+        if (err) {
+          console.error('Error storing connection information to MySQL:', err);
+          return;
+        }
+        console.log('Connection information stored in MySQL');
+      });
+
+      
+      
       socket.emit("ssh.success");
       socket.emit("ssh.status", "SSH connection successful!");
       console.log("SSH connection successful!");
+
+
       // Open a shell within the SSH connection
       conn.shell({ pty: true }, function (err, shellStream) {
         // Determine the shell based on the operating system

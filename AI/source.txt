@@ -3,4 +3,6 @@ https://python.langchain.com/docs/integrations/llms/llamacpp
 https://xtermjs.org/
 https://github.com/ollama/ollama
 https://www.npmjs.com/package/ssh2
+https://getbootstrap.com/
+https://sass-lang.com/
 ./models/deepseek-coder-6.7b-instruct.Q4_K_M.gguf

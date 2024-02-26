@@ -90,60 +90,94 @@
             </h2>
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
                 <div class="accordion-body" >
-                    <form id="login-form" class="container col-lg-9">
-                        <div class="row shadow rounded-4 p-3 border border-secondary ">
-                            <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
-                            <div class="col-md-6 bg-body-secondary p-4 rounded-4 border border-secondary-subtle">
-                                <div class="row g-2">
-                                    <div class="col-6 mb-3">
-                                        <label for="username" class="form-label">Username:</label>
-                                        <input type="text" id="username" class="form-control"
-                                            placeholder="Enter Username" value="usuario" />
+                    <div class="row">
+                        <div class="col-lg-8 px-4">
+                            <form id="login-form">
+                                <div class="row shadow rounded-4 p-3 border border-secondary mb-3">
+                                    
+                                    <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
+                                    <div class="col-md-6 bg-body-secondary p-4 rounded-4 border border-secondary-subtle">
+                                        <div class="row g-2">
+                                            <div class="col-6 mb-3">
+                                                <label for="username" class="form-label">Username:</label>
+                                                <input type="text" id="username" class="form-control"
+                                                    placeholder="Enter Username" value="usuario" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="ip" class="form-label">IP Address:</label>
+                                                <input type="text" id="ip" class="form-control" placeholder="Enter IP Address"
+                                                    value="192.168.186.130" />
+                                            </div>
+                                        </div>
+                                        <div class="row g-2">
+                                            <div class="col-9 mb-3">
+                                                <label for="password" class="form-label">Password:</label>
+                                                <input type="password" id="password" class="form-control"
+                                                    placeholder="Enter Password" value="usuario" />
+                                            </div>
+                                            <div class="col-3 mb-3">
+                                                <label for="port" class="form-label">Port:</label>
+                                                <input type="text" id="port" class="form-control" placeholder="Port"
+                                                    value="22" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" onclick="connectSSH()"
+                                                class="btn btn-primary">Connect</button>
+                                            <button type="button" onclick="disconnectSSH()" class="btn btn-secondary">
+                                                Disconnect
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-6 mb-3">
-                                        <label for="ip" class="form-label">IP Address:</label>
-                                        <input type="text" id="ip" class="form-control" placeholder="Enter IP Address"
-                                            value="192.168.186.130" />
+                                    <div class="col-md-6 p-4">
+                                        <div class="mb-3">
+                                            <label for="sshkey" class="form-label">SSH key:</label>
+                                            <input type="file" id="sshkey" class="form-control" accept=".pub,.pem,.ppk" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="passphrase" class="form-label">Key passphrase:</label>
+                                            <input type="password" id="passphrase" class="form-control"
+                                                placeholder="Enter passphrase" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" onclick="handleFile()" class="btn btn-secondary">
+                                                Upload SSH Key
+                                            </button>
+                                        </div>
                                     </div>
+                                    
                                 </div>
-                                <div class="row g-2">
-                                    <div class="col-9 mb-3">
-                                        <label for="password" class="form-label">Password:</label>
-                                        <input type="password" id="password" class="form-control"
-                                            placeholder="Enter Password" value="usuario" />
-                                    </div>
-                                    <div class="col-3 mb-3">
-                                        <label for="port" class="form-label">Port:</label>
-                                        <input type="text" id="port" class="form-control" placeholder="Port"
-                                            value="22" />
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <button type="button" onclick="connectSSH()"
-                                        class="btn btn-primary">Connect</button>
-                                    <button type="button" onclick="disconnectSSH()" class="btn btn-secondary">
-                                        Disconnect
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-md-6 p-4">
-                                <div class="mb-3">
-                                    <label for="sshkey" class="form-label">SSH key:</label>
-                                    <input type="file" id="sshkey" class="form-control" accept=".pub,.pem,.ppk" />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="passphrase" class="form-label">Key passphrase:</label>
-                                    <input type="password" id="passphrase" class="form-control"
-                                        placeholder="Enter passphrase" />
-                                </div>
-                                <div class="mb-3">
-                                    <button type="button" onclick="handleFile()" class="btn btn-primary">
-                                        Upload SSH Key
-                                    </button>
-                                </div>
+                            </form>
+                        </div>
+                            
+                       
+                        <div class="col-lg-4 ">
+                            <div class="p-3 border border-secondary rounded-4 shadow table-responsive">
+                                <h2 class=" h2 ">Recent:</h2>
+                                <table class="table" id="connectionsTable">
+                                    <thead>
+                                      <tr>
+                                        <th>IP</th>
+                                        <th>Port</th>
+                                        <th>Username</th>
+                                        <th>Use</th>
+        
+                                      </tr>
+                                    </thead>
+                                    <tbody id="connectionsTableBody">
+                                      <!-- Table body will be populated dynamically -->
+                                    </tbody>
+                                  </table>
                             </div>
                         </div>
-                    </form>
+
+                    </div>
+                    
+
+
+
+                    
+
                 </div>
             </div>
         </div>
