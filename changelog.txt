@@ -14,4 +14,4 @@ added ai using ollama, deepseek-coder 6.7b  marked.js (markdown) usage:( OLLAMA_
 
 added custom style usage:( sass --watch custom.scss:custom.css)
 
-added recent connections using mysql
+added recent connections using mysql : to export database : (mysqldump -u usuario -p db_conn > db_conn.sql) , to import database first create db_conn, then (mysql -u root db_conn < /home/usuario/db_conn.sql)

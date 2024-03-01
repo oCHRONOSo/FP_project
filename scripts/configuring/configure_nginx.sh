@@ -17,10 +17,7 @@ nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}'
  mkdir -p $cert_dir
  mkdir -p $key_dir
 
- openssl req -new -x509 -days 365 -nodes \
-    -out $cert_dir/nginx_${foldername}.crt \
-    -keyout $key_dir/nginx_${foldername}.key \
-    -subj "/CN=$domain"
+
 
 
 
@@ -29,6 +26,11 @@ nginx_user=$(ps -eo user,group,comm | grep nginx | awk '$1 != "root" {print $1}'
  
 
 if [ "$secure" == "true" ]; then
+    openssl req -new -x509 -days 365 -nodes \
+        -out $cert_dir/nginx_${foldername}.crt \
+        -keyout $key_dir/nginx_${foldername}.key \
+        -subj "/C=ES/CN=$domain"
+        
     echo "server {
 
         listen 443 ssl http2;
@@ -113,7 +115,7 @@ fi
     </body>
 </html>" > $directory/index.html
 
- chmod -R 755 $directory
+# chmod -R 755 $directory
  chown -R $nginx_user:$nginx_user $directory
 
  systemctl restart nginx

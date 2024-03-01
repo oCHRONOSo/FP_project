@@ -20,18 +20,19 @@ apache_user=$(ps -eo user,group,comm | grep apache | awk '$1 != "root" {print $1
  mkdir -p $cert_dir
  mkdir -p $key_dir
 
-# Generate SSL certificate and key
- openssl req -new -x509 -days 365 -nodes \
-    -out $cert_dir/apache_${foldername}.crt \
-    -keyout $key_dir/apache_${foldername}.key \
-    -subj "/CN=$domain"
 
-# Enable SSL module
- a2enmod ssl
 
 if [ "$secure" == "true" ]; then
+    # Generate SSL certificate and key
+    openssl req -new -x509 -days 365 -nodes \
+        -out $cert_dir/apache_${foldername}.crt \
+        -keyout $key_dir/apache_${foldername}.key \
+        -subj "/C=ES/CN=$domain"
+
+    # Enable SSL module
+    a2enmod ssl
     # Create virtual host configuration file (secure)
-     echo "<VirtualHost *:80>
+     echo "<VirtualHost *:8080>
     ServerAdmin webmaster@$domain
     ServerName $domain
     DocumentRoot $directory
@@ -55,7 +56,7 @@ if [ "$secure" == "true" ]; then
 </VirtualHost>" > /etc/apache2/sites-available/$foldername.conf
 else
 # Create virtual host configuration file 
- echo "<VirtualHost *:80>
+ echo "<VirtualHost *:8080>
 
     ServerAdmin webmaster@$domain
     ServerName $domain
@@ -81,7 +82,7 @@ fi
 # a2dissite 000-default.conf
 
 # Set permissions
- chmod -R 755 $directory
+# chmod -R 755 $directory
  chown -R $apache_user:$apache_user $directory
 
 # Create index.html 

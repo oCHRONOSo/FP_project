@@ -4,13 +4,18 @@ secure="$3"
 
 directory="/var/www/$foldername"
 # Install MariaDB server
-apt install -y mariadb-server
+# apt install -y mariadb-server
 
-# Remove contents of the directory
-rm -rf "$directory"/*
+# # Remove contents of the directory
+# if [ "$directory" != "" ] ; then
+#     rm -rf "$directory"/*
+# fi
+# # Download WordPress
 
-# Download WordPress
-wget -O "$directory/latest.zip" https://wordpress.org/latest.zip --wait=5
+# if [ ! -f "$directory/latest.zip" ]; then
+#     wget -O "$directory/latest.zip" https://wordpress.org/latest.zip --wait=5
+# fi
+
 
 unzip $directory/latest.zip -d $directory/
 cp -r "$directory/wordpress"/* "$directory/"

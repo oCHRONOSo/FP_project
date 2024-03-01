@@ -51,12 +51,12 @@
     <title>SSH Connection</title>
 </head>
 
-<body class="bg-body">
+<body class="bg-body body">
 
 
     <nav class="navbar sticky-top navbar-expand-lg bg-body-secondary shadow">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">Novaterm AI</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -85,7 +85,7 @@
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSSH"
                     aria-expanded="true" aria-controls="collapseSSH">
-                    SSH Connection &nbsp <i class="bi bi-shield-lock-fill"></i>
+                     <i class="bi bi-shield-lock-fill"></i> &nbsp SSH Connection 
                 </button>
             </h2>
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
@@ -185,7 +185,7 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseTerminal" aria-expanded="false" aria-controls="collapseTerminal">
-                    Terminal &nbsp <i class="bi bi-terminal-fill"></i>
+                     <i class="bi bi-terminal-fill"></i> &nbsp Terminal 
                 </button>
             </h2>
             <div id="collapseTerminal" class="accordion-collapse collapse" data-bs-parent="#accordion1">
@@ -258,7 +258,7 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseInstall" aria-expanded="false" aria-controls="collapseInstall">
-                    Install Packages &nbsp <i class="bi bi-download"></i>
+                    <i class="bi bi-download"></i> &nbsp Install Packages 
                 </button>
             </h2>
             <div id="collapseInstall" class="accordion-collapse collapse" data-bs-parent="#accordion2">
@@ -275,6 +275,11 @@
                         class="btn btn-primary mb-3">
                         Install nginx
                         </button>
+
+                        <button type="button" onclick="testCopy('install_mariadb_server.sh')" id="tools"
+                        class="btn btn-primary mb-3">
+                        Install MariaDB-server
+                        </button>
                     </div>
                 </div>
             </div>
@@ -285,7 +290,7 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseConfigure" aria-expanded="false" aria-controls="collapseConfigure">
-                    Configure Packages &nbsp <i class="bi bi-gear-fill"></i>
+                    <i class="bi bi-gear-fill"></i> &nbsp Configure Packages
                 </button>
             </h2>
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
