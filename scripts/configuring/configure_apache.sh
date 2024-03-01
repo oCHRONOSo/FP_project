@@ -32,7 +32,7 @@ if [ "$secure" == "true" ]; then
     # Enable SSL module
     a2enmod ssl
     # Create virtual host configuration file (secure)
-     echo "<VirtualHost *:8080>
+     echo "<VirtualHost *:80>
     ServerAdmin webmaster@$domain
     ServerName $domain
     DocumentRoot $directory
@@ -56,7 +56,7 @@ if [ "$secure" == "true" ]; then
 </VirtualHost>" > /etc/apache2/sites-available/$foldername.conf
 else
 # Create virtual host configuration file 
- echo "<VirtualHost *:8080>
+ echo "<VirtualHost *:80>
 
     ServerAdmin webmaster@$domain
     ServerName $domain
