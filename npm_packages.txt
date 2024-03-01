@@ -8,3 +8,5 @@ npm i marked
 npm i bootstrap-icons
 npm i bootstrap@5.3.3
 npm i -g sass
+
+# command to install all : npm i ssh2 && npm i socket.io && npm i xterm && npm i xterm-addon-fit && npm i xterm-addon-web-links && npm i xterm-addon-search && npm i marked && npm i bootstrap-icons && npm i bootstrap@5.3.3 && npm i -g sass
