@@ -27,14 +27,21 @@ add_interface_config() {
 
 # Call the function with provided values
 while true; do
+clear
+ip a
+
 # Prompt user for interface information
-read -p "Enter interface name: " interface_name
+read -p "Enter interface name (ej:ens33): " interface_name
 read -p "Enter IP address: " ip_address
 read -p "Enter subnet mask: " subnet_mask
 read -p "Enter gateway (optional, press Enter if none): " gateway
 
 add_interface_config "$interface_name" "$ip_address" "$subnet_mask" "$gateway"
 echo "Interface configuration added successfully."
+ifdown $interface_name
+ifup $interface_name
+
+ip a
 read -p "add more interface ? (y/n)" YN
 if [ "$YN" == "n" ]; then
     break
