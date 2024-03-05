@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #cp -r /usr/share/easy-rsa /etc/openvpn
-read -p "continue (make sure you copied easy-rsa and you run this script in /etc/openvpn/easy-rsa)" cont
+read -p "continue (make sure you copied easy-rsa, have ip-forwarding activated and to run this script in /etc/openvpn/easy-rsa)" cont
 
 if [ ! -f /etc/openvpn/easy-rsa/vars ]; then
     cp /etc/openvpn/easy-rsa/vars.example /etc/openvpn/easy-rsa/vars
