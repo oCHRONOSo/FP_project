@@ -1,7 +1,7 @@
-save connections
+
 DNS conf
 DHCP conf
 security checker
-installation searcher
+
 VPN config
 iptables

@@ -182,13 +182,23 @@ function testCommand() {
 }
 
 // Copy script to the server and configure web server
-function testCopy(button) {
+function copy(button) {
   const input_name = button;
   const domain = document.getElementById("domain").value;
   const folderName = document.getElementById("folder_name").value;
   const isSecure = document.getElementById("matchCaseSec").checked;
   socket.emit("path", input_name);
   socket.emit('copy');
+  socket.emit('configue_webserver', {domain, folderName, isSecure});
+}
+
+function copyWebserver(button) {
+  const input_name = button;
+  const domain = document.getElementById("domain").value;
+  const folderName = document.getElementById("folder_name").value;
+  const isSecure = document.getElementById("matchCaseSec").checked;
+  socket.emit("path", input_name);
+  socket.emit('copy_webserver');
   socket.emit('configue_webserver', {domain, folderName, isSecure});
 }
 
@@ -207,6 +217,9 @@ socket.on("disconnect", () => {
   updateTerminalButtons();
 });
 
+
+
+// recent connections
 
 socket.on('recentConnections', (results) => {
   console.log('Recent connections:', results);
@@ -265,8 +278,60 @@ document.getElementById('flexSwitchCheckDefault').addEventListener('click', () =
 });
 
 
+// add tabs for configuration
+var tabcontent = document.getElementsByClassName("tabcontent");
+var tablinks = document.getElementsByClassName("tablink");
+for (i = 0; i < tabcontent.length; i++) {
+  tabcontent[i].style.display = "none";
+}
+document.getElementById("tab1").style.display = "block";
+document.getElementById("tablink1").classList.add("bg-body-secondary");
 
-makeTermFullScreen = function(){
+  // Function to open a specific tab
+  function openTab(tabName,tabLink) {
+    var i;
+    var tabcontent = document.getElementsByClassName("tabcontent");
+    var tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("bg-body-secondary");
+    }
+    document.getElementById(tabName).style.display = "block";
+    document.getElementById(tabLink).classList.add("bg-body-secondary");
+  }
+
+
+// search for packages
+
+
+
+  var searchInput = document.getElementById("searchInput");
+  var buttons = document.getElementsByClassName("install");
+
+  searchInput.addEventListener("input", e => {
+      const searchText = e.target.value.toLowerCase();     
+      for (var i = 0; i < buttons.length; i++) {
+          var button = buttons[i];
+          var buttonText = button.textContent.toLowerCase();
+          
+          if (buttonText.includes(searchText)) {
+              button.style.display = "inline-block";
+          } else {
+              button.style.display = "none";
+          }
+      }
+  });
+
+
+
+
+
+
+ // terminal full screen
+
+ makeTermFullScreen = function(){
   const element = document.getElementById('terminal-container');
   ;
   if (element.requestFullscreen) {

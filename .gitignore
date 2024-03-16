@@ -4,3 +4,4 @@ ssh_key/
 package.json
 package-lock.json
 AI/models/
+my-app/

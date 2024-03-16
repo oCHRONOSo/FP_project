@@ -35,17 +35,19 @@
             z-index: 9999;
 
         }
+
         .bg-blur {
             backdrop-filter: blur(12px);
         }
 
         .bg-image {
-            background-image: url(https://cdn.wallpapersafari.com/22/54/GJ21tH.jpg); background-size:100% 100%;
+            background-image: url(https://cdn.wallpapersafari.com/22/54/GJ21tH.jpg);
+            background-size: 100% 100%;
         }
 
-        
-    /* #F0ECE5 #B6BBC4 #31304D #161A30  */
-    /* #FFF2D8 #EAD7BB #BCA37F #113946  */
+
+        /* #F0ECE5 #B6BBC4 #31304D #161A30  */
+        /* #FFF2D8 #EAD7BB #BCA37F #113946  */
     </style>
 
     <title>SSH Connection</title>
@@ -80,23 +82,24 @@
         </div>
     </nav>
 
-    <div class="accordion" id="accordion1" >
+    <div class="accordion" id="accordion1">
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSSH"
                     aria-expanded="true" aria-controls="collapseSSH">
-                     <i class="bi bi-shield-lock-fill"></i> &nbsp SSH Connection 
+                    <i class="bi bi-shield-lock-fill"></i> &nbsp SSH Connection
                 </button>
             </h2>
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
-                <div class="accordion-body" >
+                <div class="accordion-body">
                     <div class="row">
                         <div class="col-lg-8 px-4">
                             <form id="login-form">
                                 <div class="row shadow rounded-4 p-3 border border-secondary mb-3">
-                                    
+
                                     <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
-                                    <div class="col-md-6 bg-body-secondary p-4 rounded-4 border border-secondary-subtle">
+                                    <div
+                                        class="col-md-6 bg-body-secondary p-4 rounded-4 border border-secondary-subtle">
                                         <div class="row g-2">
                                             <div class="col-6 mb-3">
                                                 <label for="username" class="form-label">Username:</label>
@@ -105,8 +108,8 @@
                                             </div>
                                             <div class="col-6 mb-3">
                                                 <label for="ip" class="form-label">IP Address:</label>
-                                                <input type="text" id="ip" class="form-control" placeholder="Enter IP Address"
-                                                    value="192.168.186.130" />
+                                                <input type="text" id="ip" class="form-control"
+                                                    placeholder="Enter IP Address" value="192.168.186.130" />
                                             </div>
                                         </div>
                                         <div class="row g-2">
@@ -132,7 +135,8 @@
                                     <div class="col-md-6 p-4">
                                         <div class="mb-3">
                                             <label for="sshkey" class="form-label">SSH key:</label>
-                                            <input type="file" id="sshkey" class="form-control" accept=".pub,.pem,.ppk" />
+                                            <input type="file" id="sshkey" class="form-control"
+                                                accept=".pub,.pem,.ppk" />
                                         </div>
                                         <div class="mb-3">
                                             <label for="passphrase" class="form-label">Key passphrase:</label>
@@ -145,38 +149,38 @@
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </form>
                         </div>
-                            
-                       
+
+
                         <div class="col-lg-4 ">
                             <div class="p-3 border border-secondary rounded-4 shadow table-responsive">
                                 <h2 class=" h2 ">Recent:</h2>
                                 <table class="table" id="connectionsTable">
                                     <thead>
-                                      <tr>
-                                        <th>IP</th>
-                                        <th>Port</th>
-                                        <th>Username</th>
-                                        <th>Use</th>
-        
-                                      </tr>
+                                        <tr>
+                                            <th>IP</th>
+                                            <th>Port</th>
+                                            <th>Username</th>
+                                            <th>Use</th>
+
+                                        </tr>
                                     </thead>
                                     <tbody id="connectionsTableBody">
-                                      <!-- Table body will be populated dynamically -->
+                                        <!-- Table body will be populated dynamically -->
                                     </tbody>
-                                  </table>
+                                </table>
                             </div>
                         </div>
 
                     </div>
-                    
 
 
 
-                    
+
+
 
                 </div>
             </div>
@@ -185,7 +189,7 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseTerminal" aria-expanded="false" aria-controls="collapseTerminal">
-                     <i class="bi bi-terminal-fill"></i> &nbsp Terminal 
+                    <i class="bi bi-terminal-fill"></i> &nbsp Terminal
                 </button>
             </h2>
             <div id="collapseTerminal" class="accordion-collapse collapse" data-bs-parent="#accordion1">
@@ -199,26 +203,28 @@
                             class="btn btn-secondary" disabled>
                             Close Terminal
                         </button>
-<!--                         <button type="button" onclick="testCommand()" id="command" class="btn btn-primary">
+                        <!--                         <button type="button" onclick="testCommand()" id="command" class="btn btn-primary">
                             Command
                         </button>
-                        <button type="button" onclick="testCopy('hello.sh')" id="execute" class="btn btn-primary">
+                        <button type="button" onclick="copy('hello.sh')" id="execute" class="btn btn-primary">
                             Hello
                         </button> -->
                     </div>
                     <div class="row g-4">
                         <div class="col-lg-7 mb-3">
 
-                                <div id="wrapper" class="p-3 bg-body-secondary rounded-4 shadow border border-secondary mb-3" hidden>
-                                    <div style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div> <!-- style="max-width: 1080px; max-height:460px" -->
-                                </div>
+                            <div id="wrapper"
+                                class="p-3 bg-body-secondary rounded-4 shadow border border-secondary mb-3" hidden>
+                                <div style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div>
+                                <!-- style="max-width: 1080px; max-height:460px" -->
+                            </div>
 
-                            
+
                             <div class="col-3 mb-3">
                                 <label for="searchTxt" class="form-label">search text:</label>
                                 <input id="searchTxt" type="text" placeholder="Find" class="form-control col-md-3">
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-check-label"> <input type="checkbox" class="form-check-input"
                                         id="matchCaseChb"> &nbsp Match Case</label>
@@ -230,22 +236,24 @@
                                 onclick="searchAddon.findPrevious(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">Find
                                 Previous</button>
                             <button type="button" class="btn btn-secondary mb-3" onclick="toggleFullScreen();">Toggle
-                                Fullscreen</button>  
+                                Fullscreen</button>
                         </div>
                         <div class="col-lg-5 mb-3">
                             <div class="shadow rounded-4 p-3 border border-secondary">
                                 <h2 class="h2 text-center">AI assistant</h2>
                                 <div class="mb-3">
                                     <label for="prompt" class="form-label">Enter your prompt:</label><br>
-                                    <input class="form-control" type="text" id="prompt" rows="4" cols="50" value="explain me FTP"/>
+                                    <input class="form-control" type="text" id="prompt" rows="4" cols="50"
+                                        value="explain me FTP" />
                                 </div>
-                                <button type="button" onclick="sendRequest()" class="btn btn-primary mb-3" >Send Request</button>
+                                <button type="button" onclick="sendRequest()" class="btn btn-primary mb-3">Send
+                                    Request</button>
                                 <div id="response-container"></div>
                             </div>
-                            
+
                         </div>
                     </div>
-                     
+
                 </div>
             </div>
 
@@ -258,27 +266,31 @@
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseInstall" aria-expanded="false" aria-controls="collapseInstall">
-                    <i class="bi bi-download"></i> &nbsp Install Packages 
+                    <i class="bi bi-download"></i> &nbsp Install Packages
                 </button>
             </h2>
             <div id="collapseInstall" class="accordion-collapse collapse" data-bs-parent="#accordion2">
                 <div class="accordion-body">
                     <div class="mb-3">
-                        <button type="button" onclick="testCopy('tools.sh')" id="tools" class="btn btn-primary mb-3">
-                            Install tools
+                        <form class="mb-3 col-md-5 d-flex">
+                            <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        </form>
+
+                        <button type="button" onclick="copy('tools.sh')" id="tools" class="install btn btn-primary mb-3">
+                            tools
                         </button>
-                        <button type="button" onclick="testCopy('install_apache.sh')" id="tools"
-                            class="btn btn-primary mb-3">
-                            Install Apache
+                        <button type="button" onclick="copy('install_apache.sh')" id="tools"
+                            class="install btn btn-primary mb-3">
+                            Apache
                         </button>
-                        <button type="button" onclick="testCopy('install_nginx.sh')" id="tools"
-                        class="btn btn-primary mb-3">
-                        Install nginx
+                        <button type="button" onclick="copy('install_nginx.sh')" id="tools"
+                            class="install btn btn-primary mb-3">
+                            nginx
                         </button>
 
-                        <button type="button" onclick="testCopy('install_mariadb_server.sh')" id="tools"
-                        class="btn btn-primary mb-3">
-                        Install MariaDB-server
+                        <button type="button" onclick="copy('install_mariadb_server.sh')" id="tools"
+                            class="install btn btn-primary mb-3">
+                            MariaDB-server
                         </button>
                     </div>
                 </div>
@@ -295,36 +307,72 @@
             </h2>
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
                 <div class="accordion-body">
-                    <div class="mb-3">
-                        <button type="button" onclick="testCopy('configure_apache.sh')" id="tools"
-                            class="btn btn-primary mb-3">
-                            Configure apache2
-                        </button>
+                    <div class="p-3 col-md-8 col-lg-7">
+                        <div class="tabs row">
+                            <div id="tablink1" type="button"
+                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                onclick="openTab('tab1','tablink1')">
+                                <h5>Webserver</h5>
+                            </div>
+                            <div id="tablink2" type="button"
+                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                onclick="openTab('tab2','tablink2')">
+                                <h5>Wordpress</h5>
+                            </div>
+                            <div id="tablink3" type="button"
+                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                onclick="openTab('tab3','tablink3')">
+                                <h5>Database</h5>
+                            </div>
 
-                        <button type="button" onclick="testCopy('configure_nginx.sh')" id="tools"
-                            class="btn btn-primary mb-3">
-                            Configure nginx
-                        </button>
+                        </div>
+                        <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
 
-                        <button type="button" onclick="testCopy('configure_wordpress.sh')" id="tools"
-                            class="btn btn-primary mb-3">
-                            Configure Wordpress
-                        </button>
+                            <div id="tab1" class="tabcontent">
+                                <div class="col-4 mb-3">
+                                    <label for="domain" class="form-label">Domain:</label>
+                                    <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
+                                        value="example.com" />
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <label for="folder_name" class="form-label">Folder name:</label>
+                                    <input type="text" id="folder_name" class="form-control"
+                                        placeholder="Enter your folder name" value="example" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-check-label"> <input type="checkbox" class="form-check-input"
+                                            id="matchCaseSec"> &nbsp Secure</label>
+                                </div>
+                                <button type="button" onclick="copyWebserver('configure_apache.sh')" id="tools"
+                                    class="btn btn-secondary mb-3">
+                                    Configure apache2
+                                </button>
+
+                                <button type="button" onclick="copyWebserver('configure_nginx.sh')" id="tools"
+                                    class="btn btn-secondary mb-3">
+                                    Configure nginx
+                                </button>
+                            </div>
+
+                            <div id="tab2" class="tabcontent">
+                                <h3>Content for Tab 2</h3>
+                                <p>This is the content for Tab 2.</p>
+                                <button type="button" onclick="copy('configure_wordpress.sh')" id="tools"
+                                    class="btn btn-primary mb-3">
+                                    Configure Wordpress
+                                </button>
+
+                            </div>
+
+                            <div id="tab3" class="tabcontent">
+                                <h3>Content for Tab 3</h3>
+                                <p>This is the content for Tab 3.</p>
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="col-4 mb-3">
-                        <label for="domain" class="form-label">Domain:</label>
-                        <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
-                            value="example.com" />
-                    </div>
-                    <div class="col-3 mb-3">
-                        <label for="domain" class="form-label">Folder name:</label>
-                        <input type="text" id="folder_name" class="form-control" placeholder="Enter your domain"
-                            value="example" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-check-label"> <input type="checkbox" class="form-check-input"
-                                id="matchCaseSec"> &nbsp Secure</label>
-                    </div>
+
+
                 </div>
             </div>
         </div>

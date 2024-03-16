@@ -207,7 +207,33 @@ io.on("connection", (socket) => {
                       return;
                     }
                     console.log("File transfer complete!");
-                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} ) && rm script.sh \n`);
+                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh}" && rm script.sh) \n`);
+                  }
+                );
+
+              } catch (error) {
+                socket.emit("ssh.status", "error: unable to copy the code");
+              }
+            });
+
+
+            socket.on("copy_webserver", () => {
+              const localFilePath = script_path;
+              const remoteDestination = "./";
+              try {
+
+                sftp.fastPut(
+                  localFilePath,
+                  remoteDestination + "script.sh",
+                  {},
+                  (transferErr) => {
+                    if (transferErr) {
+                      console.error("Error during file transfer:", transferErr.message);
+                      return;
+                    }
+                    console.log("File transfer complete!");
+                    console.log("Copy Webserver");
+                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh}" && rm script.sh) \n`);
                   }
                 );
 
