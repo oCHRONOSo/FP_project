@@ -1,6 +1,6 @@
-domain="$1"
-foldername="$2"
-secure="$3"
+#!/bin/bash
+
+foldername="$1"
 
 directory="/var/www/$foldername"
 # Install MariaDB server
@@ -15,20 +15,11 @@ fi
 
 if [ ! -f "$directory/latest.zip" ]; then
      wget -O "$directory/latest.zip" https://wordpress.org/latest.zip --wait=5
+     unzip $directory/latest.zip -d $directory/
+     cp -r "$directory/wordpress"/* "$directory/"
+     rm -r "$directory/wordpress"
+     chown -R www-data:www-data "$directory"
 fi
 
 
-unzip $directory/latest.zip -d $directory/
-cp -r "$directory/wordpress"/* "$directory/"
-rm -r "$directory/wordpress"
 
-# Create database and user in MariaDB
-mariadb <<MYSQL_SCRIPT
-CREATE DATABASE IF NOT EXISTS wordpress_$foldername;
-CREATE USER IF NOT EXISTS 'wpadmin'@'localhost' IDENTIFIED BY 'wpadmin';
-GRANT ALL ON wordpress_$foldername.* TO 'wpadmin'@'localhost';
-FLUSH PRIVILEGES;
-MYSQL_SCRIPT
-
-# Change ownership of directory to www-data
-chown -R www-data:www-data "$directory"

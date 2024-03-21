@@ -184,12 +184,8 @@ function testCommand() {
 // Copy script to the server and configure web server
 function copy(button) {
   const input_name = button;
-  const domain = document.getElementById("domain").value;
-  const folderName = document.getElementById("folder_name").value;
-  const isSecure = document.getElementById("matchCaseSec").checked;
   socket.emit("path", input_name);
   socket.emit('copy');
-  socket.emit('configue_webserver', {domain, folderName, isSecure});
 }
 
 function copyWebserver(button) {
@@ -200,6 +196,25 @@ function copyWebserver(button) {
   socket.emit("path", input_name);
   socket.emit('copy_webserver');
   socket.emit('configue_webserver', {domain, folderName, isSecure});
+}
+
+function copyWordpress(button) {
+  const input_name = button;
+  const folderName = document.getElementById("wp_folder_name").value;
+  socket.emit("path", input_name);
+  socket.emit('copy_wp');
+  socket.emit('configue_wp', folderName);
+}
+
+function copyDb(button) {
+  const input_name = button;
+  const dbname = document.getElementById("db_name").value;
+  const dbuser = document.getElementById("db_user").value;
+  const dbhost = document.getElementById("db_host").value;
+  const dbpassword = document.getElementById("db_password").value;
+  socket.emit("path", input_name);
+  socket.emit('copy_db');
+  socket.emit('configue_db', {dbname, dbuser, dbhost, dbpassword});
 }
 
 // Handle SSH error messages

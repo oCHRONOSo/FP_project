@@ -183,6 +183,12 @@ io.on("connection", (socket) => {
             let domain_sh;
             let folderName_sh;
             let isSecure_sh;
+            let wp_folderName_sh;
+            let dbhost_sh;
+            let dbname_sh;
+            let dbuser_sh;
+            let dbpassword_sh;
+
             socket.on('configue_webserver', ({ domain, folderName, isSecure }) => {
               domain_sh = domain
               folderName_sh = folderName
@@ -192,32 +198,22 @@ io.on("connection", (socket) => {
               console.log(isSecure_sh);
             });
 
-            socket.on("copy", () => {
-              const localFilePath = script_path;
-              const remoteDestination = "./";
-              try {
+            socket.on('configue_wp', (wp_folderName) => {
+              wp_folderName_sh = wp_folderName
+              console.log(wp_folderName);
+            });
 
-                sftp.fastPut(
-                  localFilePath,
-                  remoteDestination + "script.sh",
-                  {},
-                  (transferErr) => {
-                    if (transferErr) {
-                      console.error("Error during file transfer:", transferErr.message);
-                      return;
-                    }
-                    console.log("File transfer complete!");
-                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh}" && rm script.sh) \n`);
-                  }
-                );
+            socket.on('configue_db', ({ dbname, dbuser, dbhost, dbpassword }) => {
+              dbname_sh = dbname
+              dbuser_sh = dbuser
+              dbhost_sh = dbhost
+              dbpassword_sh = dbpassword
+              console.log(dbname);
 
-              } catch (error) {
-                socket.emit("ssh.status", "error: unable to copy the code");
-              }
             });
 
 
-            socket.on("copy_webserver", () => {
+            function copy_conf(command="echo 'transfer complete'") {
               const localFilePath = script_path;
               const remoteDestination = "./";
               try {
@@ -232,14 +228,29 @@ io.on("connection", (socket) => {
                       return;
                     }
                     console.log("File transfer complete!");
-                    console.log("Copy Webserver");
-                    stream.write(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh}" && rm script.sh) \n`);
-                  }
-                );
+                    stream.write(command)
+                  });
 
               } catch (error) {
                 socket.emit("ssh.status", "error: unable to copy the code");
               }
+
+            } 
+
+            socket.on("copy", () => {
+              copy_conf();
+            });
+
+            socket.on("copy_webserver", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh} && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${domain_sh} ${folderName_sh} ${isSecure_sh}" && rm script.sh) \n`);
+            });
+
+            socket.on("copy_wp", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${wp_folderName_sh} && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${wp_folderName_sh}" && rm script.sh) \n`);
+            });
+
+            socket.on("copy_db", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${dbname_sh} ${dbuser_sh} ${dbpassword_sh} ${dbhost_sh} && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${dbname_sh} ${dbuser_sh} ${dbpassword_sh} ${dbhost_sh} " && rm script.sh) \n`);
             });
 
 
