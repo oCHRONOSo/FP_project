@@ -188,6 +188,12 @@ function copy(button) {
   socket.emit('copy');
 }
 
+function copy_install(button) {
+  const input_name = button;
+  socket.emit("path", input_name);
+  socket.emit('copy_install');
+}
+
 function copyWebserver(button) {
   const input_name = button;
   const domain = document.getElementById("domain").value;

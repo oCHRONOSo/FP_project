@@ -213,7 +213,7 @@ io.on("connection", (socket) => {
             });
 
 
-            function copy_conf(command="echo 'transfer complete'") {
+            function copy_conf(command="echo 'transfer complete' \n") {
               const localFilePath = script_path;
               const remoteDestination = "./";
               try {
@@ -239,6 +239,10 @@ io.on("connection", (socket) => {
 
             socket.on("copy", () => {
               copy_conf();
+            });
+
+            socket.on("copy_install", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh" && rm script.sh) \n`);
             });
 
             socket.on("copy_webserver", () => {

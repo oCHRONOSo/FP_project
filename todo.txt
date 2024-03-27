@@ -1,5 +1,6 @@
 
-DNS conf
+DNS conf / add record tab
+
 DHCP conf
 security checker
 
