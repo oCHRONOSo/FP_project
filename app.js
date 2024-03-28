@@ -223,6 +223,15 @@ function copyDb(button) {
   socket.emit('configue_db', {dbname, dbuser, dbhost, dbpassword});
 }
 
+function copyDNS(button) {
+  const input_name = button;
+  const dns_domain = document.getElementById("dns_domain").value;
+  const dns_ip = document.getElementById("dns_ip").value;
+  socket.emit("path", input_name);
+  socket.emit('copy_dns');
+  socket.emit('configue_dns', {dns_domain, dns_ip});
+}
+
 // Handle SSH error messages
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
@@ -281,6 +290,7 @@ socket.on('recentConnections', (results) => {
       // Define the action to be performed when the button is clicked
 
       document.getElementById("ip").value = connection.ip;
+      document.getElementById("dns_ip").value = connection.ip;
       document.getElementById("port").value = connection.port;
       document.getElementById("username").value = connection.username;
       document.getElementById("password").value = connection.password;
@@ -300,19 +310,29 @@ document.getElementById('flexSwitchCheckDefault').addEventListener('click', () =
 
 
 // add tabs for configuration
-var tabcontent = document.getElementsByClassName("tabcontent");
-var tablinks = document.getElementsByClassName("tablink");
-for (i = 0; i < tabcontent.length; i++) {
-  tabcontent[i].style.display = "none";
+var section = document.getElementsByClassName("tab-section");
+for (s = 0; s < section.length; s++){
+  var tabcontent = section[s].getElementsByClassName("tabcontent");
+  var tablinks = section[s].getElementsByClassName("tablink");
+  for (i = 1; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks[0].classList.add("bg-body-secondary");
 }
-document.getElementById("tab1").style.display = "block";
-document.getElementById("tablink1").classList.add("bg-body-secondary");
+
+
+// document.getElementById("tab1").style.display = "block";
+// document.getElementById("tablink1").classList.add("bg-body-secondary");
+
+// document.getElementById("dns_tab1").style.display = "block";
+// document.getElementById("dns_tablink1").classList.add("bg-body-secondary");
 
   // Function to open a specific tab
-  function openTab(tabName,tabLink) {
+  function openTab(tabName, tabLink, sectionId) {
     var i;
-    var tabcontent = document.getElementsByClassName("tabcontent");
-    var tablinks = document.getElementsByClassName("tablink");
+    var section = document.getElementById(sectionId);
+    var tabcontent = section.getElementsByClassName("tabcontent");
+    var tablinks = section.getElementsByClassName("tablink");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
@@ -321,7 +341,7 @@ document.getElementById("tablink1").classList.add("bg-body-secondary");
     }
     document.getElementById(tabName).style.display = "block";
     document.getElementById(tabLink).classList.add("bg-body-secondary");
-  }
+}
 
 
 // search for packages

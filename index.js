@@ -212,6 +212,12 @@ io.on("connection", (socket) => {
 
             });
 
+            socket.on('configue_dns', ({ dns_domain, dns_ip }) => {
+              dns_domain_sh = dns_domain;
+              dns_ip_sh = dns_ip;
+
+            });
+
 
             function copy_conf(command="echo 'transfer complete' \n") {
               const localFilePath = script_path;
@@ -255,6 +261,10 @@ io.on("connection", (socket) => {
 
             socket.on("copy_db", () => {
               copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${dbname_sh} ${dbuser_sh} ${dbpassword_sh} ${dbhost_sh} && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${dbname_sh} ${dbuser_sh} ${dbpassword_sh} ${dbhost_sh} " && rm script.sh) \n`);
+            });
+
+            socket.on("copy_dns", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${dns_domain_sh} ${dns_ip_sh} && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${dns_domain_sh} ${dns_ip_sh} " && rm script.sh) \n`);
             });
 
 
