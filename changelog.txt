@@ -21,3 +21,5 @@ fixed sudo error (sudo not found or error leads to executes the script as root)
 added search for package, tabs for configuration
 
 added dns, dhcp and security scripts , not implemented yet
+
+implemented dns , dhcp (only network config)

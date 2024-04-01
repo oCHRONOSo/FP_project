@@ -6,3 +6,4 @@ security checker
 
 VPN config
 iptables
+enhance ssh errors (specific info)

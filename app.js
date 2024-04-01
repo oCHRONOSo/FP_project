@@ -200,16 +200,18 @@ function copyWebserver(button) {
   const folderName = document.getElementById("folder_name").value;
   const isSecure = document.getElementById("matchCaseSec").checked;
   socket.emit("path", input_name);
-  socket.emit('copy_webserver');
   socket.emit('configue_webserver', {domain, folderName, isSecure});
+  socket.emit('copy_webserver');
+
 }
 
 function copyWordpress(button) {
   const input_name = button;
   const folderName = document.getElementById("wp_folder_name").value;
   socket.emit("path", input_name);
-  socket.emit('copy_wp');
   socket.emit('configue_wp', folderName);
+  socket.emit('copy_wp');
+
 }
 
 function copyDb(button) {
@@ -219,8 +221,9 @@ function copyDb(button) {
   const dbhost = document.getElementById("db_host").value;
   const dbpassword = document.getElementById("db_password").value;
   socket.emit("path", input_name);
-  socket.emit('copy_db');
   socket.emit('configue_db', {dbname, dbuser, dbhost, dbpassword});
+  socket.emit('copy_db');
+
 }
 
 function copyDNS(button) {
@@ -228,8 +231,47 @@ function copyDNS(button) {
   const dns_domain = document.getElementById("dns_domain").value;
   const dns_ip = document.getElementById("dns_ip").value;
   socket.emit("path", input_name);
-  socket.emit('copy_dns');
   socket.emit('configue_dns', {dns_domain, dns_ip});
+  socket.emit('copy_dns');
+
+  console.log(`${dns_domain} ${dns_ip}`)
+}
+
+function copyRecord(button) {
+  const input_name = button;
+  var selectElement = document.getElementById("recordType");
+  var selectedOption = selectElement.options[selectElement.selectedIndex];
+  var recordType = selectedOption.innerHTML;
+  const dns_conf_file = document.getElementById("dns_conf_file").value;
+  var value1 = document.getElementById("dns_value_1").value;
+  var value2 = document.getElementById("dns_value_2").value;
+  socket.emit("path", input_name);
+  socket.emit('configue_dns_record', {dns_conf_file, recordType, value1, value2});
+  socket.emit('copy_dns_record');
+}
+
+function copydhcp(button) {
+  const input_name = button;
+  const interfaceName = document.getElementById("interface").value;
+  const subnetIP = document.getElementById("dhcp_subnet_ip").value;
+  const subnetMask = document.getElementById("dhcp_subnet_mask").value;
+  const dhcpRangeStart = document.getElementById("dhcp_range_start").value;
+  const dhcpRangeEnd = document.getElementById("dhcp_range_end").value;
+  const gatewayIP = document.getElementById("gateway_ip").value;
+  const dnsIP = document.getElementById("dhcp_dns_ip").value;
+
+  // Replace the following lines with your socket.emit calls
+  socket.emit("path", input_name);
+  socket.emit('configue_dhcp', {
+      interfaceName,
+      subnetIP,
+      subnetMask,
+      dhcpRangeStart,
+      dhcpRangeEnd,
+      gatewayIP,
+      dnsIP
+  });
+  socket.emit('copy_dhcp');
 }
 
 // Handle SSH error messages
@@ -284,7 +326,7 @@ socket.on('recentConnections', (results) => {
     // Create a button cell with a button for each row
     const actionsCell = document.createElement('td');
     const button = document.createElement('button');
-    button.textContent = 'Action';
+    button.textContent = 'Use';
     button.setAttribute("class","btn btn-secondary")
     button.addEventListener('click', () => {
       // Define the action to be performed when the button is clicked
@@ -365,8 +407,11 @@ for (s = 0; s < section.length; s++){
       }
   });
 
-
-
+function updateip(){
+    document.getElementById("dns_ip").value = document.getElementById("ip").value
+    document.getElementById("dhcp_ip").value = document.getElementById("ip").value
+}
+updateip();
 
 
 

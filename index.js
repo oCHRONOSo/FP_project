@@ -27,7 +27,8 @@ io.on("connection", (socket) => {
     console.log('Connected to MySQL database');
   });
 
-  const query = `
+  function sendRecentconn() {
+    const query = `
   SELECT ip, port, username, password
   FROM connections
   ORDER BY last_connection DESC
@@ -44,6 +45,9 @@ io.on("connection", (socket) => {
     socket.emit('recentConnections', results);
     console.log("DB results sent");
   });
+  }
+  
+  sendRecentconn();
 
   // Log the IP address of the connecting user
   const clientIpAddress = socket.handshake.address;
@@ -100,7 +104,7 @@ io.on("connection", (socket) => {
         console.log('Connection information stored in MySQL');
       });
 
-      
+      sendRecentconn();
       
       socket.emit("ssh.success");
       socket.emit("ssh.status", "SSH connection successful!");
@@ -188,6 +192,20 @@ io.on("connection", (socket) => {
             let dbname_sh;
             let dbuser_sh;
             let dbpassword_sh;
+            let dns_domain_sh;
+            let dns_ip_sh;
+            let dns_conf_file_sh;
+            let recordType_sh;
+            let value1_sh;
+            let value2_sh;
+            let interfaceName_sh;
+            let subnetIP_sh;
+            let subnetMask_sh;
+            let dhcpRangeStart_sh;
+            let dhcpRangeEnd_sh;
+            let gatewayIP_sh;
+            let dnsIP_sh;
+
 
             socket.on('configue_webserver', ({ domain, folderName, isSecure }) => {
               domain_sh = domain
@@ -213,12 +231,29 @@ io.on("connection", (socket) => {
             });
 
             socket.on('configue_dns', ({ dns_domain, dns_ip }) => {
-              dns_domain_sh = dns_domain;
-              dns_ip_sh = dns_ip;
-
+              dns_domain_sh = dns_domain
+              dns_ip_sh = dns_ip
             });
 
+            socket.on('configue_dns_record', ({dns_conf_file, recordType, value1, value2}) => {
+              dns_conf_file_sh = dns_conf_file
+              recordType_sh = recordType
+              value1_sh = value1
+              value2_sh = value2
+            });
 
+            socket.on('configue_dhcp', ({ interfaceName, subnetIP, subnetMask, dhcpRangeStart, dhcpRangeEnd, gatewayIP, dnsIP }) => {
+
+              interfaceName_sh = interfaceName;
+              subnetIP_sh = subnetIP;
+              subnetMask_sh = subnetMask;
+              dhcpRangeStart_sh = dhcpRangeStart;
+              dhcpRangeEnd_sh = dhcpRangeEnd;
+              gatewayIP_sh = gatewayIP;
+              dnsIP_sh = dnsIP;
+          
+          });
+          
             function copy_conf(command="echo 'transfer complete' \n") {
               const localFilePath = script_path;
               const remoteDestination = "./";
@@ -264,10 +299,17 @@ io.on("connection", (socket) => {
             });
 
             socket.on("copy_dns", () => {
-              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${dns_domain_sh} ${dns_ip_sh} && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${dns_domain_sh} ${dns_ip_sh} " && rm script.sh) \n`);
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${dns_ip_sh} ${dns_domain_sh}  && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${dns_ip_sh} ${dns_domain_sh}  " && rm script.sh) \n`);
             });
 
+            socket.on("copy_dns_record", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${dns_conf_file_sh} ${recordType_sh} ${value1_sh} ${value2_sh}  && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${dns_conf_file_sh} ${recordType_sh} ${value1_sh} ${value2_sh} " && rm script.sh) \n`);
+            });
 
+            socket.on("copy_dhcp", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${interfaceName_sh} ${subnetIP_sh} ${subnetMask_sh} ${dhcpRangeStart_sh} ${dhcpRangeEnd_sh} ${gatewayIP_sh} ${dnsIP_sh}  && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${interfaceName_sh} ${subnetIP_sh} ${subnetMask_sh} ${dhcpRangeStart_sh} ${dhcpRangeEnd_sh} ${gatewayIP_sh} ${dnsIP_sh} " && rm script.sh) \n`);
+            });
+          
           });
 
         }

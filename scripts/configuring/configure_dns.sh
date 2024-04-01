@@ -21,12 +21,15 @@ zone "$DOMAIN" {
 
 zone "$(echo $DNS_IP | awk -F'.' '{print $4"."$3"."$2"."$1}').in-addr.arpa" {
     type master;
-    file "/etc/bind/db.$(echo $DNS_IP | awk -F'.' '{print $4"."$3"."$2"."$1}').reverse";
+    file "/etc/bind/db.$DOMAIN.reverse";
 };
 EOF
-    
-    # Create forward zone file
-    cat <<EOF > /etc/bind/db.$DOMAIN
+
+
+    forward_zone="/etc/bind/db.$DOMAIN"
+    if [ ! -f "$forward_zone" ]; then
+        echo "Creating $forward_zone..."
+        cat <<EOF > "$forward_zone"
 \$TTL    86400
 @       IN      SOA     ns1.$DOMAIN. admin.$DOMAIN. (
                           3         ; Serial
@@ -40,10 +43,16 @@ EOF
 ns1     IN      A       $DNS_IP
 ns2     IN      A       $DNS_IP
 EOF
+    else
+        echo "$forward_zone already exists."
+    fi
+
     
-    # Create reverse zone file
     reverse_ip=$(echo $DNS_IP | awk -F'.' '{print $4"."$3"."$2"."$1}')
-    cat <<EOF > /etc/bind/db.$DOMAIN.reverse
+    reverse_zone="/etc/bind/db.$DOMAIN.reverse"
+    if [ ! -f "$reverse_zone" ]; then
+        echo "Creating $reverse_zone..."
+        cat <<EOF > "$reverse_zone"
 \$TTL    86400
 @       IN      SOA     ns1.$DOMAIN. admin.$DOMAIN. (
                           3         ; Serial
@@ -56,9 +65,10 @@ EOF
 @       IN      NS      ns2.$DOMAIN.
 $(echo $reverse_ip | awk -F'.' '{print $1"."$2"."$3"."$4}')     IN      PTR     $DOMAIN.
 EOF
+    else
+        echo "$reverse_zone already exists."
+    fi
     
-    # Set permissions
-    chown -R bind:bind /etc/bind
     
     # Restart BIND service
     systemctl restart named

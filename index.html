@@ -92,31 +92,30 @@
             </h2>
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
                 <div class="accordion-body">
-                    <div class="row">
-                        <div class="col-lg-8 px-4">
-                            <form id="login-form">
-                                <div class="row shadow rounded-4 p-3 border border-secondary mb-3">
 
+                    <div class="row" >
+                        <div class="col-lg-8 p-3 ">
+                            <div class="container bg-body-secondary border border-secondary rounded-4 shadow">
+                                <div class="row p-3">
                                     <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
-                                    <div
-                                        class="col-md-6 bg-body-secondary p-4 rounded-4 border border-secondary-subtle">
+                                    <div class="col-md-7 bg-body p-4 rounded-4 border border-secondary-subtle">
                                         <div class="row g-2">
                                             <div class="col-6 mb-3">
                                                 <label for="username" class="form-label">Username:</label>
                                                 <input type="text" id="username" class="form-control"
-                                                    placeholder="Enter Username" value="usuario" />
+                                                    placeholder="Enter Username" />
                                             </div>
                                             <div class="col-6 mb-3">
                                                 <label for="ip" class="form-label">IP Address:</label>
                                                 <input type="text" id="ip" oninput="updatednsip()" class="form-control"
-                                                    placeholder="Enter IP Address" value="192.168.186.130" />
+                                                    placeholder="Enter IP Address" />
                                             </div>
                                         </div>
                                         <div class="row g-2">
                                             <div class="col-9 mb-3">
                                                 <label for="password" class="form-label">Password:</label>
                                                 <input type="password" id="password" class="form-control"
-                                                    placeholder="Enter Password" value="usuario" />
+                                                    placeholder="Enter Password" />
                                             </div>
                                             <div class="col-3 mb-3">
                                                 <label for="port" class="form-label">Port:</label>
@@ -132,7 +131,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 p-4">
+                                    <div class="col-md-5 p-4">
                                         <div class="mb-3">
                                             <label for="sshkey" class="form-label">SSH key:</label>
                                             <input type="file" id="sshkey" class="form-control"
@@ -149,30 +148,33 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
-                            </form>
+                            </div>
+
                         </div>
 
 
-                        <div class="col-lg-4 ">
-                            <div class="p-3 border border-secondary rounded-4 shadow table-responsive">
+                        <div class="col-lg-4 p-3 ">
+                            <div class="container  border border-secondary rounded-4 shadow p-3">
                                 <h2 class=" h2 ">Recent:</h2>
-                                <table class="table" id="connectionsTable">
-                                    <thead>
-                                        <tr>
-                                            <th>IP</th>
-                                            <th>Port</th>
-                                            <th>Username</th>
-                                            <th>Use</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="connectionsTableBody">
-                                        <!-- Table body will be populated dynamically -->
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive" style="height: 18em;">
+                                    <table class="table table-striped" id="connectionsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>IP</th>
+                                                <th>Port</th>
+                                                <th>Username</th>
+                                                <th>Action</th>
+    
+                                            </tr>
+                                        </thead>
+                                        <tbody id="connectionsTableBody">
+                                            <!-- Table body will be populated dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -195,7 +197,7 @@
             <div id="collapseTerminal" class="accordion-collapse collapse" data-bs-parent="#accordion1">
                 <div class="accordion-body">
                     <div class="mb-3">
-                        <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-secondary"
+                        <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-primary"
                             disabled>
                             Open Terminal
                         </button>
@@ -449,12 +451,6 @@
                                     <label for="dns_ip" class="form-label">DNS ip:</label>
                                     <input type="text" id="dns_ip" class="form-control"
                                         placeholder="Enter your folder name" />
-                                    <script>
-                                        function updatednsip(){
-                                            document.getElementById("dns_ip").value = document.getElementById("ip").value
-                                        }
-                                        updatednsip();
-                                    </script>
                                 </div>
                                 <button type="button" onclick="copyDNS('configure_dns.sh')" id="tools"
                                     class="btn btn-primary mb-3">
@@ -473,12 +469,12 @@
                                 <p>Add your records here:</p>
                                 <div class="row">
                                     <div class="col-4 mb-3">
-                                        <input type="text" id="value_1" class="form-control"
+                                        <input type="text" id="dns_value_1" class="form-control"
                                             placeholder="field 1" />
                                     </div>
     
                                     <div class="col-2 mb-3">
-                                        <select class="form-select" aria-label="Default select example">
+                                        <select id="recordType" class="form-select" aria-label="Default select example">
                                             <option value="1" selected>A</option>
                                             <option value="2">AAAA</option>
                                             <option value="3">CNAME</option>
@@ -491,13 +487,13 @@
                                     </div>
     
                                     <div class="col-4 mb-3">
-                                        <input type="text" id="value_2" class="form-control"
+                                        <input type="text" id="dns_value_2" class="form-control"
                                             placeholder="field 2" />
                                     </div>
                                 </div>
 
 
-                                <button type="button" onclick="copydnsrecord('configure_wordpress.sh')" id="tools"
+                                <button type="button" onclick="copyRecord('configure_dns_record.sh')" id="tools"
                                     class="btn btn-primary mb-3">
                                     Add Record
                                 </button>
@@ -526,69 +522,52 @@
                         <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
 
                             <div id="dhcp_tab1" class="tabcontent">
-                                <div class="col-6 mb-3">
-                                    <label for="dns_domain" class="form-label">Domain:</label>
-                                    <input type="text" id="dns_domain" class="form-control" placeholder="Enter your domain"
-                                        value="example.com" />
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label for="dns_ip" class="form-label">DNS ip:</label>
-                                    <input type="text" id="dns_ip" class="form-control"
-                                        placeholder="Enter your folder name" />
-                                    <script>
-                                        function updatednsip(){
-                                            document.getElementById("dns_ip").value = document.getElementById("ip").value
-                                        }
-                                        updatednsip();
-                                    </script>
-                                </div>
-                                <button type="button" onclick="copyDNS('configure_dns.sh')" id="tools"
-                                    class="btn btn-primary mb-3">
-                                    Configure DNS
-                                </button>
-
-                            </div>
-
-                            <div id="dhcp_tab2" class="tabcontent">
-                                <p>Select your file in /etc/bind/</p>
-                                <div class="col-6 mb-3">
-                                    <label for="dns_conf_file" class="form-label">Configuration file:</label>
-                                    <input type="text" id="dns_conf_file" class="form-control" placeholder="Enter your domain"
-                                        value="db.example" />
-                                </div>
-                                <p>Add your records here:</p>
+                                <h2>Network Configuration</h2>
+                                <p>Configure your network settings:</p>
                                 <div class="row">
-                                    <div class="col-4 mb-3">
-                                        <input type="text" id="value_1" class="form-control"
-                                            placeholder="field 1" />
-                                    </div>
-    
-                                    <div class="col-2 mb-3">
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option value="1" selected>A</option>
-                                            <option value="2">AAAA</option>
-                                            <option value="3">CNAME</option>
-                                            <option value="4">MX</option>
-                                            <option value="5">NS</option>
-                                            <option value="6">SOA</option>
-                                            <option value="7">PTR</option>
-                                            <option value="4">TXT</option>
-                                          </select>
-                                    </div>
-    
-                                    <div class="col-4 mb-3">
-                                        <input type="text" id="value_2" class="form-control"
-                                            placeholder="field 2" />
+                                    <div class="col-md-6 mb-3">
+                                        <label for="interface" class="form-label">Interface Name:</label>
+                                        <input type="text" id="interface" class="form-control" placeholder="e.g., eth0" />
                                     </div>
                                 </div>
-
-
-                                <button type="button" onclick="copydnsrecord('configure_wordpress.sh')" id="tools"
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="subnet_ip" class="form-label">Subnet IP Address:</label>
+                                        <input type="text" id="dhcp_subnet_ip" class="form-control" placeholder="e.g., 192.168.1.0" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="subnet_mask" class="form-label">Subnet Mask:</label>
+                                        <input type="text" id="dhcp_subnet_mask" class="form-control" placeholder="e.g., 24" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="dhcp_range_start" class="form-label">DHCP Range Start:</label>
+                                        <input type="text" id="dhcp_range_start" class="form-control" placeholder="e.g., 192.168.1.100" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="dhcp_range_end" class="form-label">DHCP Range End:</label>
+                                        <input type="text" id="dhcp_range_end" class="form-control" placeholder="e.g., 192.168.1.200" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="gateway_ip" class="form-label">Gateway IP Address:</label>
+                                        <input type="text" id="gateway_ip" class="form-control" placeholder="e.g., 192.168.1.1" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="dhcp_dns_ip" class="form-label">DNS Server IP Address:</label>
+                                        <input type="text" id="dhcp_dns_ip" class="form-control" placeholder="e.g., 8.8.8.8" />
+                                    </div>
+                                </div>
+                            
+                                <button type="button" onclick="copydhcp('configure_dhcp.sh')" id="configure_network"
                                     class="btn btn-primary mb-3">
-                                    Add Record
+                                    Configure Network
                                 </button>
-
+                            
                             </div>
+                            
 
                         </div>
                     </div>
