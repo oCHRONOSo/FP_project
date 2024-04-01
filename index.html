@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" class="dark">
 
-<head>
+<head >
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
@@ -37,11 +37,12 @@
         }
 
         .bg-blur {
+            background-color: #22283119 ;
             backdrop-filter: blur(12px);
         }
 
         .bg-image {
-            background-image: url(https://cdn.wallpapersafari.com/22/54/GJ21tH.jpg);
+            background-image: linear-gradient(0deg, #222831, #00ADB5);
             background-size: 100% 100%;
         }
 
@@ -56,7 +57,7 @@
 <body class="bg-body body">
 
 
-    <nav class="navbar sticky-top navbar-expand-lg bg-body-secondary shadow">
+    <nav class="navbar sticky-top navbar-expand-lg shadow bg-blur">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Novaterm AI</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -91,7 +92,7 @@
                 </button>
             </h2>
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
-                <div class="accordion-body">
+                <div class="accordion-body bg-image-container">
 
                     <div class="row">
                         <div class="col-lg-8 p-3 ">
@@ -125,8 +126,8 @@
                                         </div>
                                         <div class="mb-3">
                                             <button type="button" onclick="connectSSH()"
-                                                class="btn btn-primary">Connect</button>
-                                            <button type="button" onclick="disconnectSSH()" class="btn btn-secondary">
+                                                class="btn btn-primary rounded-pill">Connect</button>
+                                            <button type="button" onclick="disconnectSSH()" class="btn btn-secondary rounded-pill">
                                                 Disconnect
                                             </button>
                                         </div>
@@ -156,7 +157,7 @@
 
                         <div class="col-lg-4 p-3 ">
                             <div class="container  border border-secondary rounded-4 shadow p-3">
-                                <h2 class=" h2 ">Recent:</h2>
+                                <h2 class=" h2 mb-3">Recent:</h2>
                                 <div class="table-responsive" style="height: 18em;">
                                     <table class="table table-striped" id="connectionsTable">
                                         <thead>
@@ -195,14 +196,14 @@
                 </button>
             </h2>
             <div id="collapseTerminal" class="accordion-collapse collapse" data-bs-parent="#accordion1">
-                <div class="accordion-body">
+                <div class="accordion-body bg-image-container">
                     <div class="mb-3">
-                        <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-primary"
+                        <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-primary rounded-pill"
                             disabled>
                             Open Terminal
                         </button>
-                        <button type="button" onclick="closeTerminal()" id="close-terminal-btn"
-                            class="btn btn-secondary" disabled>
+                        <button type="button" onclick="closeTerminal()" id="close-terminal-btn "
+                            class="btn btn-secondary rounded-pill" disabled>
                             Close Terminal
                         </button>
                         <!--   <button type="button" onclick="testCommand()" id="command" class="btn btn-primary">
@@ -248,7 +249,7 @@
                                     <input class="form-control" type="text" id="prompt" rows="4" cols="50"
                                         value="explain me FTP" />
                                 </div>
-                                <button type="button" onclick="sendRequest()" class="btn btn-primary mb-3">Send
+                                <button type="button" onclick="sendRequest()" class="btn btn-primary rounded-pill mb-3">Send
                                     Request</button>
                                 <div id="response-container"></div>
                             </div>
@@ -272,7 +273,7 @@
                 </button>
             </h2>
             <div id="collapseInstall" class="accordion-collapse collapse" data-bs-parent="#accordion2">
-                <div class="accordion-body">
+                <div class="accordion-body bg-image-container">
                     <div class="mb-3">
                         <form class="mb-3 col-md-5 d-flex">
                             <input id="searchInput" class="form-control me-2" type="search" placeholder="Search"
@@ -320,7 +321,7 @@
                 </button>
             </h2>
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
-                <div class="accordion-body">
+                <div class="accordion-body bg-image-container">
 
                     <div id="config-section" class="btn-section">
                         <div class="tabs row justify-content-center text-center">
@@ -407,7 +408,7 @@
                                             </div>
             
                                             <button type="button" onclick="copyWordpress('configure_wordpress.sh')" id="tools"
-                                                class="btn btn-primary mb-3">
+                                                class="btn btn-primary rounded-pill mb-3">
                                                 Configure Wordpress
                                             </button>
             
@@ -441,7 +442,7 @@
                                             </div>
             
                                             <button type="button" onclick="copyDb('configure_db.sh')" id="tools"
-                                                class="btn btn-primary mb-3">
+                                                class="btn btn-primary rounded-pill mb-3">
                                                 Configure Database
                                             </button>
             
@@ -481,7 +482,7 @@
                                                     placeholder="Enter your folder name" />
                                             </div>
                                             <button type="button" onclick="copyDNS('configure_dns.sh')" id="tools"
-                                                class="btn btn-primary mb-3">
+                                                class="btn btn-primary rounded-pill mb-3">
                                                 Configure DNS
                                             </button>
             
@@ -522,7 +523,7 @@
             
             
                                             <button type="button" onclick="copyRecord('configure_dns_record.sh')" id="tools"
-                                                class="btn btn-primary mb-3">
+                                                class="btn btn-primary rounded-pill mb-3">
                                                 Add Record
                                             </button>
             
@@ -596,7 +597,7 @@
                                             </div>
             
                                             <button type="button" onclick="copydhcp('configure_dhcp.sh')" id="configure_network"
-                                                class="btn btn-primary mb-3">
+                                                class="btn btn-primary rounded-pill mb-3">
                                                 Configure Network
                                             </button>
             
@@ -743,7 +744,7 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" onclick="generateRule()" class="btn btn-primary">Generate
+                                                    <button type="button" onclick="generateRule()" class="btn btn-primary rounded-pill">Generate
                                                         Rule</button>
                                                 </div>
                                             </div>

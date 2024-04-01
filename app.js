@@ -327,7 +327,7 @@ socket.on('recentConnections', (results) => {
     const actionsCell = document.createElement('td');
     const button = document.createElement('button');
     button.textContent = 'Use';
-    button.setAttribute("class","btn btn-secondary")
+    button.setAttribute("class","btn btn-secondary rounded-pill")
     button.addEventListener('click', () => {
       // Define the action to be performed when the button is clicked
 
