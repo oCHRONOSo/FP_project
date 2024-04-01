@@ -93,7 +93,7 @@
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
                 <div class="accordion-body">
 
-                    <div class="row" >
+                    <div class="row">
                         <div class="col-lg-8 p-3 ">
                             <div class="container bg-body-secondary border border-secondary rounded-4 shadow">
                                 <div class="row p-3">
@@ -133,12 +133,12 @@
                                     </div>
                                     <div class="col-md-5 p-4">
                                         <div class="mb-3">
-                                            <label for="sshkey" class="form-label">SSH key:</label>
+                                            <label for="sshkey" class="form-label">SSH Key:</label>
                                             <input type="file" id="sshkey" class="form-control"
                                                 accept=".pub,.pem,.ppk" />
                                         </div>
                                         <div class="mb-3">
-                                            <label for="passphrase" class="form-label">Key passphrase:</label>
+                                            <label for="passphrase" class="form-label">Key Passphrase:</label>
                                             <input type="password" id="passphrase" class="form-control"
                                                 placeholder="Enter passphrase" />
                                         </div>
@@ -165,7 +165,7 @@
                                                 <th>Port</th>
                                                 <th>Username</th>
                                                 <th>Action</th>
-    
+
                                             </tr>
                                         </thead>
                                         <tbody id="connectionsTableBody">
@@ -275,10 +275,12 @@
                 <div class="accordion-body">
                     <div class="mb-3">
                         <form class="mb-3 col-md-5 d-flex">
-                            <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <input id="searchInput" class="form-control me-2" type="search" placeholder="Search"
+                                aria-label="Search">
                         </form>
 
-                        <button type="button" onclick="copy_install('tools.sh')" id="tools" class="install btn btn-primary mb-3">
+                        <button type="button" onclick="copy_install('tools.sh')" id="tools"
+                            class="install btn btn-primary mb-3">
                             Tools
                         </button>
                         <button type="button" onclick="copy_install('install_apache.sh')" id="tools"
@@ -319,263 +321,468 @@
             </h2>
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
                 <div class="accordion-body">
-                    <h2 class="h2 mb-3">Configure your Webserver</h2>
 
-                    <div id="web-server-section" class="p-3 col-md-8 col-lg-7 tab-section">
-                        <div class="tabs row">
-                            <div id="tablink1" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('tab1','tablink1','web-server-section')">
-                                <h5>Webserver</h5>
+                    <div id="config-section" class="btn-section">
+                        <div class="tabs row justify-content-center text-center">
+                            <div  class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab1','config_tablink1','config-section')">
+                                <button id="config_tablink1" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-globe"></i></button>
+                                <h4>Web</h4>
                             </div>
-                            <div id="tablink2" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('tab2','tablink2','web-server-section')">
-                                <h5>Wordpress</h5>
+                            <div  class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab2','config_tablink2','config-section')">
+                                <button id="config_tablink2" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-database-fill-gear"></i></button>
+                                <h4>DNS</h4>
                             </div>
-                            <div id="tablink3" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('tab3','tablink3','web-server-section')">
-                                <h5>Database</h5>
+                            <div class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab3','config_tablink3','config-section')">
+                                <button id="config_tablink3" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-router"></i></button>
+                                <h4>DHCP</h4>
                             </div>
-
+                            <div class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab4','config_tablink4','config-section')">
+                                <button id="config_tablink4" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-bricks"></i></button>
+                                <h4>Firewall</h4>
+                            </div>
+                            <div class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab5','config_tablink5','config-section')">
+                                <button id="config_tablink5" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-shield-shaded"></i></button>
+                                <h4>Security</h4>
+                            </div>
                         </div>
-                        <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+                
+                        <div>
+                            <div id="config_tab1" class="btncontent row justify-content-center"> 
+                                <div id="web-server-section" class="p-3 col-md-8 col-lg-7 tab-section">
+                                    <div class="tabs row">
 
-                            <div id="tab1" class="tabcontent">
-                                <div class="col-6 mb-3">
-                                    <label for="domain" class="form-label">Domain:</label>
-                                    <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
-                                        value="example.com" />
+                                        <div id="tablink1" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('tab1','tablink1','web-server-section')">
+                                            <h5>Webserver</h5>
+                                        </div>
+                                        <div id="tablink2" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('tab2','tablink2','web-server-section')">
+                                            <h5>Wordpress</h5>
+                                        </div>
+                                        <div id="tablink3" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('tab3','tablink3','web-server-section')">
+                                            <h5>Database</h5>
+                                        </div>
+            
+                                    </div>
+                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+            
+                                        <div id="tab1" class="tabcontent">
+                                            <div class="col-6 mb-3">
+                                                <label for="domain" class="form-label">Domain:</label>
+                                                <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
+                                                    value="example.com" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="folder_name" class="form-label">Folder Name:</label>
+                                                <input type="text" id="folder_name" class="form-control"
+                                                    placeholder="Enter your folder name" value="example" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-check-label"> <input type="checkbox" class="form-check-input"
+                                                        id="matchCaseSec"> &nbsp Secure</label>
+                                            </div>
+                                            <button type="button" onclick="copyWebserver('configure_apache.sh')" id="tools"
+                                                class="btn btn-secondary mb-3">
+                                                Configure apache2
+                                            </button>
+            
+                                            <button type="button" onclick="copyWebserver('configure_nginx.sh')" id="tools"
+                                                class="btn btn-secondary mb-3">
+                                                Configure nginx
+                                            </button>
+                                        </div>
+            
+                                        <div id="tab2" class="tabcontent">
+                                            <p>Specify your wordpress installation folder in /var/www/</p>
+                                            <p>Don't forget to configure your database : &rpar; </p>
+            
+                                            <div class="col-6 mb-3">
+                                                <label for="folder_name" class="form-label">Folder Name:</label>
+                                                <input type="text" id="wp_folder_name" class="form-control"
+                                                    placeholder="Enter your folder name" value="example" />
+                                            </div>
+            
+                                            <button type="button" onclick="copyWordpress('configure_wordpress.sh')" id="tools"
+                                                class="btn btn-primary mb-3">
+                                                Configure Wordpress
+                                            </button>
+            
+                                        </div>
+            
+                                        <div id="tab3" class="tabcontent">
+                                            <h3>Set up your database</h3>
+                                            <div class="row">
+                                                <div class="col-6 mb-3">
+                                                    <label for="folder_name" class="form-label">Database Name:</label>
+                                                    <input type="text" id="db_name" class="form-control"
+                                                        placeholder="Enter your database name" value="example" />
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="folder_name" class="form-label">Database User:</label>
+                                                    <input type="text" id="db_user" class="form-control"
+                                                        placeholder="Enter your user" value="user" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 mb-3">
+                                                    <label for="folder_name" class="form-label">Database Host:</label>
+                                                    <input type="text" id="db_host" class="form-control"
+                                                        placeholder="Enter your host" value="localhost" />
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="folder_name" class="form-label">Database User's Password:</label>
+                                                    <input type="password" id="db_password" class="form-control"
+                                                        placeholder="Enter your password" value="user" />
+                                                </div>
+                                            </div>
+            
+                                            <button type="button" onclick="copyDb('configure_db.sh')" id="tools"
+                                                class="btn btn-primary mb-3">
+                                                Configure Database
+                                            </button>
+            
+            
+                                        </div>
+            
+                                    </div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <label for="folder_name" class="form-label">Folder name:</label>
-                                    <input type="text" id="folder_name" class="form-control"
-                                        placeholder="Enter your folder name" value="example" />
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-check-label"> <input type="checkbox" class="form-check-input"
-                                            id="matchCaseSec"> &nbsp Secure</label>
-                                </div>
-                                <button type="button" onclick="copyWebserver('configure_apache.sh')" id="tools"
-                                    class="btn btn-secondary mb-3">
-                                    Configure apache2
-                                </button>
-
-                                <button type="button" onclick="copyWebserver('configure_nginx.sh')" id="tools"
-                                    class="btn btn-secondary mb-3">
-                                    Configure nginx
-                                </button>
                             </div>
+                            <div id="config_tab2" class="btncontent row justify-content-center">
 
-                            <div id="tab2" class="tabcontent">
-                                <p>Specify your wordpress installation folder in /var/www/</p>
-                                <p>Don't forget to configure your database : &rpar; </p>
-
-                                <div class="col-6 mb-3">
-                                    <label for="folder_name" class="form-label">Folder name:</label>
-                                    <input type="text" id="wp_folder_name" class="form-control"
-                                        placeholder="Enter your folder name" value="example" />
+                                <div id="dns-section" class="p-3 col-md-8 col-lg-7 tab-section">
+                                    <div class="tabs row">
+                                        <div id="dns_tablink1" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('dns_tab1','dns_tablink1','dns-section')">
+                                            <h5>DNS server</h5>
+                                        </div>
+                                        <div id="dns_tablink2" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('dns_tab2','dns_tablink2','dns-section')">
+                                            <h5>DNS records</h5>
+                                        </div>
+            
+                                    </div>
+                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+            
+                                        <div id="dns_tab1" class="tabcontent">
+                                            <div class="col-6 mb-3">
+                                                <label for="dns_domain" class="form-label">Domain:</label>
+                                                <input type="text" id="dns_domain" class="form-control"
+                                                    placeholder="Enter your domain" value="example.com" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="dns_ip" class="form-label">DNS Server IP Address:</label>
+                                                <input type="text" id="dns_ip" class="form-control"
+                                                    placeholder="Enter your folder name" />
+                                            </div>
+                                            <button type="button" onclick="copyDNS('configure_dns.sh')" id="tools"
+                                                class="btn btn-primary mb-3">
+                                                Configure DNS
+                                            </button>
+            
+                                        </div>
+            
+                                        <div id="dns_tab2" class="tabcontent">
+                                            <p>Select your file in /etc/bind/</p>
+                                            <div class="col-6 mb-3">
+                                                <label for="dns_conf_file" class="form-label">Configuration File:</label>
+                                                <input type="text" id="dns_conf_file" class="form-control"
+                                                    placeholder="Enter your domain" value="db.example" />
+                                            </div>
+                                            <p>Add your records here:</p>
+                                            <div class="row">
+                                                <div class="col-4 mb-3">
+                                                    <input type="text" id="dns_value_1" class="form-control"
+                                                        placeholder="field 1" />
+                                                </div>
+            
+                                                <div class="col-2 mb-3">
+                                                    <select id="recordType" class="form-select" aria-label="Default select example">
+                                                        <option value="1" selected>A</option>
+                                                        <option value="2">AAAA</option>
+                                                        <option value="3">CNAME</option>
+                                                        <option value="4">MX</option>
+                                                        <option value="5">NS</option>
+                                                        <option value="6">SOA</option>
+                                                        <option value="7">PTR</option>
+                                                        <option value="4">TXT</option>
+                                                    </select>
+                                                </div>
+            
+                                                <div class="col-4 mb-3">
+                                                    <input type="text" id="dns_value_2" class="form-control"
+                                                        placeholder="field 2" />
+                                                </div>
+                                            </div>
+            
+            
+                                            <button type="button" onclick="copyRecord('configure_dns_record.sh')" id="tools"
+                                                class="btn btn-primary mb-3">
+                                                Add Record
+                                            </button>
+            
+                                        </div>
+            
+                                    </div>
                                 </div>
-
-                                <button type="button" onclick="copyWordpress('configure_wordpress.sh')" id="tools"
-                                    class="btn btn-primary mb-3">
-                                    Configure Wordpress
-                                </button>
-
                             </div>
+                            <div id="config_tab3" class="btncontent row justify-content-center">
 
-                            <div id="tab3" class="tabcontent">
-                                <h3>Set up your database</h3>
-                                <div class="row">
-                                    <div class="col-6 mb-3">
-                                        <label for="folder_name" class="form-label">Database name:</label>
-                                        <input type="text" id="db_name" class="form-control"
-                                            placeholder="Enter your database name" value="example" />
+                                <div id="dhcp-section" class="p-3 col-md-8 col-lg-7 tab-section">
+                                    <div class="tabs row">
+                                        <div id="dhcp_tablink1" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('dhcp_tab1','dhcp_tablink1','dhcp-section')">
+                                            <h5>DHCP Server</h5>
+                                        </div>
+                                        <div id="dhcp_tablink2" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('dhcp_tab2','dhcp_tablink2','dhcp-section')">
+                                            <h5>DHCP lease</h5>
+                                        </div>
+            
                                     </div>
-                                    <div class="col-6 mb-3">
-                                        <label for="folder_name" class="form-label">Database User:</label>
-                                        <input type="text" id="db_user" class="form-control"
-                                            placeholder="Enter your user" value="user" />
+                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+            
+                                        <div id="dhcp_tab1" class="tabcontent">
+                                            <p>Configure your network settings:</p>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="interface" class="form-label">Interface Name:</label>
+                                                    <input type="text" id="interface" class="form-control"
+                                                        placeholder="e.g., eth0" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="subnet_ip" class="form-label">Subnet IP Address:</label>
+                                                    <input type="text" id="dhcp_ip" class="form-control"
+                                                        placeholder="e.g., 192.168.1.0" />
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="subnet_mask" class="form-label">Subnet Mask:</label>
+                                                    <input type="text" id="dhcp_subnet_mask" class="form-control"
+                                                        placeholder="e.g., 24" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="dhcp_range_start" class="form-label">DHCP Range Start:</label>
+                                                    <input type="text" id="dhcp_range_start" class="form-control"
+                                                        placeholder="e.g., 192.168.1.100" />
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="dhcp_range_end" class="form-label">DHCP Range End:</label>
+                                                    <input type="text" id="dhcp_range_end" class="form-control"
+                                                        placeholder="e.g., 192.168.1.200" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="gateway_ip" class="form-label">Gateway IP Address:</label>
+                                                    <input type="text" id="gateway_ip" class="form-control"
+                                                        placeholder="e.g., 192.168.1.1" />
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="dhcp_dns_ip" class="form-label">DNS Server IP Address:</label>
+                                                    <input type="text" id="dhcp_dns_ip" class="form-control"
+                                                        placeholder="e.g., 8.8.8.8" />
+                                                </div>
+                                            </div>
+            
+                                            <button type="button" onclick="copydhcp('configure_dhcp.sh')" id="configure_network"
+                                                class="btn btn-primary mb-3">
+                                                Configure Network
+                                            </button>
+            
+                                        </div>
+            
+            
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-6 mb-3">
-                                        <label for="folder_name" class="form-label">Database host:</label>
-                                        <input type="text" id="db_host" class="form-control"
-                                            placeholder="Enter your host" value="localhost" />
-                                    </div>
-                                    <div class="col-6 mb-3">
-                                        <label for="folder_name" class="form-label">Database user's password:</label>
-                                        <input type="password" id="db_password" class="form-control"
-                                            placeholder="Enter your password" value="user" />
-                                    </div>
-                                </div>
-
-                                <button type="button" onclick="copyDb('configure_db.sh')" id="tools"
-                                class="btn btn-primary mb-3">
-                                Configure Database
-                                </button>
-                                
-                               
                             </div>
+                            <div id="config_tab4" class="btncontent row justify-content-center">
 
+                                <div id="iptables-section" class="p-3 col-md-8 col-lg-7 tab-section">
+                                    <div class="tabs row">
+                                        <div id="iptables_tablink1" type="button"
+                                            class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
+                                            onclick="openTab('iptables_tab1','iptables_tablink1','iptables-section')">
+                                            <h5>Iptables</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+                                        <div id="iptables_tab1" class="tabcontent">
+                                            <h2>Iptables Rule Generator</h2>
+                                            <p>Generate your iptables rules:</p>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="table">Table:</label>
+                                                        <select id="table" class="form-select">
+                                                            <option value="filter">Filter</option>
+                                                            <option value="nat">NAT</option>
+                                                            <option value="mangle">Mangle</option>
+                                                            <option value="raw">Raw</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="chain">Chain:</label>
+                                                        <select id="chain" class="form-select">
+                                                            <option value="INPUT">Input</option>
+                                                            <option value="OUTPUT">Output</option>
+                                                            <option value="FORWARD">Forward</option>
+                                                            <option value="PREROUTING">Pre-routing</option>
+                                                            <option value="POSTROUTING">Post-routing</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="type">Rule Type:</label>
+                                                        <select id="type" class="form-select">
+                                                            <option value="A">Regular rule</option>
+                                                            <option value="P">Policy by default</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="protocol">Protocol:</label>
+                                                        <select id="protocol" class="form-select">
+                                                            <option value="tcp">TCP</option>
+                                                            <option value="udp">UDP</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="originIP">Source IP:</label>
+                                                        <input type="text" id="originIP" class="form-control"
+                                                            placeholder="e.g., 192.168.1.0">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="destinationIP">Destination IP:</label>
+                                                        <input type="text" id="destinationIP" class="form-control"
+                                                            placeholder="e.g., 192.168.1.100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="outputInterface">Output Interface:</label>
+                                                        <input type="text" id="outputInterface" class="form-control"
+                                                            placeholder="e.g., eth0">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="inputInterface">Input Interface:</label>
+                                                        <input type="text" id="inputInterface" class="form-control"
+                                                            placeholder="e.g., eth0">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="sourcePort">Source Port:</label>
+                                                        <input type="text" id="sourcePort" class="form-control"
+                                                            placeholder="e.g., 80">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="destinationPort">Destination Port:</label>
+                                                        <input type="text" id="destinationPort" class="form-control"
+                                                            placeholder="e.g., 22">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="user">User:</label>
+                                                        <input type="text" id="user" class="form-control"
+                                                            placeholder="e.g., username">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="finalAction">Final Action:</label>
+                                                        <select id="finalAction" class="form-select">
+                                                            <option value="ACCEPT">Accept</option>
+                                                            <option value="DROP">Drop</option>
+                                                            <option value="LOG">Log</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-3">
+                                                        <label for="logTag">Log Tag:</label>
+                                                        <input type="text" id="logTag" class="form-control"
+                                                            placeholder="e.g., my-iptables-rule">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" onclick="generateRule()" class="btn btn-primary">Generate
+                                                        Rule</button>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-12" id="result" hidden></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="config_tab5" class="btncontent row justify-content-center">Content for Tab 5</div>
                         </div>
+                
                     </div>
 
-                    <h2>Configure your DNS server</h2>
-
-                    <div id="dns-section" class="p-3 col-md-8 col-lg-7 tab-section">
-                        <div class="tabs row">
-                            <div id="dns_tablink1" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('dns_tab1','dns_tablink1','dns-section')">
-                                <h5>DNS server</h5>
-                            </div>
-                            <div id="dns_tablink2" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('dns_tab2','dns_tablink2','dns-section')">
-                                <h5>DNS records</h5>
-                            </div>
-
-                        </div>
-                        <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-
-                            <div id="dns_tab1" class="tabcontent">
-                                <div class="col-6 mb-3">
-                                    <label for="dns_domain" class="form-label">Domain:</label>
-                                    <input type="text" id="dns_domain" class="form-control" placeholder="Enter your domain"
-                                        value="example.com" />
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label for="dns_ip" class="form-label">DNS ip:</label>
-                                    <input type="text" id="dns_ip" class="form-control"
-                                        placeholder="Enter your folder name" />
-                                </div>
-                                <button type="button" onclick="copyDNS('configure_dns.sh')" id="tools"
-                                    class="btn btn-primary mb-3">
-                                    Configure DNS
-                                </button>
-
-                            </div>
-
-                            <div id="dns_tab2" class="tabcontent">
-                                <p>Select your file in /etc/bind/</p>
-                                <div class="col-6 mb-3">
-                                    <label for="dns_conf_file" class="form-label">Configuration file:</label>
-                                    <input type="text" id="dns_conf_file" class="form-control" placeholder="Enter your domain"
-                                        value="db.example" />
-                                </div>
-                                <p>Add your records here:</p>
-                                <div class="row">
-                                    <div class="col-4 mb-3">
-                                        <input type="text" id="dns_value_1" class="form-control"
-                                            placeholder="field 1" />
-                                    </div>
-    
-                                    <div class="col-2 mb-3">
-                                        <select id="recordType" class="form-select" aria-label="Default select example">
-                                            <option value="1" selected>A</option>
-                                            <option value="2">AAAA</option>
-                                            <option value="3">CNAME</option>
-                                            <option value="4">MX</option>
-                                            <option value="5">NS</option>
-                                            <option value="6">SOA</option>
-                                            <option value="7">PTR</option>
-                                            <option value="4">TXT</option>
-                                          </select>
-                                    </div>
-    
-                                    <div class="col-4 mb-3">
-                                        <input type="text" id="dns_value_2" class="form-control"
-                                            placeholder="field 2" />
-                                    </div>
-                                </div>
 
 
-                                <button type="button" onclick="copyRecord('configure_dns_record.sh')" id="tools"
-                                    class="btn btn-primary mb-3">
-                                    Add Record
-                                </button>
 
-                            </div>
 
-                        </div>
-                    </div>
 
-                    <h2>Configure your DHCP server</h2>
 
-                    <div id="dhcp-section" class="p-3 col-md-8 col-lg-7 tab-section">
-                        <div class="tabs row">
-                            <div id="dhcp_tablink1" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('dhcp_tab1','dhcp_tablink1','dhcp-section')">
-                                <h5>DHCP Server</h5>
-                            </div>
-                            <div id="dhcp_tablink2" type="button"
-                                class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
-                                onclick="openTab('dhcp_tab2','dhcp_tablink2','dhcp-section')">
-                                <h5>DHCP lease</h5>
-                            </div>
 
-                        </div>
-                        <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
 
-                            <div id="dhcp_tab1" class="tabcontent">
-                                <h2>Network Configuration</h2>
-                                <p>Configure your network settings:</p>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="interface" class="form-label">Interface Name:</label>
-                                        <input type="text" id="interface" class="form-control" placeholder="e.g., eth0" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="subnet_ip" class="form-label">Subnet IP Address:</label>
-                                        <input type="text" id="dhcp_subnet_ip" class="form-control" placeholder="e.g., 192.168.1.0" />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="subnet_mask" class="form-label">Subnet Mask:</label>
-                                        <input type="text" id="dhcp_subnet_mask" class="form-control" placeholder="e.g., 24" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="dhcp_range_start" class="form-label">DHCP Range Start:</label>
-                                        <input type="text" id="dhcp_range_start" class="form-control" placeholder="e.g., 192.168.1.100" />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="dhcp_range_end" class="form-label">DHCP Range End:</label>
-                                        <input type="text" id="dhcp_range_end" class="form-control" placeholder="e.g., 192.168.1.200" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="gateway_ip" class="form-label">Gateway IP Address:</label>
-                                        <input type="text" id="gateway_ip" class="form-control" placeholder="e.g., 192.168.1.1" />
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="dhcp_dns_ip" class="form-label">DNS Server IP Address:</label>
-                                        <input type="text" id="dhcp_dns_ip" class="form-control" placeholder="e.g., 8.8.8.8" />
-                                    </div>
-                                </div>
-                            
-                                <button type="button" onclick="copydhcp('configure_dhcp.sh')" id="configure_network"
-                                    class="btn btn-primary mb-3">
-                                    Configure Network
-                                </button>
-                            
-                            </div>
-                            
 
-                        </div>
-                    </div>
+
+
+
+
+
+
+
+
+
 
                 </div>
             </div>
         </div>
     </div>
+
 
 
 

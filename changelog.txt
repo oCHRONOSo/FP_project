@@ -23,3 +23,5 @@ added search for package, tabs for configuration
 added dns, dhcp and security scripts , not implemented yet
 
 implemented dns , dhcp (only network config)
+
+added iptables rule generator, enhanced appearences

@@ -1,9 +1,7 @@
-
-DNS conf / add record tab
-
-DHCP conf
 security checker
 
+remove record tab
+DHCP lease 
+
 VPN config
-iptables
-enhance ssh errors (specific info)
+enhance ssh errors (add specific info)

@@ -1,6 +1,6 @@
 // Establish WebSocket connection with the server
-const socket = io("ws://localhost:8080");
-
+//const socket = io("ws://localhost:8080");
+const socket = io("ws://192.168.0.187:8080");
 // Initialize state variables
 let isConnected = false;
 let isTerminalOpen = false;
@@ -362,6 +362,15 @@ for (s = 0; s < section.length; s++){
   tablinks[0].classList.add("bg-body-secondary");
 }
 
+var section_btn = document.getElementsByClassName("btn-section");
+for (s = 0; s < section_btn.length; s++){
+  var tabcontent = section_btn[s].getElementsByClassName("btncontent");
+  var tablinks = section_btn[s].getElementsByClassName("btnlink");
+  for (i = 1; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks[0].classList.replace("btn-outline-primary","btn-primary");
+}
 
 // document.getElementById("tab1").style.display = "block";
 // document.getElementById("tablink1").classList.add("bg-body-secondary");
@@ -382,7 +391,23 @@ for (s = 0; s < section.length; s++){
         tablinks[i].classList.remove("bg-body-secondary");
     }
     document.getElementById(tabName).style.display = "block";
-    document.getElementById(tabLink).classList.add("bg-body-secondary");
+    document.getElementById(tabLink).classList.add("bg-body-secondary");   
+}
+
+  // Function to open a specific button
+  function openBtn(tabName, tabLink, sectionId) {
+    var i;
+    var section = document.getElementById(sectionId);
+    var tabcontent = section.getElementsByClassName("btncontent");
+    var tablinks = section.getElementsByClassName("btnlink");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.replace("btn-primary","btn-outline-primary");
+    }
+    document.getElementById(tabName).style.display = "flex";
+    document.getElementById(tabLink).classList.replace("btn-outline-primary","btn-primary");   
 }
 
 
@@ -413,6 +438,80 @@ function updateip(){
 }
 updateip();
 
+function generateRule() {
+  var table = document.getElementById("table").value;
+  var chain = document.getElementById("chain").value;
+  var type = document.getElementById("type").value;
+  var protocol = document.getElementById("protocol").value;
+  var originIP = document.getElementById("originIP").value;
+  var destinationIP = document.getElementById("destinationIP").value;
+  var outputInterface = document.getElementById("outputInterface").value;
+  var inputInterface = document.getElementById("inputInterface").value;
+  var sourcePort = document.getElementById("sourcePort").value;
+  var destinationPort = document.getElementById("destinationPort").value;
+  var user = document.getElementById("user").value;
+  var finalAction = document.getElementById("finalAction").value;
+  var logTag = document.getElementById("logTag").value;
+
+  var command = "iptables -t " + table + " -" + type + " " + chain;
+  if (protocol !== "") command += " -p " + protocol;
+  if (originIP !== "") command += " -s " + originIP;
+  if (destinationIP !== "") command += " -d " + destinationIP;
+  if (outputInterface !== "") command += " -o " + outputInterface;
+  if (inputInterface !== "") command += " -i " + inputInterface;
+  if (sourcePort !== "") command += " --sport " + sourcePort;
+  if (destinationPort !== "") command += " --dport " + destinationPort;
+  if (user !== "") command += " -m owner --uid-owner " + user;
+  command += " -j " + finalAction;
+  if (finalAction === "LOG" && logTag !== "") command += " --log-prefix " + logTag;
+  iptable_cont = document.getElementById("result");
+  iptable_cont.hidden = false;
+  iptable_cont.innerHTML = '<div class="row"><div class="col-sm-12 col-md-10">'+ command +'</div>' + '<div class="col-sm-12 col-md-2 text-end"><button class="btn btn-outline-secondary" id="copyRule"><i class="bi bi-copy"></i></button></div></div>';
+  iptable_cont.setAttribute("class","col bg-body p-4 rounded-4 border border-secondary-subtle");
+  copybtn = document.getElementById("copyRule");
+
+  copybtn.addEventListener('click', function(event) {
+    
+    text = iptable_cont.innerText;
+    copyTextToClipboard(text);
+  });
+}
+
+function fallbackCopyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+  
+  // Avoid scrolling to bottom
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.position = "fixed";
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Fallback: Copying text command was ' + msg);
+  } catch (err) {
+    console.error('Fallback: Oops, unable to copy', err);
+  }
+
+  document.body.removeChild(textArea);
+}
+
+function copyTextToClipboard(text) {
+  if (!navigator.clipboard) {
+    fallbackCopyTextToClipboard(text);
+    return;
+  }
+  navigator.clipboard.writeText(text).then(function() {
+    console.log('Async: Copying to clipboard was successful!');
+  }, function(err) {
+    console.error('Async: Could not copy text: ', err);
+  });
+}
 
 
  // terminal full screen
