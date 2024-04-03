@@ -1,6 +1,6 @@
 // Establish WebSocket connection with the server
-//const socket = io("ws://localhost:8080");
-const socket = io("ws://192.168.0.187:8080");
+const socket = io("ws://localhost:8080");
+//const socket = io("ws://192.168.0.187:8080");
 // Initialize state variables
 let isConnected = false;
 let isTerminalOpen = false;
@@ -110,10 +110,15 @@ function connectSSH() {
   socket.on("ssh.status", (status) => {
     showMessage(status);
     isConnected = status === "SSH connection successful!";
-    if (!isTerminalInitialized) initializeTerminal();
-    updateTerminalButtons();
+    if (!isTerminalInitialized && isConnected) {
+      initializeTerminal();
+      openTerminal();
+      console.log('terminal initialized');
+      }
   });
-  openTerminal();
+  // if(isConnected == false) {
+
+  // }
 }
 
 // Disconnect from SSH server
@@ -122,19 +127,21 @@ function disconnectSSH() {
     showMessage("Not connected!");
     return;
   }
+  closeTerminal();
   term = null;
   document.getElementById('terminal-container').innerHTML = null;
   isTerminalInitialized = false;
   showMessage("Disconnecting from SSH...");
   isConnected = false;
   socket.emit('disconnectSSH');
-  closeTerminal();
+  
 }
 
 // Open the terminal
 function openTerminal() {
   if (!isConnected) {
     showMessage("Cannot open terminal. Ensure SSH connection is established.");
+    console.log("1")
     return;
   }
   if (isTerminalOpen) {
@@ -147,8 +154,8 @@ function openTerminal() {
 
   var wrapper = document.getElementById('wrapper');
   wrapper.hidden = false;
- 
-  updateTerminalButtons();
+  console.log("0")
+
 }
 
 // Close the terminal
@@ -165,15 +172,18 @@ function closeTerminal() {
   var wrapper = document.getElementById('wrapper');
   wrapper.hidden = true;
   isTerminalOpen = false;
-  updateTerminalButtons();
+
 }
+
 
 // Update state of terminal buttons
 function updateTerminalButtons() {
   const openTerminalBtn = document.getElementById('open-terminal-btn');
   const closeTerminalBtn = document.getElementById('close-terminal-btn');
+  console.log(closeTerminalBtn);
+
   openTerminalBtn.disabled = isConnected && isTerminalOpen;
-  closeTerminalBtn.disabled = !isConnected || !isTerminalOpen;
+  closeTerminalBtn.disabled = ! openTerminalBtn.disabled;
 }
 
 // Send test command to the server
@@ -274,11 +284,16 @@ function copydhcp(button) {
   socket.emit('copy_dhcp');
 }
 
+function copysecurity(button) {
+  const input_name = button;
+  socket.emit("path", input_name);
+  socket.emit('copy_security');
+}
+
 // Handle SSH error messages
 socket.on("ssh.error", (errorMessage) => {
   showMessage(`Error: ${errorMessage}`);
   isConnected = false;
-  updateTerminalButtons();
 });
 
 // Handle server disconnection
@@ -286,7 +301,6 @@ socket.on("disconnect", () => {
   showMessage("Server Disconnected");
   isConnected = false;
   isTerminalOpen = false;
-  updateTerminalButtons();
 });
 
 
@@ -512,6 +526,46 @@ function copyTextToClipboard(text) {
     console.error('Async: Could not copy text: ', err);
   });
 }
+
+
+
+// themes dropodown
+
+const themes = {
+  "dark-green": "Dark Green",
+  "dark-yellow": "Dark Yellow",
+  "dark-gold": "Dark Gold",
+  "dark-violet": "Dark Violet",
+  "dark-warm-brown": "Dark Warm Brown",
+  "dark-blue-grey": "Dark Blue Grey",
+  "dark-cream-green": "Dark Cream Green",
+  "sky-blue": "Sky Blue",
+  "cream": "Cream",
+  "cloudy-green": "Cloudy Green",
+  "cream-grey": "Cream Grey",
+  "light-violet": "Light Violet",
+  "cream-green-light": "Cream Green Light"
+};
+
+const themeSelect = document.getElementById('themeSelect');
+
+Object.entries(themes).forEach(([key, value]) => {
+const option = document.createElement('option');
+option.value = key;
+option.textContent = value;
+themeSelect.appendChild(option);
+});
+
+themeSelect.addEventListener('change', function(event) {
+const newTheme = event.target.value;
+if (newTheme) {
+  document.documentElement.setAttribute('data-bs-theme', newTheme);
+}
+});
+
+
+
+
 
 
  // terminal full screen

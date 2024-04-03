@@ -22,4 +22,4 @@ if [ ! -f "$directory/latest.zip" ]; then
 fi
 
 
-
+echo "Done !"

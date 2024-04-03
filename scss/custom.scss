@@ -1,187 +1,273 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/scss/bootstrap"; // Import Bootstrap
+
+// Define color themes
+$themes: (
+    "dark-green": (
+        "primary":    #93B1A6,
+        "secondary":  #5C8374,
+        "tertiary":   #183D3D,
+        "quaternary": #040D12
+    ),
+    "dark-yellow": (
+        "primary":    #EEEEEE,
+        "secondary":  #FFD369,
+        "tertiary":   #393E46,
+        "quaternary": #222831
+    ),
+    "dark-gold": (
+        "primary":    #C69749,
+        "secondary":  #735F32,
+        "tertiary":   #282A3A,
+        "quaternary": #000000
+    ),
+    "dark-violet": (
+        "primary":    #635985,
+        "secondary":  #443C68,
+        "tertiary":   #393053,
+        "quaternary": #18122B
+    ),
+    "dark-warm-brown": (
+        "primary":    #E0C097,
+        "secondary":  #B85C38,
+        "tertiary":   #5C3D2E,
+        "quaternary": #2D2424
+    ),
+    "dark-blue-grey": (
+        "primary":    #EEEEEE,
+        "secondary":  #76ABAE,
+        "tertiary":   #31363F,
+        "quaternary": #222831
+    ),
+    "dark-cream-green": (
+        "primary":    #DCD7C9,
+        "secondary":  #A27B5C,
+        "tertiary":   #3F4E4F,
+        "quaternary": #2C3639
+    ),
+    "sky-blue": (
+        "primary":    #112D4E,
+        "secondary":  #3F72AF,
+        "tertiary":   #DBE2EF,
+        "quaternary": #F9F7F7
+    ),
+    "cream": (
+        "primary":    #113946,
+        "secondary":  #BCA37F,
+        "tertiary":   #EAD7BB,
+        "quaternary": #FFF2D8
+    ),
+    "cloudy-green": (
+        "primary":    #627254,
+        "secondary":  #76885B,
+        "tertiary":   #DDDDDD,
+        "quaternary": #EEEEEE
+    ),
+    "cream-grey": (
+        "primary":    #B4B4B8,
+        "secondary":  #C7C8CC,
+        "tertiary":   #E3E1D9,
+        "quaternary": #F2EFE5
+    ),
+    "light-violet": (
+        "primary":    #424874,
+        "secondary":  #A6B1E1,
+        "tertiary":   #DCD6F7,
+        "quaternary": #F4EEFF
+    ),
+    "cream-green-light": (
+        "primary":    #576F72,
+        "secondary":  #7D9D9C,
+        "tertiary":   #E4DCCF,
+        "quaternary": #F0EBE3
+    )
+);
 
 
-// dark mode colors
-
-// dark green 
-// $col1:#93B1A6;
-// $col2:#5C8374;
-// $col3:#183D3D;
-// $col4:#040D12;
-
-// dark yellow
-// $col1:#EEEEEE;
-// $col2:#FFD369;
-// $col3:#393E46;
-// $col4:#222831;
-
-// dark gold
-// $col1:#C69749;
-// $col2:#735F32;
-// $col3:#282A3A;
-// $col4:#000000;
-
-// calm monochrome violet
-// $col1:#635985;
-// $col2:#443C68;
-// $col3:#393053;
-// $col4:#18122B;
-
-// warm brown
-// $col1:#E0C097;
-// $col2:#B85C38;
-// $col3:#5C3D2E;
-// $col4:#2D2424;
-
-// blue grey
-// $col1:#EEEEEE;
-// $col2:#76ABAE;
-// $col3:#31363F;
-// $col4:#222831;
-
-// cream green
-$col1:#DCD7C9;
-$col2:#A27B5C;
-$col3:#3F4E4F;
-$col4:#2C3639;
-
-
-//light mode colors
-
-// sky blue
-// $colight1:#112D4E ;
-// $colight2:#3F72AF;
-// $colight3:#DBE2EF;
-// $colight4:#F9F7F7;
-
-// cream 
-// $colight1:#113946 ;
-// $colight2:#BCA37F;
-// $colight3:#EAD7BB;
-// $colight4:#FFF2D8;
-
-// cloudy green
-$colight1:#627254;
-$colight2:#76885B;
-$colight3:#DDDDDD;
-$colight4:#EEEEEE;
-
-// cream grey
-// $colight1:#B4B4B8;
-// $colight2:#C7C8CC;
-// $colight3:#E3E1D9;
-// $colight4:#F2EFE5;
-
-// light violet
-// $colight1:#424874;
-// $colight2:#A6B1E1;
-// $colight3:#DCD6F7;
-// $colight4:#F4EEFF;
-
-// ceam green
-// $colight1:#576F72;
-// $colight2:#7D9D9C;
-// $colight3:#E4DCCF;
-// $colight4:#F0EBE3;
-
+// Define primary and secondary colors
 $primary: #F0ECE5;
 $secondary: #B6BBC4;
 
+// Generate styles for each color theme
+@each $theme, $colors in $themes {
+    $primary-color: map-get($colors, "primary");
+    $secondary-color: map-get($colors, "secondary");
+    $tertiary-color: map-get($colors, "tertiary");
+    $quaternary-color: map-get($colors, "quaternary");
 
+    [data-bs-theme=#{$theme}] {
+        // Dark mode styles
+        @if str-index($theme, "dark") {
+            // Theme colors
+            $theme-colors: (
+                "primary":    $primary-color,
+                "secondary":  $secondary-color,
+                // Add more theme colors here if needed
+            );
 
-  
-  
-/*   .dark {
-  
-  
-      $body-color: #eeeeee;
-      $body-bg: $col4;
-      
-      
-      --#{$variable-prefix}body-color: #{$body-color};
-      --#{$variable-prefix}body-bg: #{$body-bg};
-        
-  }
-  .bg-body-tertiary {
-    --bs-bg-opacity: 1;
-    background-color: rgba(#{to-rgb($col3)}, var(--bs-bg-opacity)) !important;
-} */
+            // Apply button variants for dark mode
+            @each $color, $value in $theme-colors {
+                .btn-#{$color} {
+                    @include button-variant($value, $value);
+                }
+            }
 
-[data-bs-theme=dark] {
+            // Apply button outline variants for dark mode
+            @each $color, $value in $theme-colors {
+                .btn-outline-#{$color} {
+                    @include button-outline-variant($value);
+                }
+            }
 
-    $theme-colors: (
-        "primary":    $col1,
-        "secondary":  $col2,
-        "success":    $success,
-        "info":       $info,
-        "warning":    $warning,
-        "danger":     $danger,
-        "light":      $light,
-        "dark":       $dark
-      );
-      
-      @each $color, $value in $theme-colors {
-          .btn-#{$color} {
-            @include button-variant($value, $value);
-          }
-        }
-        
-        @each $color, $value in $theme-colors {
-          .btn-outline-#{$color} {
-            @include button-outline-variant($value);
-          }
+            // Additional styling for specific elements in dark mode
+            .form-check-input:checked {
+                background-color: $quaternary-color;
+                border-color: $quaternary-color;
+            }
+
+            .accordion-button:not(.collapsed) {
+                color: $primary-color;
+                background-color: $secondary-color;
+            }
+
+            .form-select {
+              color: $quaternary-color;
+              background-color: $primary-color;
+            }
+
+            .navbar-toggler {
+              background-color: $primary-color;
+            }
+            .form-control {
+              border-color: $secondary-color;
+            }
+            .alert-primary {
+              color : #EEEEEE;
+              background-color : $tertiary-color;
+              border-color: $secondary-color;
+              font-size: large;
+            }
+            .form-check-input[type=checkbox] {
+              border-radius: 1em;
+              background-color: $secondary-color;
+              border-color: $primary-color;
+            }
+            
+            // Bootstrap variables for dark mode
+            color-scheme: dark;
+            --bs-body-bg: $quaternary-color;
+            --bs-body-bg-rgb: #{to-rgb($quaternary-color)};
+            --bs-secondary-bg: $tertiary-color;
+            --bs-secondary-bg-rgb: #{to-rgb($tertiary-color)};
+            --bs-tertiary-bg: $secondary-color;
+            --bs-tertiary-bg-rgb: #{to-rgb($secondary-color)};
+
+            --bs-body-color: #dee2e6;
+            --bs-body-color-rgb: 222, 226, 230;
+
+            --bs-emphasis-color: #fff;
+            --bs-emphasis-color-rgb: 255, 255, 255;
+            --bs-secondary-color: rgba(222, 226, 230, 0.75);
+            --bs-secondary-color-rgb: 222, 226, 230;
+
+            --bs-tertiary-color: rgba(222, 226, 230, 0.5);
+            --bs-tertiary-color-rgb: 222, 226, 230;
+
+            --bs-primary-text-emphasis: #6ea8fe;
+            --bs-secondary-text-emphasis: #a7acb1;
+            --bs-success-text-emphasis: #75b798;
+            --bs-info-text-emphasis: #6edff6;
+            --bs-warning-text-emphasis: #ffda6a;
+            --bs-danger-text-emphasis: #ea868f;
+            --bs-light-text-emphasis: #f8f9fa;
+            --bs-dark-text-emphasis: #dee2e6;
+            --bs-primary-bg-subtle: #031633;
+            --bs-secondary-bg-subtle: #161719;
+            --bs-success-bg-subtle: #051b11;
+            --bs-info-bg-subtle: #032830;
+            --bs-warning-bg-subtle: #332701;
+            --bs-danger-bg-subtle: #2c0b0e;
+            --bs-light-bg-subtle: #343a40;
+            --bs-dark-bg-subtle: #1a1d20;
+            --bs-primary-border-subtle: #084298;
+            --bs-secondary-border-subtle: #41464b;
+            --bs-success-border-subtle: #0f5132;
+            --bs-info-border-subtle: #087990;
+            --bs-warning-border-subtle: #997404;
+            --bs-danger-border-subtle: #842029;
+            --bs-light-border-subtle: #495057;
+            --bs-dark-border-subtle: #343a40;
+            --bs-heading-color: inherit;
+            --bs-link-color: #6ea8fe;
+            --bs-link-hover-color: #8bb9fe;
+            --bs-link-color-rgb: 110, 168, 254;
+            --bs-link-hover-color-rgb: 139, 185, 254;
+            --bs-code-color: #e685b5;
+            --bs-highlight-color: #dee2e6;
+            --bs-highlight-bg: #664d03;
+            --bs-border-color: #495057;
+            --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
+            --bs-form-valid-color: #75b798;
+            --bs-form-valid-border-color: #75b798;
+            --bs-form-invalid-color: #ea868f;
+            --bs-form-invalid-border-color: #ea868f;
         }
 
-    .form-check-input:checked {
-            background-color: #{$col4};
-            border-color: #{$col4};
-        }
-    .accordion-button:not(.collapsed) {
-            color: #{$col1};
-            background-color:#{$col2} ;
-        }
-    color-scheme: dark;
-    --bs-body-bg: #{$col4};
-    --bs-body-bg-rgb: #{to-rgb($col4)};
-    --bs-secondary-bg: #{$col3};
-    --bs-secondary-bg-rgb: #{to-rgb($col3)};
-    --bs-tertiary-bg: #{$col2};
-    --bs-tertiary-bg-rgb: #{to-rgb($col2)};
-}
+        // Light mode styles
+        @else {
+            // Theme colors
+            $theme-colors: (
+                "primary":    $primary-color,
+                "secondary":  $secondary-color,
+                // Add more theme colors here if needed
+            );
 
-[data-bs-theme=light] {
-    $theme-colors: (
-        "primary":    $colight1,
-        "secondary":  $colight2,
-        "success":    $success,
-        "info":       $info,
-        "warning":    $warning,
-        "danger":     $danger,
-        "light":      $light,
-        "dark":       $dark
-      );
-      
-      @each $color, $value in $theme-colors {
-          .btn-#{$color} {
-            @include button-variant($value, $value);
-          }
-        }
-        
-        @each $color, $value in $theme-colors {
-          .btn-outline-#{$color} {
-            @include button-outline-variant($value);
-          }
-        }
+            // Apply button variants for light mode
+            @each $color, $value in $theme-colors {
+                .btn-#{$color} {
+                    @include button-variant($value, $value);
+                }
+            }
 
-        .accordion-button:not(.collapsed) {
-            color: #{$colight4};
-            background-color:#{$colight2} ;
+            // Apply button outline variants for light mode
+            @each $color, $value in $theme-colors {
+                .btn-outline-#{$color} {
+                    @include button-outline-variant($value);
+                }
+            }
+
+            // Additional styling for specific elements in light mode
+            .accordion-button:not(.collapsed) {
+                color: $quaternary-color;
+                background-color: $secondary-color;
+            }
+
+            .form-select {
+              color: $quaternary-color;
+              background-color: $secondary-color;
+            }
+            .form-control {
+              border-color: $secondary-color;
+            }
+            .alert-primary {
+              color : #000000;
+              background-color : $tertiary-color;
+              border-color: $secondary-color;
+              font-size: large;
+            }
+
+            .form-check-input[type=checkbox] {
+              border-radius: 1em;
+              background-color: $secondary-color;
+              border-color: $primary-color;
+            }
+            // Bootstrap variables for light mode
+            --bs-body-bg: $quaternary-color;
+            --bs-body-bg-rgb: #{to-rgb($quaternary-color)};
+            --bs-secondary-bg: $tertiary-color;
+            --bs-secondary-bg-rgb: #{to-rgb($tertiary-color)};
+            --bs-tertiary-bg: $secondary-color;
+            --bs-tertiary-bg-rgb: #{to-rgb($secondary-color)};
+
         }
-        
-    --bs-body-bg: #{$colight4};
-    --bs-body-bg-rgb: #{to-rgb($colight4)};
-    --bs-secondary-bg: #{$colight3};
-    --bs-secondary-bg-rgb: #{to-rgb($colight3)};
-    --bs-tertiary-bg: #{$colight2};
-    --bs-tertiary-bg-rgb: #{to-rgb($colight2)};
+    }
 }

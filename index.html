@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" class="dark">
 
-<head >
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
@@ -37,7 +37,6 @@
         }
 
         .bg-blur {
-            background-color: #22283119 ;
             backdrop-filter: blur(12px);
         }
 
@@ -57,7 +56,7 @@
 <body class="bg-body body">
 
 
-    <nav class="navbar sticky-top navbar-expand-lg shadow bg-blur">
+    <nav class="p-3 navbar sticky-top navbar-expand-lg shadow bg-blur">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Novaterm AI</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -70,14 +69,20 @@
                     <a class="nav-link" href="#collapseSSH">SSH</a>
                     <a class="nav-link" href="#accordion1">Terminal </a>
                     <a class="nav-link" href="#accordion3">Configure</a>
-                    <span class="align-self-center position-absolute end-0 me-3">
-                        <div class="form-switch form-check">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
-                                checked>
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Dark - Light</label>
-                    </span>
                 </div>
-
+                <div class="row justify-content-end align-self-end position-absolute top-50 end-0 translate-middle-y">
+                    <div class="col-3 form-switch form-check align-content-center">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                            checked>
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Mode</label>
+                    </div>
+                    <div class="col-9">
+                        <select id="themeSelect" class="form-select">
+                            <option value="">Select Theme</option>
+                            <!-- Theme options will be dynamically added here -->
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
@@ -127,7 +132,8 @@
                                         <div class="mb-3">
                                             <button type="button" onclick="connectSSH()"
                                                 class="btn btn-primary rounded-pill">Connect</button>
-                                            <button type="button" onclick="disconnectSSH()" class="btn btn-secondary rounded-pill">
+                                            <button type="button" onclick="disconnectSSH()"
+                                                class="btn btn-secondary rounded-pill">
                                                 Disconnect
                                             </button>
                                         </div>
@@ -158,7 +164,7 @@
                         <div class="col-lg-4 p-3 ">
                             <div class="container  border border-secondary rounded-4 shadow p-3">
                                 <h2 class=" h2 mb-3">Recent:</h2>
-                                <div class="table-responsive" style="height: 18em;">
+                                <div class="table-responsive bg-body-secondary rounded-4" style="height: 18em;">
                                     <table class="table table-striped" id="connectionsTable">
                                         <thead>
                                             <tr>
@@ -198,12 +204,12 @@
             <div id="collapseTerminal" class="accordion-collapse collapse" data-bs-parent="#accordion1">
                 <div class="accordion-body bg-image-container">
                     <div class="mb-3">
-                        <button type="button" onclick="openTerminal()" id="open-terminal-btn" class="btn btn-primary rounded-pill"
-                            disabled>
+                        <button type="button" onclick="openTerminal()" id="open-terminal-btn"
+                            class="btn btn-primary rounded-pill" >
                             Open Terminal
                         </button>
                         <button type="button" onclick="closeTerminal()" id="close-terminal-btn "
-                            class="btn btn-secondary rounded-pill" disabled>
+                            class="btn btn-secondary rounded-pill" >
                             Close Terminal
                         </button>
                         <!--   <button type="button" onclick="testCommand()" id="command" class="btn btn-primary">
@@ -218,7 +224,7 @@
 
                             <div id="wrapper"
                                 class="p-3 bg-body-secondary rounded-4 shadow border border-secondary mb-3" hidden>
-                                <div style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div>
+                                <div class="rounded-4" style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div>
                                 <!-- style="max-width: 1080px; max-height:460px" -->
                             </div>
 
@@ -249,7 +255,8 @@
                                     <input class="form-control" type="text" id="prompt" rows="4" cols="50"
                                         value="explain me FTP" />
                                 </div>
-                                <button type="button" onclick="sendRequest()" class="btn btn-primary rounded-pill mb-3">Send
+                                <button type="button" onclick="sendRequest()"
+                                    class="btn btn-primary rounded-pill mb-3">Send
                                     Request</button>
                                 <div id="response-container"></div>
                             </div>
@@ -324,31 +331,47 @@
                 <div class="accordion-body bg-image-container">
 
                     <div id="config-section" class="btn-section">
-                        <div class="tabs row justify-content-center text-center">
-                            <div  class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab1','config_tablink1','config-section')">
-                                <button id="config_tablink1" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-globe"></i></button>
-                                <h4>Web</h4>
+                        <div class="tabs row justify-content-center text-center sticky-top bg-blur rounded-bottom-4"
+                            style="z-index: 0; top: 4.5em;">
+                            <div class="col-sm-4 col-md-2 p-2"
+                                onclick="openBtn('config_tab1','config_tablink1','config-section')">
+                                <button id="config_tablink1"
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
+                                        class="h5 bi bi-globe"></i></button>
+                                <p>Web</p>
                             </div>
-                            <div  class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab2','config_tablink2','config-section')">
-                                <button id="config_tablink2" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-database-fill-gear"></i></button>
-                                <h4>DNS</h4>
+                            <div class="col-sm-4 col-md-2 p-2"
+                                onclick="openBtn('config_tab2','config_tablink2','config-section')">
+                                <button id="config_tablink2"
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
+                                        class="h5 bi bi-database-fill-gear"></i></button>
+                                <p>DNS</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab3','config_tablink3','config-section')">
-                                <button id="config_tablink3" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-router"></i></button>
-                                <h4>DHCP</h4>
+                            <div class="col-sm-4 col-md-2 p-2"
+                                onclick="openBtn('config_tab3','config_tablink3','config-section')">
+                                <button id="config_tablink3"
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
+                                        class="h5 bi bi-router"></i></button>
+                                <p>DHCP</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab4','config_tablink4','config-section')">
-                                <button id="config_tablink4" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-bricks"></i></button>
-                                <h4>Firewall</h4>
+                            <div class="col-sm-4 col-md-2 p-2"
+                                onclick="openBtn('config_tab4','config_tablink4','config-section')">
+                                <button id="config_tablink4"
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
+                                        class="h5 bi bi-bricks"></i></button>
+                                <p>Firewall</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-3" onclick="openBtn('config_tab5','config_tablink5','config-section')">
-                                <button id="config_tablink5" class="mb-3 p-3 btn btn-outline-primary rounded-circle btnlink"><i class="h4 bi bi-shield-shaded"></i></button>
-                                <h4>Security</h4>
+                            <div class="col-sm-4 col-md-2 p-2"
+                                onclick="openBtn('config_tab5','config_tablink5','config-section')">
+                                <button id="config_tablink5"
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
+                                        class="h5 bi bi-shield-shaded"></i></button>
+                                <p>Security</p>
                             </div>
                         </div>
-                
+
                         <div>
-                            <div id="config_tab1" class="btncontent row justify-content-center"> 
+                            <div id="config_tab1" class="btncontent row justify-content-center">
                                 <div id="web-server-section" class="p-3 col-md-8 col-lg-7 tab-section">
                                     <div class="tabs row">
 
@@ -367,15 +390,16 @@
                                             onclick="openTab('tab3','tablink3','web-server-section')">
                                             <h5>Database</h5>
                                         </div>
-            
+
                                     </div>
-                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-            
+                                    <div
+                                        class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+
                                         <div id="tab1" class="tabcontent">
                                             <div class="col-6 mb-3">
                                                 <label for="domain" class="form-label">Domain:</label>
-                                                <input type="text" id="domain" class="form-control" placeholder="Enter your domain"
-                                                    value="example.com" />
+                                                <input type="text" id="domain" class="form-control"
+                                                    placeholder="Enter your domain" value="example.com" />
                                             </div>
                                             <div class="col-6 mb-3">
                                                 <label for="folder_name" class="form-label">Folder Name:</label>
@@ -383,37 +407,37 @@
                                                     placeholder="Enter your folder name" value="example" />
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-check-label"> <input type="checkbox" class="form-check-input"
-                                                        id="matchCaseSec"> &nbsp Secure</label>
+                                                <label class="form-check-label"> <input type="checkbox"
+                                                        class="form-check-input" id="matchCaseSec"> &nbsp Secure</label>
                                             </div>
-                                            <button type="button" onclick="copyWebserver('configure_apache.sh')" id="tools"
-                                                class="btn btn-secondary mb-3">
+                                            <button type="button" onclick="copyWebserver('configure_apache.sh')"
+                                                id="tools" class="btn btn-secondary mb-3">
                                                 Configure apache2
                                             </button>
-            
-                                            <button type="button" onclick="copyWebserver('configure_nginx.sh')" id="tools"
-                                                class="btn btn-secondary mb-3">
+
+                                            <button type="button" onclick="copyWebserver('configure_nginx.sh')"
+                                                id="tools" class="btn btn-secondary mb-3">
                                                 Configure nginx
                                             </button>
                                         </div>
-            
+
                                         <div id="tab2" class="tabcontent">
                                             <p>Specify your wordpress installation folder in /var/www/</p>
                                             <p>Don't forget to configure your database : &rpar; </p>
-            
+
                                             <div class="col-6 mb-3">
                                                 <label for="folder_name" class="form-label">Folder Name:</label>
                                                 <input type="text" id="wp_folder_name" class="form-control"
                                                     placeholder="Enter your folder name" value="example" />
                                             </div>
-            
-                                            <button type="button" onclick="copyWordpress('configure_wordpress.sh')" id="tools"
-                                                class="btn btn-primary rounded-pill mb-3">
+
+                                            <button type="button" onclick="copyWordpress('configure_wordpress.sh')"
+                                                id="tools" class="btn btn-primary rounded-pill mb-3">
                                                 Configure Wordpress
                                             </button>
-            
+
                                         </div>
-            
+
                                         <div id="tab3" class="tabcontent">
                                             <h3>Set up your database</h3>
                                             <div class="row">
@@ -435,20 +459,21 @@
                                                         placeholder="Enter your host" value="localhost" />
                                                 </div>
                                                 <div class="col-6 mb-3">
-                                                    <label for="folder_name" class="form-label">Database User's Password:</label>
+                                                    <label for="folder_name" class="form-label">Database User's
+                                                        Password:</label>
                                                     <input type="password" id="db_password" class="form-control"
                                                         placeholder="Enter your password" value="user" />
                                                 </div>
                                             </div>
-            
+
                                             <button type="button" onclick="copyDb('configure_db.sh')" id="tools"
                                                 class="btn btn-primary rounded-pill mb-3">
                                                 Configure Database
                                             </button>
-            
-            
+
+
                                         </div>
-            
+
                                     </div>
                                 </div>
                             </div>
@@ -466,10 +491,11 @@
                                             onclick="openTab('dns_tab2','dns_tablink2','dns-section')">
                                             <h5>DNS records</h5>
                                         </div>
-            
+
                                     </div>
-                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-            
+                                    <div
+                                        class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+
                                         <div id="dns_tab1" class="tabcontent">
                                             <div class="col-6 mb-3">
                                                 <label for="dns_domain" class="form-label">Domain:</label>
@@ -485,13 +511,14 @@
                                                 class="btn btn-primary rounded-pill mb-3">
                                                 Configure DNS
                                             </button>
-            
+
                                         </div>
-            
+
                                         <div id="dns_tab2" class="tabcontent">
                                             <p>Select your file in /etc/bind/</p>
                                             <div class="col-6 mb-3">
-                                                <label for="dns_conf_file" class="form-label">Configuration File:</label>
+                                                <label for="dns_conf_file" class="form-label">Configuration
+                                                    File:</label>
                                                 <input type="text" id="dns_conf_file" class="form-control"
                                                     placeholder="Enter your domain" value="db.example" />
                                             </div>
@@ -501,9 +528,10 @@
                                                     <input type="text" id="dns_value_1" class="form-control"
                                                         placeholder="field 1" />
                                                 </div>
-            
+
                                                 <div class="col-2 mb-3">
-                                                    <select id="recordType" class="form-select" aria-label="Default select example">
+                                                    <select id="recordType" class="form-select"
+                                                        aria-label="Default select example">
                                                         <option value="1" selected>A</option>
                                                         <option value="2">AAAA</option>
                                                         <option value="3">CNAME</option>
@@ -514,21 +542,21 @@
                                                         <option value="4">TXT</option>
                                                     </select>
                                                 </div>
-            
+
                                                 <div class="col-4 mb-3">
                                                     <input type="text" id="dns_value_2" class="form-control"
                                                         placeholder="field 2" />
                                                 </div>
                                             </div>
-            
-            
-                                            <button type="button" onclick="copyRecord('configure_dns_record.sh')" id="tools"
-                                                class="btn btn-primary rounded-pill mb-3">
+
+
+                                            <button type="button" onclick="copyRecord('configure_dns_record.sh')"
+                                                id="tools" class="btn btn-primary rounded-pill mb-3">
                                                 Add Record
                                             </button>
-            
+
                                         </div>
-            
+
                                     </div>
                                 </div>
                             </div>
@@ -546,10 +574,11 @@
                                             onclick="openTab('dhcp_tab2','dhcp_tablink2','dhcp-section')">
                                             <h5>DHCP lease</h5>
                                         </div>
-            
+
                                     </div>
-                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-            
+                                    <div
+                                        class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+
                                         <div id="dhcp_tab1" class="tabcontent">
                                             <p>Configure your network settings:</p>
                                             <div class="row">
@@ -573,37 +602,41 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="dhcp_range_start" class="form-label">DHCP Range Start:</label>
+                                                    <label for="dhcp_range_start" class="form-label">DHCP Range
+                                                        Start:</label>
                                                     <input type="text" id="dhcp_range_start" class="form-control"
                                                         placeholder="e.g., 192.168.1.100" />
                                                 </div>
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="dhcp_range_end" class="form-label">DHCP Range End:</label>
+                                                    <label for="dhcp_range_end" class="form-label">DHCP Range
+                                                        End:</label>
                                                     <input type="text" id="dhcp_range_end" class="form-control"
                                                         placeholder="e.g., 192.168.1.200" />
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="gateway_ip" class="form-label">Gateway IP Address:</label>
+                                                    <label for="gateway_ip" class="form-label">Gateway IP
+                                                        Address:</label>
                                                     <input type="text" id="gateway_ip" class="form-control"
                                                         placeholder="e.g., 192.168.1.1" />
                                                 </div>
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="dhcp_dns_ip" class="form-label">DNS Server IP Address:</label>
+                                                    <label for="dhcp_dns_ip" class="form-label">DNS Server IP
+                                                        Address:</label>
                                                     <input type="text" id="dhcp_dns_ip" class="form-control"
                                                         placeholder="e.g., 8.8.8.8" />
                                                 </div>
                                             </div>
-            
-                                            <button type="button" onclick="copydhcp('configure_dhcp.sh')" id="configure_network"
-                                                class="btn btn-primary rounded-pill mb-3">
+
+                                            <button type="button" onclick="copydhcp('configure_dhcp.sh')"
+                                                id="configure_network" class="btn btn-primary rounded-pill mb-3">
                                                 Configure Network
                                             </button>
-            
+
                                         </div>
-            
-            
+
+
                                     </div>
                                 </div>
                             </div>
@@ -617,7 +650,8 @@
                                             <h5>Iptables</h5>
                                         </div>
                                     </div>
-                                    <div class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
+                                    <div
+                                        class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
                                         <div id="iptables_tab1" class="tabcontent">
                                             <h2>Iptables Rule Generator</h2>
                                             <p>Generate your iptables rules:</p>
@@ -744,7 +778,8 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" onclick="generateRule()" class="btn btn-primary rounded-pill">Generate
+                                                    <button type="button" onclick="generateRule()"
+                                                        class="btn btn-primary rounded-pill">Generate
                                                         Rule</button>
                                                 </div>
                                             </div>
@@ -755,23 +790,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="config_tab5" class="btncontent row justify-content-center">Content for Tab 5</div>
+                            <div id="config_tab5" class="btncontent row justify-content-center p-3">
+                                <div class="col-sm-10 col-lg-6 bg-body-secondary rounded-4 p-4">
+                                    <h2 class="mb-3">Security Checks</h2>
+                                    <p class="mb-3">In this program, various security checks are performed including checking file
+                                        permissions, iptables configurations, secure protocols, installed security updates,
+                                        antivirus software, open ports, integrity of critical system files, and unauthorized
+                                        users or groups.</p>
+                                    <button class="btn btn-primary" onclick="copysecurity('security_check.sh')">Run Security Checks</button>
+                                </div>
+
+                            </div>
                         </div>
-                
+
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -790,11 +822,18 @@
 
 
 
-    <div class="container fixed-container col-lg-4 col-md-6" id="message_container" hidden>
+
+
+
+    <div class="p-3 container fixed-container col-lg-4 col-md-6" id="message_container" hidden>
         <div id="message" class="alert alert-primary"></div>
     </div>
-
-
+    <footer>
+        <div class="border border-top text-center p-5">
+            <p>© 2024 NovatermAI. All rights reserved.</p>
+            <p>Made by <a href="https://github.com/oCHRONOSo" target="_blank" class="text-body-secondary">CHRONOS</a></p>
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -309,6 +309,10 @@ io.on("connection", (socket) => {
             socket.on("copy_dhcp", () => {
               copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh ${interfaceName_sh} ${subnetIP_sh} ${subnetMask_sh} ${dhcpRangeStart_sh} ${dhcpRangeEnd_sh} ${gatewayIP_sh} ${dnsIP_sh}  && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh ${interfaceName_sh} ${subnetIP_sh} ${subnetMask_sh} ${dhcpRangeStart_sh} ${dhcpRangeEnd_sh} ${gatewayIP_sh} ${dnsIP_sh} " && rm script.sh) \n`);
             });
+
+            socket.on("copy_security", () => {
+              copy_conf(`sleep 2 && chmod a+x script.sh && (echo ${password} | sudo -S ./script.sh && rm script.sh ) || ( echo "Using root instead of sudo ..." && source /etc/profile && su - -c "$(pwd)/script.sh " && rm script.sh) \n`);
+            });
           
           });
 
