@@ -1,42 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Round Buttons with Bootstrap</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Option Cookie</title>
 </head>
 <body>
-  <div class="container mt-4">
-    <!-- Primary Round Button -->
-    <button type="button" class="btn btn-primary rounded-circle mr-2">Primary</button>
+  <select id="mySelect">
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+  </select>
 
-    <!-- Secondary Round Button -->
-    <button type="button" class="btn btn-secondary rounded-circle mr-2">Secondary</button>
+  <script>
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+      var expires = "";
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
 
-    <!-- Success Round Button -->
-    <button type="button" class="btn btn-success rounded-circle mr-2">Success</button>
+    // Function to get a cookie
+    function getCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) == 0) {
+          return c.substring(nameEQ.length, c.length);
+        }
+      }
+      return null;
+    }
 
-    <!-- Danger Round Button -->
-    <button type="button" class="btn btn-danger rounded-circle mr-2">Danger</button>
+    // Function to handle select change
+    document.getElementById("mySelect").addEventListener("change", function() {
+      var selectedOption = this.value;
+      setCookie("selectedOption", selectedOption, 365); // Set cookie for 1 year
+    });
 
-    <!-- Warning Round Button -->
-    <button type="button" class="btn btn-warning rounded-circle mr-2">Warning</button>
-
-    <!-- Info Round Button -->
-    <button type="button" class="btn btn-info rounded-circle mr-2">Info</button>
-
-    <!-- Light Round Button -->
-    <button type="button" class="btn btn-light rounded-circle mr-2">Light</button>
-
-    <!-- Dark Round Button -->
-    <button type="button" class="btn btn-dark rounded-circle">Dark</button>
-  </div>
-
-  <!-- Bootstrap JS (Optional) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    // Check if there is a stored option and select it
+    var storedOption = getCookie("selectedOption");
+    if (storedOption) {
+      document.getElementById("mySelect").value = storedOption;
+    }
+  </script>
 </body>
 </html>

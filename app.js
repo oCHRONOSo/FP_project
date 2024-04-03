@@ -1,6 +1,6 @@
 // Establish WebSocket connection with the server
-const socket = io("ws://localhost:8080");
-//const socket = io("ws://192.168.0.187:8080");
+// const socket = io("ws://localhost:8080");
+const socket = io("ws://192.168.68.195:8080");
 // Initialize state variables
 let isConnected = false;
 let isTerminalOpen = false;
@@ -105,7 +105,7 @@ function connectSSH() {
   const { value: password } = document.getElementById('password');
   const { value: passphrase } = document.getElementById('passphrase');
   const { value: port } = document.getElementById('port');
-  socket.emit('startSSHConnection', { ip, username, password, port, sshKeyContent, passphrase });
+  socket.emit('startSSHConnection', { ip, username, password, port, sshKeyContent, passphrase }); // starts from here
   showMessage("Connecting to SSH...");
   socket.on("ssh.status", (status) => {
     showMessage(status);
@@ -127,12 +127,13 @@ function disconnectSSH() {
     showMessage("Not connected!");
     return;
   }
-  closeTerminal();
-  term = null;
-  document.getElementById('terminal-container').innerHTML = null;
-  isTerminalInitialized = false;
+  // closeTerminal();
+  // term = null;
+  // document.getElementById('terminal-container').innerHTML = null;
+  // isTerminalInitialized = false;
   showMessage("Disconnecting from SSH...");
-  isConnected = false;
+  // isConnected = false;
+  socket.emit('closeshell');
   socket.emit('disconnectSSH');
   
 }
@@ -564,7 +565,45 @@ if (newTheme) {
 });
 
 
+  // Function to set a cookie
+  function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+  }
 
+  // Function to get a cookie
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1, c.length);
+      }
+      if (c.indexOf(nameEQ) == 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
+    }
+    return null;
+  }
+
+  // Function to handle select change
+  document.getElementById("themeSelect").addEventListener("change", function() {
+    var selectedOption = this.value;
+    setCookie("selectedOption", selectedOption, 365); // Set cookie for 1 year
+  });
+
+  // Check if there is a stored option and select it
+  var storedOption = getCookie("selectedOption");
+  if (storedOption) {
+    document.getElementById("themeSelect").value = storedOption;
+    document.documentElement.setAttribute('data-bs-theme', storedOption);
+  }
 
 
 

@@ -8,46 +8,50 @@ const os = require("os");
 const io = require("socket.io")(http, { cors: { origin: "*" } });
 const mysql = require('mysql');
 
+
+
+// Initialize MySQL connection
+const dbConnection = mysql.createConnection({
+  host: 'localhost',
+  user: 'usuario',
+  password: 'usuario',
+  database: 'db_conn'
+});
+
+dbConnection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL database');
+});
+
+function sendRecentconn(socket) {
+  const query = `
+SELECT ip, port, username, password
+FROM connections
+ORDER BY last_connection DESC
+LIMIT 10
+`;
+
+dbConnection.query(query, (err, results) => {
+  if (err) {
+    console.log('Error fetching recent connections from MySQL:', err);
+    return;
+  }
+  
+  // Emit the recent connections to the client
+  socket.emit('recentConnections', results);
+  console.log("DB results sent");
+});
+}
+
+
 // Handle socket connections
 io.on("connection", (socket) => {
 
-  // Initialize MySQL connection
-  const dbConnection = mysql.createConnection({
-    host: 'localhost',
-    user: 'usuario',
-    password: 'usuario',
-    database: 'db_conn'
-  });
-
-  dbConnection.connect((err) => {
-    if (err) {
-      console.error('Error connecting to MySQL:', err);
-      return;
-    }
-    console.log('Connected to MySQL database');
-  });
-
-  function sendRecentconn() {
-    const query = `
-  SELECT ip, port, username, password
-  FROM connections
-  ORDER BY last_connection DESC
-  LIMIT 10
-  `;
-
-  dbConnection.query(query, (err, results) => {
-    if (err) {
-      console.log('Error fetching recent connections from MySQL:', err);
-      return;
-    }
-    
-    // Emit the recent connections to the client
-    socket.emit('recentConnections', results);
-    console.log("DB results sent");
-  });
-  }
-  
-  sendRecentconn();
+  // send recent connections
+  sendRecentconn(socket);
 
   // Log the IP address of the connecting user
   const clientIpAddress = socket.handshake.address;
@@ -56,7 +60,11 @@ io.on("connection", (socket) => {
 
   // Listen for requests to start an SSH connection
   socket.on("startSSHConnection", ({ ip, username, password, port, sshKeyContent, passphrase }) => {
-    let sshConfig;
+
+
+    
+    
+    let sshConfig ;
     const conn = new ssh2.Client();
     //let ptyProcess;
 
@@ -104,7 +112,7 @@ io.on("connection", (socket) => {
         console.log('Connection information stored in MySQL');
       });
 
-      sendRecentconn();
+      sendRecentconn(socket);
       
       socket.emit("ssh.success");
       socket.emit("ssh.status", "SSH connection successful!");
@@ -116,7 +124,7 @@ io.on("connection", (socket) => {
         // Determine the shell based on the operating system
         const shell = os.platform() === "win32" ? "powershell.exe" : "bash";
         //console.log(shell);
-        stream = shellStream;
+        let stream = shellStream;
         
         socket.on('resize',({newrow,newcol})=>{
           stream.setWindow(newrow,newcol);
@@ -131,6 +139,9 @@ io.on("connection", (socket) => {
           return;
         }
 
+        socket.on('closeshell',()=>{
+          stream.write("echo shell");
+        });
         /*         // Spawn a pseudo-terminal process
         ptyProcess = pty.spawn(shell, [], {
           name: "xterm-color",
@@ -149,7 +160,7 @@ io.on("connection", (socket) => {
 
         // Relay data received from the SSH connection to the client
         stream.on("data", function (data) {
-          io.emit("output", data.toString());
+          socket.emit("output", data.toString());
         });
 
         // Listen for client commands

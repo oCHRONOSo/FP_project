@@ -1,11 +1,8 @@
-mutiple connextions issue (broadcast output)
+
 sftp (copy file corrupt server while changing to root and execute copy)
-close / open terminal not working when connecting / disconnecting
-
-double text on the terminal after connect / disconnect / connect
-
-- when reaching the end of the line in the terminal it doesn't skip a line (only while typing) (https://github.com/xtermjs/xterm.js/discussions/4436)
 
 multiple ai request (no limit)
 
 dns named.conf.local, needed to add and delete only the desired zones (check if exists then add)
+
+send recent connection must send the connections only for the user
