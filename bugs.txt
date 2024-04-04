@@ -6,3 +6,5 @@ multiple ai request (no limit)
 dns named.conf.local, needed to add and delete only the desired zones (check if exists then add)
 
 send recent connection must send the connections only for the user
+
+responsivness for the mobile

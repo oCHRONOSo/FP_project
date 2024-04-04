@@ -23,7 +23,7 @@
     <script type="module" src="./node_modules/marked/marked.min.js"></script>
     <script defer src="ai.js"></script>
     <script defer src="app.js"></script>
-    <link rel="stylesheet" href="./scss/custom.css">
+    <link rel="stylesheet" href="./scss/custom.css" />
     <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script> -->
@@ -33,7 +33,6 @@
             bottom: 10px;
             right: 10px;
             z-index: 9999;
-
         }
 
         .bg-blur {
@@ -41,10 +40,9 @@
         }
 
         .bg-image {
-            background-image: linear-gradient(0deg, #222831, #00ADB5);
+            background-image: linear-gradient(0deg, #222831, #00adb5);
             background-size: 100% 100%;
         }
-
 
         /* #F0ECE5 #B6BBC4 #31304D #161A30  */
         /* #FFF2D8 #EAD7BB #BCA37F #113946  */
@@ -54,9 +52,7 @@
 </head>
 
 <body class="bg-body body">
-
-
-    <nav class="p-3 navbar sticky-top navbar-expand-lg shadow bg-blur">
+    <nav class="p-3 navbar sticky-top navbar-expand-lg shadow bg-blur border-bottom border-secondary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Novaterm AI</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -71,20 +67,22 @@
                     <a class="nav-link" href="#accordion3">Configure</a>
                 </div>
                 <div class="row justify-content-end align-self-end position-absolute top-50 end-0 translate-middle-y">
-                    <div class="col-3 form-switch form-check align-content-center">
+                    <!-- <div class="col-3 form-switch form-check align-content-center">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
                             checked>
                         <label class="form-check-label" for="flexSwitchCheckDefault">Mode</label>
-                    </div>
-                    <div class="col-9">
+                    </div> -->
+                    <div class="col-10">
                         <select id="themeSelect" class="form-select">
                             <option value="">Select Theme</option>
                             <!-- Theme options will be dynamically added here -->
                         </select>
                     </div>
+                    <div class="col-2 align-content-center">
+                        <span id="status" type="checkbox" class="badge bg-danger rounded-pill align-content-center opacity-75">&nbsp;</span>             
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </nav>
 
@@ -98,12 +96,11 @@
             </h2>
             <div id="collapseSSH" class="accordion-collapse collapse show" data-bs-parent="#accordion1">
                 <div class="accordion-body bg-image-container">
-
                     <div class="row">
-                        <div class="col-lg-8 p-3 ">
+                        <div class="col-lg-8 p-3">
                             <div class="container bg-body-secondary border border-secondary rounded-4 shadow">
                                 <div class="row p-3">
-                                    <h2 class="display-5 text-center mb-3"> SSH Connection</h2>
+                                    <h2 class="display-5 text-center mb-3">SSH Connection</h2>
                                     <div class="col-md-7 bg-body p-4 rounded-4 border border-secondary-subtle">
                                         <div class="row g-2">
                                             <div class="col-6 mb-3">
@@ -131,7 +128,9 @@
                                         </div>
                                         <div class="mb-3">
                                             <button type="button" onclick="connectSSH()"
-                                                class="btn btn-primary rounded-pill">Connect</button>
+                                                class="btn btn-primary rounded-pill">
+                                                Connect
+                                            </button>
                                             <button type="button" onclick="disconnectSSH()"
                                                 class="btn btn-secondary rounded-pill">
                                                 Disconnect
@@ -157,14 +156,12 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
-
-                        <div class="col-lg-4 p-3 ">
-                            <div class="container  border border-secondary rounded-4 shadow p-3">
-                                <h2 class=" h2 mb-3">Recent:</h2>
-                                <div class="table-responsive bg-body-secondary rounded-4" style="height: 18em;">
+                        <div class="col-lg-4 p-3">
+                            <div class="container border border-secondary rounded-4 shadow p-3">
+                                <h2 class="h2 mb-3">Recent:</h2>
+                                <div class="table-responsive bg-body-secondary rounded-4" style="height: 18em">
                                     <table class="table table-striped" id="connectionsTable">
                                         <thead>
                                             <tr>
@@ -172,7 +169,6 @@
                                                 <th>Port</th>
                                                 <th>Username</th>
                                                 <th>Action</th>
-
                                             </tr>
                                         </thead>
                                         <tbody id="connectionsTableBody">
@@ -181,16 +177,8 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
-
-
-
-
-
-
                 </div>
             </div>
         </div>
@@ -205,11 +193,11 @@
                 <div class="accordion-body bg-image-container">
                     <div class="mb-3">
                         <button type="button" onclick="openTerminal()" id="open-terminal-btn"
-                            class="btn btn-primary rounded-pill" >
+                            class="btn btn-primary rounded-pill">
                             Open Terminal
                         </button>
                         <button type="button" onclick="closeTerminal()" id="close-terminal-btn "
-                            class="btn btn-secondary rounded-pill" >
+                            class="btn btn-secondary rounded-pill">
                             Close Terminal
                         </button>
                         <!--   <button type="button" onclick="testCommand()" id="command" class="btn btn-primary">
@@ -221,55 +209,53 @@
                     </div>
                     <div class="row g-4">
                         <div class="col-lg-7 mb-3">
-
                             <div id="wrapper"
                                 class="p-3 bg-body-secondary rounded-4 shadow border border-secondary mb-3" hidden>
-                                <div class="rounded-4" style="max-width: 1080px; max-height:460px" id="terminal-container" hidden></div>
+                                <div class="rounded-4" style="max-width: 1080px; max-height: 460px"
+                                    id="terminal-container" hidden></div>
                                 <!-- style="max-width: 1080px; max-height:460px" -->
                             </div>
 
-
                             <div class="col-3 mb-3">
                                 <label for="searchTxt" class="form-label">search text:</label>
-                                <input id="searchTxt" type="text" placeholder="Find" class="form-control col-md-3">
+                                <input id="searchTxt" type="text" placeholder="Find" class="form-control col-md-3" />
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-check-label"> <input type="checkbox" class="form-check-input"
-                                        id="matchCaseChb"> &nbsp Match Case</label>
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" id="matchCaseChb" />
+                                    &nbsp Match Case</label>
                             </div>
                             <button type="button" class="btn btn-secondary mb-3"
-                                onclick="searchAddon.findNext(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">Find
-                                Next</button>
+                                onclick="searchAddon.findNext(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">
+                                Find Next
+                            </button>
                             <button type="button" class="btn btn-secondary mb-3"
-                                onclick="searchAddon.findPrevious(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">Find
-                                Previous</button>
-                            <button type="button" class="btn btn-secondary mb-3" onclick="toggleFullScreen();">Toggle
-                                Fullscreen</button>
+                                onclick="searchAddon.findPrevious(document.getElementById('searchTxt').value,{caseSensitive: document.getElementById('matchCaseChb').checked })">
+                                Find Previous
+                            </button>
+                            <button type="button" class="btn btn-secondary mb-3" onclick="toggleFullScreen();">
+                                Toggle Fullscreen
+                            </button>
                         </div>
                         <div class="col-lg-5 mb-3">
                             <div class="shadow rounded-4 p-3 border border-secondary">
                                 <h2 class="h2 text-center">AI assistant</h2>
                                 <div class="mb-3">
-                                    <label for="prompt" class="form-label">Enter your prompt:</label><br>
+                                    <label for="prompt" class="form-label">Enter your prompt:</label><br />
                                     <input class="form-control" type="text" id="prompt" rows="4" cols="50"
                                         value="explain me FTP" />
                                 </div>
-                                <button type="button" onclick="sendRequest()"
-                                    class="btn btn-primary rounded-pill mb-3">Send
-                                    Request</button>
+                                <button type="button" onclick="sendRequest()" class="btn btn-primary rounded-pill mb-3">
+                                    Send Request
+                                </button>
                                 <div id="response-container"></div>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
-    </div>
-    </div>
     </div>
     <div class="accordion" id="accordion2">
         <div class="accordion-item">
@@ -284,7 +270,7 @@
                     <div class="mb-3">
                         <form class="mb-3 col-md-5 d-flex">
                             <input id="searchInput" class="form-control me-2" type="search" placeholder="Search"
-                                aria-label="Search">
+                                aria-label="Search" />
                         </form>
 
                         <button type="button" onclick="copy_install('tools.sh')" id="tools"
@@ -329,43 +315,47 @@
             </h2>
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
                 <div class="accordion-body bg-image-container">
-
                     <div id="config-section" class="btn-section">
-                        <div class="tabs row justify-content-center text-center sticky-top bg-blur rounded-bottom-4"
-                            style="z-index: 0; top: 4.5em;">
+                        <div class="tabs row justify-content-center text-center sticky-sm-top bg-blur rounded-bottom-4 border-bottom border-start border-end border-secondary"
+                            style="z-index: 0; top: 4.5em">
                             <div class="col-sm-4 col-md-2 p-2"
                                 onclick="openBtn('config_tab1','config_tablink1','config-section')">
                                 <button id="config_tablink1"
-                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
-                                        class="h5 bi bi-globe"></i></button>
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
+                                    <i class="h5 bi bi-globe"></i>
+                                </button>
                                 <p>Web</p>
                             </div>
                             <div class="col-sm-4 col-md-2 p-2"
                                 onclick="openBtn('config_tab2','config_tablink2','config-section')">
                                 <button id="config_tablink2"
-                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
-                                        class="h5 bi bi-database-fill-gear"></i></button>
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
+                                    <i class="h5 bi bi-database-fill-gear"></i>
+                                </button>
                                 <p>DNS</p>
                             </div>
                             <div class="col-sm-4 col-md-2 p-2"
                                 onclick="openBtn('config_tab3','config_tablink3','config-section')">
                                 <button id="config_tablink3"
-                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
-                                        class="h5 bi bi-router"></i></button>
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
+                                    <i class="h5 bi bi-router"></i>
+                                </button>
                                 <p>DHCP</p>
                             </div>
                             <div class="col-sm-4 col-md-2 p-2"
                                 onclick="openBtn('config_tab4','config_tablink4','config-section')">
                                 <button id="config_tablink4"
-                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
-                                        class="h5 bi bi-bricks"></i></button>
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
+                                    <i class="h5 bi bi-bricks"></i>
+                                </button>
                                 <p>Firewall</p>
                             </div>
                             <div class="col-sm-4 col-md-2 p-2"
                                 onclick="openBtn('config_tab5','config_tablink5','config-section')">
                                 <button id="config_tablink5"
-                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink"><i
-                                        class="h5 bi bi-shield-shaded"></i></button>
+                                    class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
+                                    <i class="h5 bi bi-shield-shaded"></i>
+                                </button>
                                 <p>Security</p>
                             </div>
                         </div>
@@ -374,7 +364,6 @@
                             <div id="config_tab1" class="btncontent row justify-content-center">
                                 <div id="web-server-section" class="p-3 col-md-8 col-lg-7 tab-section">
                                     <div class="tabs row">
-
                                         <div id="tablink1" type="button"
                                             class="tablink col p-2 rounded-top-4 border-top border-start border-end border-secondary text-center"
                                             onclick="openTab('tab1','tablink1','web-server-section')">
@@ -390,11 +379,9 @@
                                             onclick="openTab('tab3','tablink3','web-server-section')">
                                             <h5>Database</h5>
                                         </div>
-
                                     </div>
                                     <div
                                         class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-
                                         <div id="tab1" class="tabcontent">
                                             <div class="col-6 mb-3">
                                                 <label for="domain" class="form-label">Domain:</label>
@@ -407,8 +394,9 @@
                                                     placeholder="Enter your folder name" value="example" />
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-check-label"> <input type="checkbox"
-                                                        class="form-check-input" id="matchCaseSec"> &nbsp Secure</label>
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" id="matchCaseSec" />
+                                                    &nbsp Secure</label>
                                             </div>
                                             <button type="button" onclick="copyWebserver('configure_apache.sh')"
                                                 id="tools" class="btn btn-secondary mb-3">
@@ -422,8 +410,11 @@
                                         </div>
 
                                         <div id="tab2" class="tabcontent">
-                                            <p>Specify your wordpress installation folder in /var/www/</p>
-                                            <p>Don't forget to configure your database : &rpar; </p>
+                                            <p>
+                                                Specify your wordpress installation folder in
+                                                /var/www/
+                                            </p>
+                                            <p>Don't forget to configure your database : &rpar;</p>
 
                                             <div class="col-6 mb-3">
                                                 <label for="folder_name" class="form-label">Folder Name:</label>
@@ -435,7 +426,6 @@
                                                 id="tools" class="btn btn-primary rounded-pill mb-3">
                                                 Configure Wordpress
                                             </button>
-
                                         </div>
 
                                         <div id="tab3" class="tabcontent">
@@ -470,15 +460,11 @@
                                                 class="btn btn-primary rounded-pill mb-3">
                                                 Configure Database
                                             </button>
-
-
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                             <div id="config_tab2" class="btncontent row justify-content-center">
-
                                 <div id="dns-section" class="p-3 col-md-8 col-lg-7 tab-section">
                                     <div class="tabs row">
                                         <div id="dns_tablink1" type="button"
@@ -491,11 +477,9 @@
                                             onclick="openTab('dns_tab2','dns_tablink2','dns-section')">
                                             <h5>DNS records</h5>
                                         </div>
-
                                     </div>
                                     <div
                                         class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-
                                         <div id="dns_tab1" class="tabcontent">
                                             <div class="col-6 mb-3">
                                                 <label for="dns_domain" class="form-label">Domain:</label>
@@ -511,7 +495,6 @@
                                                 class="btn btn-primary rounded-pill mb-3">
                                                 Configure DNS
                                             </button>
-
                                         </div>
 
                                         <div id="dns_tab2" class="tabcontent">
@@ -549,19 +532,15 @@
                                                 </div>
                                             </div>
 
-
                                             <button type="button" onclick="copyRecord('configure_dns_record.sh')"
                                                 id="tools" class="btn btn-primary rounded-pill mb-3">
                                                 Add Record
                                             </button>
-
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                             <div id="config_tab3" class="btncontent row justify-content-center">
-
                                 <div id="dhcp-section" class="p-3 col-md-8 col-lg-7 tab-section">
                                     <div class="tabs row">
                                         <div id="dhcp_tablink1" type="button"
@@ -574,11 +553,9 @@
                                             onclick="openTab('dhcp_tab2','dhcp_tablink2','dhcp-section')">
                                             <h5>DHCP lease</h5>
                                         </div>
-
                                     </div>
                                     <div
                                         class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
-
                                         <div id="dhcp_tab1" class="tabcontent">
                                             <p>Configure your network settings:</p>
                                             <div class="row">
@@ -633,15 +610,11 @@
                                                 id="configure_network" class="btn btn-primary rounded-pill mb-3">
                                                 Configure Network
                                             </button>
-
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
                             <div id="config_tab4" class="btncontent row justify-content-center">
-
                                 <div id="iptables-section" class="p-3 col-md-8 col-lg-7 tab-section">
                                     <div class="tabs row">
                                         <div id="iptables_tablink1" type="button"
@@ -675,7 +648,9 @@
                                                             <option value="OUTPUT">Output</option>
                                                             <option value="FORWARD">Forward</option>
                                                             <option value="PREROUTING">Pre-routing</option>
-                                                            <option value="POSTROUTING">Post-routing</option>
+                                                            <option value="POSTROUTING">
+                                                                Post-routing
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -694,6 +669,7 @@
                                                     <div class="form-group mb-3">
                                                         <label for="protocol">Protocol:</label>
                                                         <select id="protocol" class="form-select">
+                                                            <option value="">Select protocol</option>
                                                             <option value="tcp">TCP</option>
                                                             <option value="udp">UDP</option>
                                                         </select>
@@ -705,14 +681,14 @@
                                                     <div class="form-group mb-3">
                                                         <label for="originIP">Source IP:</label>
                                                         <input type="text" id="originIP" class="form-control"
-                                                            placeholder="e.g., 192.168.1.0">
+                                                            placeholder="e.g., 192.168.1.0" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-3">
                                                         <label for="destinationIP">Destination IP:</label>
                                                         <input type="text" id="destinationIP" class="form-control"
-                                                            placeholder="e.g., 192.168.1.100">
+                                                            placeholder="e.g., 192.168.1.100" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -721,14 +697,14 @@
                                                     <div class="form-group mb-3">
                                                         <label for="outputInterface">Output Interface:</label>
                                                         <input type="text" id="outputInterface" class="form-control"
-                                                            placeholder="e.g., eth0">
+                                                            placeholder="e.g., eth0" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-3">
                                                         <label for="inputInterface">Input Interface:</label>
                                                         <input type="text" id="inputInterface" class="form-control"
-                                                            placeholder="e.g., eth0">
+                                                            placeholder="e.g., eth0" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -737,14 +713,14 @@
                                                     <div class="form-group mb-3">
                                                         <label for="sourcePort">Source Port:</label>
                                                         <input type="text" id="sourcePort" class="form-control"
-                                                            placeholder="e.g., 80">
+                                                            placeholder="e.g., 80" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group mb-3">
                                                         <label for="destinationPort">Destination Port:</label>
                                                         <input type="text" id="destinationPort" class="form-control"
-                                                            placeholder="e.g., 22">
+                                                            placeholder="e.g., 22" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -753,7 +729,7 @@
                                                     <div class="form-group mb-3">
                                                         <label for="user">User:</label>
                                                         <input type="text" id="user" class="form-control"
-                                                            placeholder="e.g., username">
+                                                            placeholder="e.g., username" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -772,15 +748,16 @@
                                                     <div class="form-group mb-3">
                                                         <label for="logTag">Log Tag:</label>
                                                         <input type="text" id="logTag" class="form-control"
-                                                            placeholder="e.g., my-iptables-rule">
+                                                            placeholder="e.g., my-iptables-rule" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-12 text-center">
                                                     <button type="button" onclick="generateRule()"
-                                                        class="btn btn-primary rounded-pill">Generate
-                                                        Rule</button>
+                                                        class="btn btn-primary rounded-pill">
+                                                        Generate Rule
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
@@ -793,48 +770,37 @@
                             <div id="config_tab5" class="btncontent row justify-content-center p-3">
                                 <div class="col-sm-10 col-lg-6 bg-body-secondary rounded-4 p-4">
                                     <h2 class="mb-3">Security Checks</h2>
-                                    <p class="mb-3">In this program, various security checks are performed including checking file
-                                        permissions, iptables configurations, secure protocols, installed security updates,
-                                        antivirus software, open ports, integrity of critical system files, and unauthorized
-                                        users or groups.</p>
-                                    <button class="btn btn-primary" onclick="copysecurity('security_check.sh')">Run Security Checks</button>
+                                    <p class="mb-3">
+                                        In this program, various security checks are performed
+                                        including checking file permissions, iptables
+                                        configurations, secure protocols, installed security
+                                        updates, antivirus software, open ports, integrity of
+                                        critical system files, and unauthorized users or groups.
+                                    </p>
+                                    <button class="btn btn-primary" onclick="copysecurity('security_check.sh')">
+                                        Run Security Checks
+                                    </button>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
-
-
-
-
-
-
-
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
 
     <div class="p-3 container fixed-container col-lg-4 col-md-6" id="message_container" hidden>
         <div id="message" class="alert alert-primary"></div>
     </div>
     <footer>
         <div class="border border-top text-center p-5">
-            <p>© 2024 NovatermAI. All rights reserved.</p>
-            <p>Made by <a href="https://github.com/oCHRONOSo" target="_blank" class="text-body-secondary">CHRONOS</a></p>
+            <p>© 2024 Novaterm AI. All rights reserved.</p>
+            <p>
+                Made by
+                <a href="https://github.com/oCHRONOSo" target="_blank" class="text-body-secondary">CHRONOS</a>
+            </p>
         </div>
     </footer>
-    
 </body>
 
 </html>

@@ -83,7 +83,7 @@ const initializeTerminal = () => {
 };
 
 // Display message in the UI
-function showMessage(text, duration = 2000) {
+function showMessage(text, duration = 2500) {
   const messageContainer = document.getElementById('message_container');
   const messageElement = document.getElementById('message');
   messageContainer.hidden = false;
@@ -297,14 +297,30 @@ socket.on("ssh.error", (errorMessage) => {
   isConnected = false;
 });
 
+const statusElement = document.getElementById('status');
+
+// Update status function
+function updateStatus(connected) {
+
+  if (connected) {
+    statusElement.classList.replace('bg-danger','bg-success');
+  } else {
+    statusElement.classList.replace('bg-success','bg-danger');
+  }
+
+}
+
 // Handle server disconnection
 socket.on("disconnect", () => {
+  updateStatus(false);
   showMessage("Server Disconnected");
   isConnected = false;
   isTerminalOpen = false;
 });
 
-
+socket.on("connect", () => {
+  updateStatus(true);
+});
 
 // recent connections
 
@@ -361,9 +377,9 @@ socket.on('recentConnections', (results) => {
 });
 
 // Toggle between dark and light themes
-document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
-  document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
-});
+// document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
+//   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
+// });
 
 
 // add tabs for configuration
@@ -533,19 +549,21 @@ function copyTextToClipboard(text) {
 // themes dropodown
 
 const themes = {
+  "dark": "Dark",
+  "dark-cream-green": "Dark Cream Green",
   "dark-green": "Dark Green",
   "dark-yellow": "Dark Yellow",
   "dark-gold": "Dark Gold",
   "dark-violet": "Dark Violet",
   "dark-warm-brown": "Dark Warm Brown",
   "dark-blue-grey": "Dark Blue Grey",
-  "dark-cream-green": "Dark Cream Green",
+  "light": "Light",
+  "cream-green-light": "Light Cream Green",
   "sky-blue": "Sky Blue",
-  "cream": "Cream",
+  "cream": "Cappuccino",
   "cloudy-green": "Cloudy Green",
   "cream-grey": "Cream Grey",
-  "light-violet": "Light Violet",
-  "cream-green-light": "Cream Green Light"
+  "light-violet": "Light Violet"
 };
 
 const themeSelect = document.getElementById('themeSelect');
@@ -601,7 +619,7 @@ if (newTheme) {
   // Check if there is a stored option and select it
   var storedOption = getCookie("selectedOption");
   if (storedOption) {
-    document.getElementById("themeSelect").value = storedOption;
+    // document.getElementById("themeSelect").value = storedOption;
     document.documentElement.setAttribute('data-bs-theme', storedOption);
   }
 

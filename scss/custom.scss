@@ -94,6 +94,7 @@ $secondary: #B6BBC4;
     $tertiary-color: map-get($colors, "tertiary");
     $quaternary-color: map-get($colors, "quaternary");
 
+        
     [data-bs-theme=#{$theme}] {
         // Dark mode styles
         @if str-index($theme, "dark") {
@@ -131,7 +132,7 @@ $secondary: #B6BBC4;
 
             .form-select {
               color: $quaternary-color;
-              background-color: $primary-color;
+              background-color: $secondary-color;
             }
 
             .navbar-toggler {
@@ -151,6 +152,13 @@ $secondary: #B6BBC4;
               background-color: $secondary-color;
               border-color: $primary-color;
             }
+
+
+            .badge {
+                background-color: $primary-color;
+                color: $primary-color;
+            }
+
             
             // Bootstrap variables for dark mode
             color-scheme: dark;
@@ -215,6 +223,9 @@ $secondary: #B6BBC4;
         // Light mode styles
         @else {
             // Theme colors
+
+            $primary: $primary-color;
+            
             $theme-colors: (
                 "primary":    $primary-color,
                 "secondary":  $secondary-color,
@@ -260,6 +271,12 @@ $secondary: #B6BBC4;
               background-color: $secondary-color;
               border-color: $primary-color;
             }
+
+            .badge {
+                background-color: $primary-color;
+                color: $quaternary-color;
+            }
+
             // Bootstrap variables for light mode
             --bs-body-bg: $quaternary-color;
             --bs-body-bg-rgb: #{to-rgb($quaternary-color)};
