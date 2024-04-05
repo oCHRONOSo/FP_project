@@ -1,14 +1,27 @@
 // Import necessary modules
-const http = require("http").createServer();
+//const http = require("http").createServer();
+const http = require('http');
+const express = require('express');
+const app = express();
+
+const server = http.createServer(app);
+
+
 const ssh2 = require("ssh2");
 const fs = require("fs");
 const path = require('path');
 // const pty = require("node-pty");
 const os = require("os");
-const io = require("socket.io")(http, { cors: { origin: "*" } });
+const io = require("socket.io")(server, { cors: { origin: "*" } });
 const mysql = require('mysql');
 
+app.get('/', function (req, res) {
+  console.log("Homepage");
+  res.sendFile(__dirname + '/CLient/index.html');
+});
 
+app.use('/static', express.static('node_modules'));
+app.use('/client', express.static('Client'));
 
 // Initialize MySQL connection
 const dbConnection = mysql.createConnection({
@@ -387,8 +400,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start the HTTP server
-http.listen(8080, () => console.log("Server listening on http://localhost:8080"));
+
 
 // Function to recursively find a script file within a directory
 function findScriptPath(folderPath, scriptName) {
@@ -412,3 +424,6 @@ function findScriptPath(folderPath, scriptName) {
   }
   return null;
 }
+
+// Start the HTTP server
+server.listen(8080, () => console.log("Server listening on http://localhost:8080"));

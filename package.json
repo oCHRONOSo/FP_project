@@ -5,6 +5,7 @@
     "@mui/material": "^5.15.12",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "express": "^4.19.2",
     "marked": "^12.0.0",
     "mysql": "^2.18.1",
     "socket.io": "^4.7.4",

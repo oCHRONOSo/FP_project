@@ -1,5 +1,6 @@
 npm i ssh2
 npm i socket.io
+npm i express --save
 npm i xterm
 npm i xterm-addon-fit
 npm i xterm-addon-web-links
