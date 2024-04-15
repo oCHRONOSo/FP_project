@@ -29,5 +29,3 @@ added iptables rule generator, enhanced appearences
 fixed broadcast out put ( io.emit for everyone, socket.emit to a specific connection)
 
 fixed double text after connecting / disconnecting (conn.shell connect variable error)
-
-fixed 

@@ -3,26 +3,36 @@
 const http = require('http');
 const express = require('express');
 const app = express();
-
+const cookieParser = require("cookie-parser");
 const server = http.createServer(app);
 
 
 const ssh2 = require("ssh2");
+const { Client } = require('ssh2');
 const fs = require("fs");
 const path = require('path');
 // const pty = require("node-pty");
 const os = require("os");
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 const mysql = require('mysql');
+const exp = require('constants');
 
-app.get('/', function (req, res) {
-  console.log("Homepage");
-  res.sendFile(__dirname + '/CLient/index.html');
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(__dirname + '/client/index.html');
+// });
 
 app.use('/static', express.static('node_modules'));
-app.use('/client', express.static('Client'));
+app.use('/js', express.static(__dirname + "/public/js"));
+app.use('/scss', express.static(__dirname + "/public/scss/"));
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieParser());
+app.set('view engine', 'html');
 
+
+app.use('/', require('./routes/pages'));
+app.use('/auth', require('./routes/auth'));
 // Initialize MySQL connection
 const dbConnection = mysql.createConnection({
   host: 'localhost',
@@ -78,7 +88,7 @@ io.on("connection", (socket) => {
     
     
     let sshConfig ;
-    const conn = new ssh2.Client();
+    const conn = new Client();
     //let ptyProcess;
 
     // Set up SSH configuration based on provided credentials
