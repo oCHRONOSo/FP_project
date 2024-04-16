@@ -1,6 +1,6 @@
 // Establish WebSocket connection with the server
- const socket = io("ws://localhost:8080");
-// const socket = io("ws://192.168.68.195:8080");
+ // const socket = io("ws://localhost:8080");
+const socket = io("ws://192.168.0.187:8080");
 // Initialize state variables
 let isConnected = false;
 let isTerminalOpen = false;
@@ -10,6 +10,7 @@ let sshKeyContent;
 let newLength = 200;
 let maxChar = 200
 let fitAddon;
+let userID;
 // Function to handle file upload for SSH key
 function handleFile() {
   const fileInput = document.getElementById('sshkey');
@@ -25,6 +26,25 @@ function handleFile() {
     showMessage('No file selected');
   }
 }
+  // say hi :
+  fetch('/userdata')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Use the fetched data as needed
+        console.log('Username:', data.user.name);
+        document.getElementById("user_username").innerText = "Hello " + data.user.name;
+        userID = data.user.id;
+        console.log(`user:${userID}`);
+        // You can set the username wherever needed in your app
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
 
 // Initialize the terminal 
 const initializeTerminal = () => {
@@ -595,21 +615,21 @@ if (newTheme) {
   }
 
   // Function to get a cookie
-  function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1, c.length);
-      }
-      if (c.indexOf(nameEQ) == 0) {
-        return c.substring(nameEQ.length, c.length);
-      }
-    }
-    return null;
-  }
 
+  function getCookie(name) {
+    const cookieString = document.cookie;
+    console.log(cookieString);
+    const cookies = cookieString.split(';');
+    for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.trim().split('=');
+        if (cookieName === name) {
+            // Decode and return the cookie value
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    console.log("cookie not found");
+    return null; // Return null if the cookie is not found
+  }
   // Function to handle select change
   document.getElementById("themeSelect").addEventListener("change", function() {
     var selectedOption = this.value;
@@ -617,6 +637,8 @@ if (newTheme) {
   });
 
   // Check if there is a stored option and select it
+
+
   var storedOption = getCookie("selectedOption");
   if (storedOption) {
     // document.getElementById("themeSelect").value = storedOption;

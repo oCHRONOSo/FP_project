@@ -117,6 +117,24 @@ exports.isLoggedIn = async (req, res, next) => {
                     return next();
                 }
                 req.user = results[0];
+            fetch('http://localhost:8080/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(req.user)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Data sent successfully');
+                } else {
+                    console.error('Failed to send data');
+                    console.log(response);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+            });
                 return next();
             });
         } catch (err) {

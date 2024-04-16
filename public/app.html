@@ -53,7 +53,7 @@
 <body class="bg-body body">
     <nav class="p-3 navbar sticky-top navbar-expand-lg shadow bg-blur border-bottom border-secondary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Novaterm AI</a>
+            <a class="navbar-brand" href="#">Novaterm AI - <span id="user_username">hello</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -71,7 +71,13 @@
                             checked>
                         <label class="form-check-label" for="flexSwitchCheckDefault">Mode</label>
                     </div> -->
-                    <div class="col-10">
+                    <div class="col-3">
+                        <form action="/logout" method="GET">
+                            <button type="submit" class="btn btn-primary">logout</button>
+                        </form>
+                        
+                    </div>
+                    <div class="col-7">
                         <select id="themeSelect" class="form-select">
                             <option value="">Select Theme</option>
                             <!-- Theme options will be dynamically added here -->

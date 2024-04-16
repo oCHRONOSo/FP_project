@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 const server = http.createServer(app);
 
 
+
+
 const ssh2 = require("ssh2");
 const { Client } = require('ssh2');
 const fs = require("fs");
@@ -16,6 +18,7 @@ const os = require("os");
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 const mysql = require('mysql');
 const exp = require('constants');
+const { cookie } = require('express/lib/response');
 
 // app.get('/', function (req, res) {
 //   res.sendFile(__dirname + '/client/index.html');
@@ -33,6 +36,23 @@ app.set('view engine', 'html');
 
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
+
+let UID;
+app.post('/data', (req, res) => {
+  // Access the data sent in the request body
+  const requestData = req.body;
+  const userID = req.body.id;
+  UID = userID;
+  
+  // Process the data as needed
+  // For example, you could log it to the console
+  console.log('Received data:', requestData);
+  console.log(userID);
+
+  // Send a response back to the client
+  res.send('Data received successfully');
+});
+
 // Initialize MySQL connection
 const dbConnection = mysql.createConnection({
   host: 'localhost',
@@ -53,6 +73,7 @@ function sendRecentconn(socket) {
   const query = `
 SELECT ip, port, username, password
 FROM connections
+WHERE userid = ${UID}
 ORDER BY last_connection DESC
 LIMIT 10
 `;
@@ -70,9 +91,17 @@ dbConnection.query(query, (err, results) => {
 }
 
 
+
+
+  
+
+
+
 // Handle socket connections
 io.on("connection", (socket) => {
 
+  console.log("id is ",UID);
+  
   // send recent connections
   sendRecentconn(socket);
 
@@ -115,8 +144,9 @@ io.on("connection", (socket) => {
 
       //Database data insert
       const insertQuery = `
-      INSERT INTO connections (ip, port, username, password, last_connection)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE 
+      INSERT INTO connections (ip, port, username, password, last_connection, userid)
+
+      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?) ON DUPLICATE KEY UPDATE 
       ip = VALUES(ip),
       port = VALUES(port),
       username = VALUES(username),
@@ -125,7 +155,7 @@ io.on("connection", (socket) => {
       ;
       `;
 
-      const values = [ip, port, username, password];
+      const values = [ip, port, username, password, UID];
     
       dbConnection.query(insertQuery, values, (err, result) => {
         if (err) {
@@ -436,4 +466,4 @@ function findScriptPath(folderPath, scriptName) {
 }
 
 // Start the HTTP server
-server.listen(8080, () => console.log("Server listening on http://localhost:8080"));
+server.listen(8080, "0.0.0.0", () => console.log("Server listening on http://localhost:8080"));

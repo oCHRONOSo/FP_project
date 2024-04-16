@@ -25,10 +25,10 @@
     <!-- <script src="../static/bootstrap/dist/js/bootstrap.min.js"></script> -->
   </head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-black sticky-top p-3">
+  <body class="bg-body">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top p-3 shadow">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Novaterm AI</a>
+          <a class="navbar-brand" href="#">Novaterm AI - <span id="user_username">hello</span></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -37,6 +37,7 @@
                 <a class="nav-link" href="./main.html">Home</a>
               <a class="nav-link" href="./login.html">Login</a>
               <a class="nav-link" href="./register.html">Register</a>
+              <a class="nav-link" href="/app">App</a>
             </div>
           </div>
         </div>
@@ -46,66 +47,68 @@
             <div class="container bg-body-secondary border border-secondary rounded-4 shadow">
                 <div class="row p-4">
                     <h2 class="display-3 text-center mb-4"><i class="bi bi-person-circle"></i>&nbsp;Login</h2>
-
-                    <div class="col bg-body p-4 rounded-4 border border-secondary-subtle shadow">
-                        <div class="row">
-                            <div class="col-md-5 text-center">
-                                <img class="rounded-4 img-fluid" src="./login_img.webp" alt="Template image" >
-                            </div>
-                            <div class="col-md-7 p-3">
-
-                                <form onsubmit="return false;" id="form">
-                                    <div class="row g-2">
-                                        <div class="col mb-3">
-                                            <label for="email" class="form-label">Email:</label>
-                                            <input type="email" id="email" name="email" class="form-control"
-                                                placeholder="Enter your email address" required/>
-                                        </div>
-                                    </div>
-                                    <div class="row g-2 mb-3">
-                                        <div class="col mb-3">
-                                            <label for="password" class="form-label">Password:</label>
-                                            <input type="password" id="password" class="form-control mb-3" name="password"
-                                                placeholder="Enter Password" required/>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Remember me
-                                                </label>
+                    <div class="p-3">
+                        <div class="col bg-body p-4 rounded-4 border border-secondary-subtle shadow">
+                            <div class="row">
+                                <div class="col-md-5 text-center">
+                                    <img class="rounded-4 img-fluid" src="./login_img.webp" alt="Template image" >
+                                </div>
+                                <div class="col-md-7 p-3">
+    
+                                    <form onsubmit="return false;" id="form">
+                                        <div class="row g-2">
+                                            <div class="col mb-3">
+                                                <label for="email" class="form-label">Email:</label>
+                                                <input type="email" id="email" name="email" class="form-control"
+                                                    placeholder="Enter your email address" required/>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row px-3 mb-3">
-                                        <div class="col">
-                                            <div class="row">
-                                                <button type="submit" class="btn btn-primary rounded-pill">
-                                                    Login
-                                                </button>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col mb-3">
+                                                <label for="password" class="form-label">Password:</label>
+                                                <input type="password" id="password" class="form-control mb-3" name="password"
+                                                    placeholder="Enter Password" required/>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        Remember me
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row px-3">
-                                        <div class="col">
-                                            <a href="./register.html" style="text-decoration: none;">
+                                        <div class="row px-3 mb-3">
+                                            <div class="col">
                                                 <div class="row">
-                                                    <button type="button" class="btn btn-secondary rounded-pill">
-                                                        Register
+                                                    <button type="submit" class="btn btn-primary rounded-pill">
+                                                        Login
                                                     </button>
                                                 </div>
-                                            </a>
-                                            <div class="alert alert-danger" role="alert" id="error" style="display: none;"></div>
-                                            <div class="alert alert-success" role="alert" id="success" style="display: none;"></div>
+                                            </div>
                                         </div>
-                                    </div>
-
-
-                                </form>
-
-
+                                        <div class="row px-3">
+                                            <div class="col">
+                                                <a href="./register.html" style="text-decoration: none;">
+                                                    <div class="row">
+                                                        <button type="button" class="btn btn-secondary rounded-pill">
+                                                            Register
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                                <div class="alert alert-danger mt-3" role="alert" id="error" style="display: none;"></div>
+                                                <div class="alert alert-success mt-3" role="alert" id="success" style="display: none;"></div>
+                                            </div>
+                                        </div>
+    
+    
+                                    </form>
+    
+    
+                                </div>
                             </div>
+                            
                         </div>
-                        
                     </div>
+
 
                 </div>
             </div>

@@ -17,4 +17,15 @@ router.get('/app', authController.isLoggedIn, (req, res) => {
         res.sendFile("login.html", { root: './public/' });
     }
 })
+router.get('/logout', authController.logout ,(req, res) => {
+    res.sendFile("login.html", { root: './public/' })
+});
+
+router.get('/userdata', authController.isLoggedIn, (req, res) => {
+    if (req.user) {
+        res.json({ user: req.user });
+    } else {
+        res.status(401).json({ error: 'User not logged in' });
+    }
+});
 module.exports = router;
