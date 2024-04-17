@@ -29,7 +29,7 @@ function getCookie(name) {
     .then(data => {
         // Use the fetched data as needed
         console.log('Username:', data.user.name);
-        document.getElementById("user_username").innerText = "Hello " + data.user.name;
+        document.getElementById("user_username").innerText = "Hi " + data.user.name + " !";
         // You can set the username wherever needed in your app
     })
     .catch(error => {

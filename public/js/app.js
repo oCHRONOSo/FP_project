@@ -1,6 +1,6 @@
 // Establish WebSocket connection with the server
- // const socket = io("ws://localhost:8080");
-const socket = io("ws://192.168.0.187:8080");
+  const socket = io("ws://localhost:8080");
+// const socket = io("ws://192.168.0.187:8080");
 // Initialize state variables
 let isConnected = false;
 let isTerminalOpen = false;
@@ -37,7 +37,7 @@ function handleFile() {
     .then(data => {
         // Use the fetched data as needed
         console.log('Username:', data.user.name);
-        document.getElementById("user_username").innerText = "Hello " + data.user.name;
+        document.getElementById("user_username").innerText = "Hi " + data.user.name + " !";
         userID = data.user.id;
         console.log(`user:${userID}`);
         // You can set the username wherever needed in your app
@@ -517,7 +517,7 @@ function generateRule() {
   if (finalAction === "LOG" && logTag !== "") command += " --log-prefix " + logTag;
   iptable_cont = document.getElementById("result");
   iptable_cont.hidden = false;
-  iptable_cont.innerHTML = '<div class="row"><div class="col-sm-12 col-md-10">'+ command +'</div>' + '<div class="col-sm-12 col-md-2 text-end"><button class="btn btn-outline-secondary" id="copyRule"><i class="bi bi-copy"></i></button></div></div>';
+  iptable_cont.innerHTML = '<div class="row"><div class="col-12 col-sm-10 align-content-center">'+ command +'</div>' + '<div class="col-12 col-sm-2 text-end"><button class="btn btn-outline-secondary" id="copyRule"><i class="bi bi-copy"></i></button></div></div>';
   iptable_cont.setAttribute("class","col bg-body p-4 rounded-4 border border-secondary-subtle");
   copybtn = document.getElementById("copyRule");
 
@@ -585,6 +585,8 @@ const themes = {
   "cream-grey": "Cream Grey",
   "light-violet": "Light Violet"
 };
+
+// set theme
 
 const themeSelect = document.getElementById('themeSelect');
 

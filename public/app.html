@@ -53,38 +53,39 @@
 <body class="bg-body body">
     <nav class="p-3 navbar sticky-top navbar-expand-lg shadow bg-blur border-bottom border-secondary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Novaterm AI - <span id="user_username">hello</span></a>
+            <a class="navbar-brand" href="#">Novaterm AI - <span id="user_username">Hello !</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse position-relative" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    <a class="nav-link" href="#collapseSSH">SSH</a>
-                    <a class="nav-link" href="#accordion1">Terminal </a>
-                    <a class="nav-link" href="#accordion3">Configure</a>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav col-12 col-lg-6">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link" href="#collapseSSH">SSH</a>
+                        <a class="nav-link" href="#accordion1">Terminal </a>
+                        <a class="nav-link" href="#accordion3">Configure</a>
+
                 </div>
-                <div class="row justify-content-end align-self-end position-absolute top-50 end-0 translate-middle-y">
+                <div class="d-flex flex-row col-12 col-lg-6 justify-content-lg-end justify-content-center flex-fill mt-2 mt-sm-0">
                     <!-- <div class="col-3 form-switch form-check align-content-center">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
                             checked>
                         <label class="form-check-label" for="flexSwitchCheckDefault">Mode</label>
                     </div> -->
-                    <div class="col-3">
-                        <form action="/logout" method="GET">
-                            <button type="submit" class="btn btn-primary">logout</button>
-                        </form>
-                        
-                    </div>
-                    <div class="col-7">
+                    <div class="px-2">
                         <select id="themeSelect" class="form-select">
                             <option value="">Select Theme</option>
                             <!-- Theme options will be dynamically added here -->
                         </select>
                     </div>
-                    <div class="col-2 align-content-center">
-                        <span id="status" type="checkbox" class="badge bg-danger rounded-pill align-content-center opacity-75">&nbsp;</span>             
+                    <div class="px-2">
+                        <form action="/logout" method="GET">
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-box-arrow-left"></i> Logout</button>
+                        </form>
+                        
+                    </div>
+                    <div class="px-2 justify-content-center align-content-center">
+                        <span id="status"  class="badge bg-danger rounded-pill opacity-75">&nbsp;</span>             
                     </div>
                 </div>
             </div>
@@ -106,7 +107,7 @@
                             <div class="container bg-body-secondary border border-secondary rounded-4 shadow">
                                 <div class="row p-3">
                                     <h2 class="display-5 text-center mb-3">SSH Connection</h2>
-                                    <div class="col-md-7 bg-body p-4 rounded-4 border border-secondary-subtle">
+                                    <div class="col-md-7 bg-body p-4 rounded-4 border border-secondary-subtle shadow">
                                         <div class="row g-2">
                                             <div class="col-6 mb-3">
                                                 <label for="username" class="form-label">Username:</label>
@@ -319,11 +320,11 @@
                 </button>
             </h2>
             <div id="collapseConfigure" class="accordion-collapse collapse" data-bs-parent="#accordion3">
-                <div class="accordion-body bg-image-container">
+                <div class="accordion-body bg-image-container pt-0">
                     <div id="config-section" class="btn-section">
-                        <div class="tabs row justify-content-center text-center sticky-sm-top bg-blur rounded-bottom-4 border-bottom border-start border-end border-secondary"
+                        <div class="d-sm-flex tabs flex-sm-row pt-3 justify-content-evenly text-center sticky-sm-top bg-blur rounded-bottom-4 border-bottom border-start border-end border-secondary"
                             style="z-index: 0; top: 4.5em">
-                            <div class="col-sm-4 col-md-2 p-2"
+                            <div class=" p-2"
                                 onclick="openBtn('config_tab1','config_tablink1','config-section')">
                                 <button id="config_tablink1"
                                     class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
@@ -331,7 +332,7 @@
                                 </button>
                                 <p>Web</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-2"
+                            <div class=" p-2"
                                 onclick="openBtn('config_tab2','config_tablink2','config-section')">
                                 <button id="config_tablink2"
                                     class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
@@ -339,7 +340,7 @@
                                 </button>
                                 <p>DNS</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-2"
+                            <div class=" p-2"
                                 onclick="openBtn('config_tab3','config_tablink3','config-section')">
                                 <button id="config_tablink3"
                                     class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
@@ -347,7 +348,7 @@
                                 </button>
                                 <p>DHCP</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-2"
+                            <div class=" p-2"
                                 onclick="openBtn('config_tab4','config_tablink4','config-section')">
                                 <button id="config_tablink4"
                                     class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
@@ -355,7 +356,7 @@
                                 </button>
                                 <p>Firewall</p>
                             </div>
-                            <div class="col-sm-4 col-md-2 p-2"
+                            <div class=" p-2"
                                 onclick="openBtn('config_tab5','config_tablink5','config-section')">
                                 <button id="config_tablink5"
                                     class="mb-2 p-3 btn btn-outline-primary rounded-circle btnlink">
@@ -798,7 +799,7 @@
         <div id="message" class="alert alert-primary"></div>
     </div>
     <footer>
-        <div class="border border-top text-center p-5">
+        <div class="border border-top border-secondary text-center p-5">
             <p>© 2024 Novaterm AI. All rights reserved.</p>
             <p>
                 Made by

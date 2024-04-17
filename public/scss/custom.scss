@@ -1,4 +1,4 @@
-@import "../node_modules/bootstrap/scss/bootstrap"; // Import Bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap"; // Import Bootstrap
 
 // Define color themes
 $themes: (
@@ -131,15 +131,17 @@ $secondary: #B6BBC4;
             }
 
             .form-select {
-              color: $quaternary-color;
-              background-color: $secondary-color;
+              color: var(--bs-body-bg);
+              background-color: $quaternary-color;
+              border-color: $tertiary-color;
             }
 
             .navbar-toggler {
               background-color: $primary-color;
             }
             .form-control {
-              border-color: $secondary-color;
+              border-color: $tertiary-color;
+              background-color: $quaternary-color;
             }
             .alert-primary {
               color : #EEEEEE;
@@ -258,6 +260,7 @@ $secondary: #B6BBC4;
             }
             .form-control {
               border-color: $secondary-color;
+              background-color: $quaternary-color;
             }
             .alert-primary {
               color : #000000;
