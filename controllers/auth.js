@@ -7,7 +7,7 @@ const { error } = require("console");
 const { ifError } = require("assert");
 
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'usuario',
     password: 'usuario',
     database: 'db_conn'
@@ -117,7 +117,7 @@ exports.isLoggedIn = async (req, res, next) => {
                     return next();
                 }
                 req.user = results[0];
-            fetch('http://localhost:8080/data', {
+            fetch('http://127.0.0.1:8080/data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

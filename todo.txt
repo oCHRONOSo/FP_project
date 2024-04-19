@@ -1,7 +1,5 @@
 security checker
 
-active / not active websocket connection
-
 remove record tab
 DHCP lease 
 

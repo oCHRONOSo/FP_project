@@ -55,7 +55,7 @@ app.post('/data', (req, res) => {
 
 // Initialize MySQL connection
 const dbConnection = mysql.createConnection({
-  host: 'localhost',
+  host: '127.0.0.1',
   user: 'usuario',
   password: 'usuario',
   database: 'db_conn'
@@ -121,7 +121,7 @@ io.on("connection", (socket) => {
     //let ptyProcess;
 
     // Set up SSH configuration based on provided credentials
-    if (!password) {
+    if (sshKeyContent) {
       sshConfig = { host: ip, port, username, privateKey: sshKeyContent, passphrase };
     } else {
       sshConfig = { host: ip, port, username, password };
@@ -134,7 +134,7 @@ io.on("connection", (socket) => {
         : "Error connecting via SSH. Check your credentials and try again.";
       console.error("SSH connection error:", err.message);
       socket.emit("ssh.error", errorMessage);
-      socket.emit("ssh.status", "Error connecting via SSH.");
+      //socket.emit("ssh.status", "Error connecting via SSH.");
       conn.end();
     });
 
@@ -236,6 +236,7 @@ io.on("connection", (socket) => {
           conn.sftp((sftpErr, sftp) => {
             if (sftpErr) {
               console.error("Error creating SFTP session:", sftpErr.message);
+              socket.emit("ssh.error", "Error creating SFTP session");
               return;
             }
             let script_path;
@@ -422,7 +423,7 @@ io.on("connection", (socket) => {
       if (conn) {
         conn.end();
         sftp = false;
-        socket.emit("ssh.status", "Disconnected");
+        socket.emit("ssh.status", "SSH connection disconnected.");
         console.log("SSH connection disconnected.");
         //conn = null;
       }

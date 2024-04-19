@@ -24,7 +24,13 @@ function handleFile() {
     reader.readAsText(file);
   } else {
     showMessage('No file selected');
+    sshKeyContent = null;
   }
+}
+
+function clearsshkey(){
+  document.getElementById('sshkey').value = null;
+  sshKeyContent = null;
 }
   // say hi :
   fetch('/userdata')
@@ -517,7 +523,7 @@ function generateRule() {
   if (finalAction === "LOG" && logTag !== "") command += " --log-prefix " + logTag;
   iptable_cont = document.getElementById("result");
   iptable_cont.hidden = false;
-  iptable_cont.innerHTML = '<div class="row"><div class="col-12 col-sm-10 align-content-center">'+ command +'</div>' + '<div class="col-12 col-sm-2 text-end"><button class="btn btn-outline-secondary" id="copyRule"><i class="bi bi-copy"></i></button></div></div>';
+  iptable_cont.innerHTML = '<div class="row"><div class="col-12 col-sm-10 align-content-center">'+ command +'</div>' + '<div class="col-12 col-sm-2 text-end"><button class="btn btn-outline-secondary" onclick="copied(\'iptables_copy\')" id="copyRule"><i id="iptables_copy" class="bi bi-copy"></i></button></div></div>';
   iptable_cont.setAttribute("class","col bg-body p-4 rounded-4 border border-secondary-subtle");
   copybtn = document.getElementById("copyRule");
 
@@ -526,6 +532,12 @@ function generateRule() {
     text = iptable_cont.innerText;
     copyTextToClipboard(text);
   });
+}
+
+function copied(id){
+  var icon = document.getElementById(id);
+  icon.classList.remove("bi-copy");
+  icon.classList.add("bi-check-circle");
 }
 
 function fallbackCopyTextToClipboard(text) {

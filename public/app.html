@@ -48,7 +48,7 @@
         /* #FFF2D8 #EAD7BB #BCA37F #113946  */
     </style>
 
-    <title>SSH Connection</title>
+    <title>App - Novaterm AI</title>
 </head>
 
 <body class="bg-body body">
@@ -158,6 +158,9 @@
                                         <div class="mb-3">
                                             <button type="button" onclick="handleFile()" class="btn btn-secondary">
                                                 Upload SSH Key
+                                            </button>
+                                            <button type="button" onclick="clearsshkey()" class="btn btn-secondary">
+                                                Clear Key
                                             </button>
                                         </div>
                                     </div>
@@ -784,7 +787,7 @@
                                         updates, antivirus software, open ports, integrity of
                                         critical system files, and unauthorized users or groups.
                                     </p>
-                                    <button class="btn btn-primary" onclick="copysecurity('security_check.sh')">
+                                    <button class="btn btn-primary rounded-pill" onclick="copysecurity('security_check.sh')">
                                         Run Security Checks
                                     </button>
                                 </div>
