@@ -1,5 +1,5 @@
 // Establish WebSocket connection with the server
-  const socket = io("ws://localhost:8080");
+  const socket = io("ws://127.0.0.1:8080");
 // const socket = io("ws://192.168.0.187:8080");
 // Initialize state variables
 let isConnected = false;
