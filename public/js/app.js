@@ -109,7 +109,7 @@ const initializeTerminal = () => {
 };
 
 // Display message in the UI
-function showMessage(text, duration = 2500) {
+function showMessage(text, duration = 3000) {
   const messageContainer = document.getElementById('message_container');
   const messageElement = document.getElementById('message');
   messageContainer.hidden = false;
@@ -122,7 +122,7 @@ function showMessage(text, duration = 2500) {
 
 // Connect to SSH server
 function connectSSH() {
-  if (isConnected) {
+  if (isConnected){
     showMessage("Already connected!");
     return;
   }

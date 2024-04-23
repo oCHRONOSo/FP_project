@@ -1,56 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Select Option Cookie</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Old School Monitor</title>
+    <style>
+      /* Global Styles */
+      html, body {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          margin: 0;
+          background-color: rgb(143, 143, 143);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: green;
+          font-family: 'Courier New', Courier, monospace;
+      }
+    
+      /* Monitor Styling */
+      .monitor-outer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+    
+      .monitor-border {
+          width: 600px;
+          height: 450px;
+          background-color: #333;
+          border-radius: 15px;
+          padding: 20px;
+          box-shadow: 0 0 15px rgba(0,0,0,0.8);
+          position: relative;
+      }
+    
+      .monitor-screen {
+          background-color: rgb(137, 132, 132);
+          width: 100%;
+          height: 100%;
+          border: 5px solid #666;
+          color: lime;
+          position: relative;
+          overflow: hidden;
+          filter: contrast(150%) brightness(120%);
+      }
+    
+      .monitor-base {
+          height: 20px;
+          width: 200px;
+          background-color: #333;
+          border-radius: 5px 5px 0 0;
+          box-shadow: 0 10px 15px rgba(0,0,0,0.5);
+      }
+    
+      h1, p {
+          margin: 20px;
+          line-height: 1.5;
+      }
+    
+      /* Noise Effect */
+      @keyframes noise {
+          0%, 100% { background-position: 0 0; }
+          10% { background-position: -5% -10%; }
+          20% { background-position: -15% 5%; }
+          30% { background-position: 7% -25%; }
+          40% { background-position: -10% 15%; }
+          50% { background-position: -20% -5%; }
+          60% { background-position: 5% 20%; }
+          70% { background-position: -25% 10%; }
+          80% { background-position: 15% 0%; }
+          90% { background-position: 10% 10%; }
+      }
+    
+      .monitor-screen::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          background-image: url('./noise.png'); /* Adjust URL as necessary */
+          animation: noise 1s steps(10) infinite;
+          opacity: 0.2;
+          z-index: 0;
+      }
+    
+      /* Improving Noise with Better Visuals */
+      .noise {
+          pointer-events: none;
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='); /* 1x1 pixel transparent GIF */
+          animation: noise 0.2s infinite;
+          opacity: 0.05;
+          z-index: 1;
+      }
+    </style>
+    
 </head>
 <body>
-  <select id="mySelect">
-    <option value="option1">Option 1</option>
-    <option value="option2">Option 2</option>
-    <option value="option3">Option 3</option>
-  </select>
-
-  <script>
-    // Function to set a cookie
-    function setCookie(name, value, days) {
-      var expires = "";
-      if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-
-    // Function to get a cookie
-    function getCookie(name) {
-      var nameEQ = name + "=";
-      var ca = document.cookie.split(';');
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1, c.length);
-        }
-        if (c.indexOf(nameEQ) == 0) {
-          return c.substring(nameEQ.length, c.length);
-        }
-      }
-      return null;
-    }
-
-    // Function to handle select change
-    document.getElementById("mySelect").addEventListener("change", function() {
-      var selectedOption = this.value;
-      setCookie("selectedOption", selectedOption, 365); // Set cookie for 1 year
-    });
-
-    // Check if there is a stored option and select it
-    var storedOption = getCookie("selectedOption");
-    if (storedOption) {
-      document.getElementById("mySelect").value = storedOption;
-    }
-  </script>
+    <div class="monitor-outer">
+        <div class="monitor-border">
+            <div class="monitor-screen">
+                <!-- Content goes here -->
+                <h1>Welcome to My Retro Site!</h1>
+                <p>This is a simulation of an old computer monitor.</p>
+            </div>
+        </div>
+        <div class="monitor-base"></div>
+    </div>
 </body>
 </html>

@@ -21,9 +21,51 @@
     <link rel="stylesheet" type="text/css" href="../static/bootstrap-icons/font/bootstrap-icons.min.css" /> -->
     <link rel="stylesheet" href="./scss/custom.css" />
     <style>
-        .bg-blur {
+      .bg-blur {
         backdrop-filter: blur(12px);
-    }
+      }
+      .nav-link,
+      .btn {
+        transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out,
+          transform 0.3s ease;
+      }
+      .btn:hover,
+      .btn:focus {
+        transform: scale(1.02);
+      }
+      .nav-link:hover {
+        color: #fff !important; /* Adjust color based on theme */
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      body {
+        animation: fadeIn 0.75s ease-in-out;
+      }
+
+      .second-element {
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      .fade-in-section {
+        opacity: 0;
+        transform: translateY(50px);
+        animation: fadeIn 1s ease forwards;
+        visibility: hidden;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
     </style>
     <!-- <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -53,7 +95,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid d-flex mt-5 justify-content-center">
+    <div class="container-fluid d-flex mt-5 justify-content-center second-element">
         <section class="col-lg-9 p-3 center">
             <div class="container bg-body-secondary border border-secondary rounded-4 shadow p-3">
                 <div class="mx-3">
@@ -71,12 +113,15 @@
                                 <li>Clone this repository to your local machine. <div><code>git clone https://github.com/oCHRONOSo/FP_project.git</code></div></li>
                                 <li>Navigate to the project directory.</li>
                                 <li>Install dependencies by running <code>npm install</code> .</li>
+                                <li>Install Ollama with your AI model</li>
                             </ol>
                         </div>
                         <div class="col-md-6">
                             <h3>Usage</h3>
-                            <p>To launch the server, run:</p>
-                            <p><code>node index.js</code></p>
+                            <p>To launch the server, run: <code>node index.js</code></p>
+                            
+                            <p>To launch AI (set your model name in ai.js file), run: <code>OLLAMA_HOST=0.0.0.0 OLLAMA_ORIGINS=http://127.0.0.1:* ollama serve</code></p>
+                            
                             <p>Ensure that any file format errors are fixed when moving from Windows to Unix systems by converting CRLF line endings to LF.</p>
                         </div>
                     </div>

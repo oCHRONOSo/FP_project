@@ -28,21 +28,65 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script> -->
     <style>
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50%); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         #message_container {
             position: fixed;
             bottom: 10px;
             right: 10px;
             z-index: 9999;
+            animation: slideUp 0.5s ease-out;
         }
 
         .bg-blur {
-            backdrop-filter: blur(12px);
-        }
+        backdrop-filter: blur(12px);
+      }
+      .nav-link,
+      .btn {
+        transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out,
+          transform 0.3s ease;
+      }
+      .btn:hover,
+      .btn:focus {
+        transform: scale(1.02);
+      }
+      .nav-link:hover {
+        color: #fff !important; /* Adjust color based on theme */
+      }
 
-        .bg-image {
-            background-image: linear-gradient(0deg, #222831, #00adb5);
-            background-size: 100% 100%;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      body {
+        animation: fadeIn 0.75s ease-in-out;
+      }
+
+      .second-element {
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      .fade-in-section {
+        opacity: 0;
+        transform: translateY(50px);
+        animation: fadeIn 1s ease forwards;
+        visibility: hidden;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
 
         /* #F0ECE5 #B6BBC4 #31304D #161A30  */
         /* #FFF2D8 #EAD7BB #BCA37F #113946  */
@@ -61,7 +105,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav col-12 col-lg-6">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
                         <a class="nav-link" href="#collapseSSH">SSH</a>
                         <a class="nav-link" href="#accordion1">Terminal </a>
                         <a class="nav-link" href="#accordion3">Configure</a>
@@ -393,6 +437,7 @@
                                     <div
                                         class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
                                         <div id="tab1" class="tabcontent">
+                                            <h2 class="mb-3">Setup your Webserver</h2>
                                             <div class="col-6 mb-3">
                                                 <label for="domain" class="form-label">Domain:</label>
                                                 <input type="text" id="domain" class="form-control"
@@ -420,6 +465,7 @@
                                         </div>
 
                                         <div id="tab2" class="tabcontent">
+                                            <h2 class="mb-3">Add Wordpress</h2>
                                             <p>
                                                 Specify your wordpress installation folder in
                                                 /var/www/
@@ -439,7 +485,7 @@
                                         </div>
 
                                         <div id="tab3" class="tabcontent">
-                                            <h3>Set up your database</h3>
+                                            <h2 class="mb-3">Set up your database</h2>
                                             <div class="row">
                                                 <div class="col-6 mb-3">
                                                     <label for="folder_name" class="form-label">Database Name:</label>
@@ -491,6 +537,7 @@
                                     <div
                                         class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
                                         <div id="dns_tab1" class="tabcontent">
+                                            <h2 class="mb-3">Setup your DNS server</h2>
                                             <div class="col-6 mb-3">
                                                 <label for="dns_domain" class="form-label">Domain:</label>
                                                 <input type="text" id="dns_domain" class="form-control"
@@ -508,6 +555,7 @@
                                         </div>
 
                                         <div id="dns_tab2" class="tabcontent">
+                                            <h2 class="mb-3">Add your DNS records</h2>
                                             <p>Select your file in /etc/bind/</p>
                                             <div class="col-6 mb-3">
                                                 <label for="dns_conf_file" class="form-label">Configuration
@@ -567,7 +615,7 @@
                                     <div
                                         class="row shadow rounded-bottom-4 p-3 bg-body-secondary border border-secondary mb-3">
                                         <div id="dhcp_tab1" class="tabcontent">
-                                            <p>Configure your network settings:</p>
+                                            <h2 class="mb-3">Configure your network settings</h2>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="interface" class="form-label">Interface Name:</label>
@@ -620,6 +668,9 @@
                                                 id="configure_network" class="btn btn-primary rounded-pill mb-3">
                                                 Configure Network
                                             </button>
+                                        </div>
+                                        <div  id="dhcp_tab2" class="tabcontent">
+                                            <h2>Coming Soon...</h2>
                                         </div>
                                     </div>
                                 </div>

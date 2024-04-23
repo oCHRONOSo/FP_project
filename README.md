@@ -36,7 +36,7 @@ You can configure HTTPS and install WordPress via checkboxes provided in the int
 
 Integrates Ollama for AI assistance in server configuration. Run Ollama with the following command (use localhost or your ip):
 ```
-OLLAMA_HOST=0.0.0.0 OLLAMA_ORIGINS=http://192.168.1.123:* ollama serve
+OLLAMA_HOST=0.0.0.0 OLLAMA_ORIGINS=http://127.0.0.1:* ollama serve
 ```
 
 ### 5. Custom Styling
