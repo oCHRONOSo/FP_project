@@ -1,6 +1,19 @@
+function showMessage(text, duration = 3000) {
+  const messageContainer = document.getElementById('message_container');
+  const messageElement = document.getElementById('message');
+  messageContainer.hidden = false;
+  messageElement.innerHTML = text;
+  setTimeout(() => {
+    messageElement.innerHTML = '';
+    messageContainer.hidden = true;
+  }, duration);
+}
+
 let streamReader;
 
+loading_button = document.getElementById("request_spinner")
 async function sendRequest() {
+  loading_button.classList.remove("visually-hidden");
   const prompt = document.getElementById('prompt').value + "(maximum 80 words)";
   const requestData = {
     model: "deepseek-coder:6.7b",
@@ -11,31 +24,35 @@ async function sendRequest() {
   try {
     const response = await fetch('http://localhost:11434/api/generate', { 
     method: 'POST',
-/*       headers: {
+    /*       headers: {
         'Content-Type': 'application/json'
-      }, */
+    },
+    */
     body: JSON.stringify(requestData)
     });
 
     streamReader = response.body.getReader();
     readStream();
   } catch (error) {
+    loading_button.classList.add("visually-hidden");
     console.error('Error:', error);
+    showMessage(`${error}`);
   }
 }
 
 async function readStream() {
-const responseContainer = document.getElementById('response-container');
-responseContainer.setAttribute("class","bg-body-secondary p-4 rounded-4 border border-secondary-subtle");
-responseContainer.innerHTML = '<h3>Response:</h3>';
-const responseText = document.createElement('div');
-responseContainer.appendChild(responseText);
+  loading_button.classList.add("visually-hidden");
+  const responseContainer = document.getElementById('response-container');
+  responseContainer.setAttribute("class","bg-body-secondary p-4 rounded-4 border border-secondary-subtle");
+  responseContainer.innerHTML = '<h3>Response:</h3>';
+  const responseText = document.createElement('div');
+  responseContainer.appendChild(responseText);
 
 
 
-let accumulatedResponse = '';
+  let accumulatedResponse = '';
   let tot = "";
-while (true) {
+  while (true) {
   const { done, value } = await streamReader.read();
   if (done) {
     break;
@@ -56,6 +73,7 @@ while (true) {
       // accumulatedResponse = ''; // Reset accumulated response
     } catch (error) {
       console.error('Error parsing JSON:', error);
+      showMessage(`${error}`);
     }
   }
 }

@@ -88,8 +88,7 @@
         scroll-behavior: smooth;
       }
 
-        /* #F0ECE5 #B6BBC4 #31304D #161A30  */
-        /* #FFF2D8 #EAD7BB #BCA37F #113946  */
+
     </style>
 
     <title>App - Novaterm AI</title>
@@ -300,9 +299,13 @@
                                     <input class="form-control" type="text" id="prompt" rows="4" cols="50"
                                         value="explain me FTP" />
                                 </div>
-                                <button type="button" onclick="sendRequest()" class="btn btn-primary rounded-pill mb-3">
-                                    Send Request
-                                </button>
+                                <div class="d-flex">
+                                    <button type="button" onclick="sendRequest()" class="btn btn-primary rounded-pill mb-3">
+                                        Send Request
+                                        <span id="request_spinner" class="spinner-border spinner-border-sm ms-1 visually-hidden" role="status" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+
                                 <div id="response-container"></div>
                             </div>
                         </div>
