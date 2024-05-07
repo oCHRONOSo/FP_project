@@ -16,6 +16,7 @@ async function sendRequest() {
   loading_button.classList.remove("visually-hidden");
   const prompt = document.getElementById('prompt').value + "(maximum 80 words)";
   const requestData = {
+    // set your model here 
     model: "deepseek-coder:6.7b",
     prompt: prompt,
     stream: true

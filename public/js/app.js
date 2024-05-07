@@ -32,25 +32,25 @@ function clearsshkey(){
   document.getElementById('sshkey').value = null;
   sshKeyContent = null;
 }
-  // say hi :
-  fetch('/userdata')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Use the fetched data as needed
-        console.log('Username:', data.user.name);
-        document.getElementById("user_username").innerText = "Hi " + data.user.name + " !";
-        userID = data.user.id;
-        console.log(`user:${userID}`);
-        // You can set the username wherever needed in your app
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
-    });
+
+fetch('/userdata')
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  })
+  .then(data => {
+      // Use the fetched data as needed
+      console.log('Username:', data.user.name);
+      document.getElementById("user_username").innerText = "Hi " + data.user.name + " !";
+      userID = data.user.id;
+      console.log(`user:${userID}`);
+      // You can set the username wherever needed in your app
+  })
+  .catch(error => {
+      console.error('Fetch error:', error);
+  });
 
 // Initialize the terminal 
 const initializeTerminal = () => {
@@ -153,12 +153,8 @@ function disconnectSSH() {
     showMessage("Not connected!");
     return;
   }
-  // closeTerminal();
-  // term = null;
-  // document.getElementById('terminal-container').innerHTML = null;
-  // isTerminalInitialized = false;
+
   showMessage("Disconnecting from SSH...");
-  // isConnected = false;
   socket.emit('closeshell');
   socket.emit('disconnectSSH');
   
@@ -218,7 +214,7 @@ function testCommand() {
   socket.emit('command');
 }
 
-// Copy script to the server and configure web server
+// Copy script inputs to the server
 function copy(button) {
   const input_name = button;
   socket.emit("path", input_name);
@@ -297,7 +293,6 @@ function copydhcp(button) {
   const gatewayIP = document.getElementById("gateway_ip").value;
   const dnsIP = document.getElementById("dhcp_dns_ip").value;
 
-  // Replace the following lines with your socket.emit calls
   socket.emit("path", input_name);
   socket.emit('configue_dhcp', {
       interfaceName,
@@ -402,10 +397,6 @@ socket.on('recentConnections', (results) => {
   });
 });
 
-// Toggle between dark and light themes
-// document.getElementById('flexSwitchCheckDefault').addEventListener('click', () => {
-//   document.documentElement.setAttribute('data-bs-theme', document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
-// });
 
 
 // add tabs for configuration
@@ -429,11 +420,6 @@ for (s = 0; s < section_btn.length; s++){
   tablinks[0].classList.replace("btn-outline-primary","btn-primary");
 }
 
-// document.getElementById("tab1").style.display = "block";
-// document.getElementById("tablink1").classList.add("bg-body-secondary");
-
-// document.getElementById("dns_tab1").style.display = "block";
-// document.getElementById("dns_tablink1").classList.add("bg-body-secondary");
 
   // Function to open a specific tab
   function openTab(tabName, tabLink, sectionId) {
@@ -470,8 +456,6 @@ for (s = 0; s < section_btn.length; s++){
 
 // search for packages
 
-
-
   var searchInput = document.getElementById("searchInput");
   var buttons = document.getElementsByClassName("install");
 
@@ -495,6 +479,7 @@ function updateip(){
 }
 updateip();
 
+//iptables section generation
 function generateRule() {
   var table = document.getElementById("table").value;
   var chain = document.getElementById("chain").value;
@@ -583,17 +568,17 @@ function copyTextToClipboard(text) {
 const themes = {
   "dark": "Dark",
   "dark-cream-green": "Dark Cream Green",
+  "dark-blue-grey": "Dark Blue Grey",
+  "dark-violet": "Dark Violet",
   "dark-green": "Dark Green",
   "dark-yellow": "Dark Yellow",
-  "dark-gold": "Dark Gold",
-  "dark-violet": "Dark Violet",
   "dark-warm-brown": "Dark Warm Brown",
-  "dark-blue-grey": "Dark Blue Grey",
+  "dark-gold": "Dark Gold",
   "light": "Light",
   "cream-green-light": "Light Cream Green",
+  "cloudy-green": "Cloudy Green",
   "sky-blue": "Sky Blue",
   "cream": "Cappuccino",
-  "cloudy-green": "Cloudy Green",
   "cream-grey": "Cream Grey",
   "light-violet": "Light Violet"
 };
@@ -617,47 +602,46 @@ if (newTheme) {
 });
 
 
-  // Function to set a cookie
-  function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+// Function to set a cookie
+function setCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
   }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
 
-  // Function to get a cookie
+// Function to get a cookie
 
-  function getCookie(name) {
-    const cookieString = document.cookie;
-    console.log(cookieString);
-    const cookies = cookieString.split(';');
-    for (let cookie of cookies) {
-        const [cookieName, cookieValue] = cookie.trim().split('=');
-        if (cookieName === name) {
-            // Decode and return the cookie value
-            return decodeURIComponent(cookieValue);
-        }
-    }
-    console.log("cookie not found");
-    return null; // Return null if the cookie is not found
+function getCookie(name) {
+  const cookieString = document.cookie;
+  console.log(cookieString);
+  const cookies = cookieString.split(';');
+  for (let cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.trim().split('=');
+      if (cookieName === name) {
+          // Decode and return the cookie value
+          return decodeURIComponent(cookieValue);
+      }
   }
-  // Function to handle select change
-  document.getElementById("themeSelect").addEventListener("change", function() {
-    var selectedOption = this.value;
-    setCookie("selectedOption", selectedOption, 365); // Set cookie for 1 year
-  });
+  console.log("cookie not found");
+  return null; // Return null if the cookie is not found
+}
+// Function to handle select change
+document.getElementById("themeSelect").addEventListener("change", function() {
+  var selectedOption = this.value;
+  setCookie("selectedOption", selectedOption, 365); // Set cookie for 1 year
+});
 
-  // Check if there is a stored option and select it
+// Check if there is a stored option and select it
 
-
-  var storedOption = getCookie("selectedOption");
-  if (storedOption) {
-    // document.getElementById("themeSelect").value = storedOption;
-    document.documentElement.setAttribute('data-bs-theme', storedOption);
-  }
+var storedOption = getCookie("selectedOption");
+if (storedOption) {
+  // document.getElementById("themeSelect").value = storedOption;
+  document.documentElement.setAttribute('data-bs-theme', storedOption);
+}
 
 
 

@@ -1,5 +1,4 @@
 // Import necessary modules
-//const http = require("http").createServer();
 const http = require('http');
 const express = require('express');
 const app = express();
@@ -13,7 +12,6 @@ const ssh2 = require("ssh2");
 const { Client } = require('ssh2');
 const fs = require("fs");
 const path = require('path');
-// const pty = require("node-pty");
 const os = require("os");
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 const mysql = require('mysql');
@@ -145,7 +143,6 @@ io.on("connection", (socket) => {
       //Database data insert
       const insertQuery = `
       INSERT INTO connections (ip, port, username, password, last_connection, userid)
-
       VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?) ON DUPLICATE KEY UPDATE 
       ip = VALUES(ip),
       port = VALUES(port),
@@ -195,21 +192,6 @@ io.on("connection", (socket) => {
         socket.on('closeshell',()=>{
           stream.write("echo shell");
         });
-        /*         // Spawn a pseudo-terminal process
-        ptyProcess = pty.spawn(shell, [], {
-          name: "xterm-color",
-          cols: 80,
-          rows: 30,
-          cwd: process.env.HOME,
-          env: process.env
-        });
-
-        // Handle errors in the PTY process
-        ptyProcess.on("error", function (err) {
-          console.error("Error spawning PTY process:", err.message);
-          socket.emit("ssh.error", "Error spawning PTY process. Please try again.");
-          console.log("Error PTY process");
-        }); */
 
         // Relay data received from the SSH connection to the client
         stream.on("data", function (data) {

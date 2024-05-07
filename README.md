@@ -7,6 +7,9 @@ Welcome to the Remote Server Configuration WebApp! This project allows you to re
 1. Clone this repository to your local machine.
 2. Navigate to the project directory.
 3. Install dependencies by running ```npm install```.
+4. import [database](#6-recent-connections)
+5. download and install Ollama (optional for AI)
+
 
 ## Usage
 
@@ -34,10 +37,14 @@ You can configure HTTPS and install WordPress via checkboxes provided in the int
 
 ### 4. AI Integration
 
+
+- to install the model for the first time use : `ollama run deepseek-coder:6.7b`
+
 Integrates Ollama for AI assistance in server configuration. Run Ollama with the following command (use localhost or your ip):
 ```
 OLLAMA_HOST=0.0.0.0 OLLAMA_ORIGINS=http://127.0.0.1:* ollama serve
 ```
+**Note**: You can specify your desired model in **ai.js** file
 
 ### 5. Custom Styling
 
@@ -55,7 +62,7 @@ mysqldump -u user -p db_conn > db_conn.sql
 ```
 - Import database:
 ```
-mysql -u user -p db_conn < /home/user/db_conn.sql
+mysql -u user -p db_conn < /home/user/db_conn_with_login.sql
 ```
 ### 7. Security Checks
 
