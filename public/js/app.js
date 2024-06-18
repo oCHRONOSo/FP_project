@@ -286,7 +286,7 @@ function copyRecord(button) {
 function copydhcp(button) {
   const input_name = button;
   const interfaceName = document.getElementById("interface").value;
-  const subnetIP = document.getElementById("dhcp_subnet_ip").value;
+  const subnetIP = document.getElementById("dhcp_ip").value;
   const subnetMask = document.getElementById("dhcp_subnet_mask").value;
   const dhcpRangeStart = document.getElementById("dhcp_range_start").value;
   const dhcpRangeEnd = document.getElementById("dhcp_range_end").value;
